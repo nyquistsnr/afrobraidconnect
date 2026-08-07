@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
-import { onboardingStepPath } from "@/lib/onboarding";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
@@ -61,13 +60,7 @@ export function GoogleSignInButton({
         router.push(callbackUrl);
         return;
       }
-      const session = await getSession();
-      const step = session?.braider?.onboarding.current_step;
-      router.push(
-        step && step !== "COMPLETED"
-          ? onboardingStepPath(lang, step)
-          : `/${lang}/dashboard`
-      );
+      router.push(`/${lang}`);
     },
     onError: (error) => {
       toast.error(getAuthErrorMessage(error.message, errorsDict));
