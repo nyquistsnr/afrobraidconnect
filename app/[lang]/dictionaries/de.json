@@ -66,8 +66,8 @@
     "or": "ODER",
     "signInWithGoogle": "Mit Google anmelden",
     "noAccount": "Sie haben noch kein Konto?",
-    "signUpProfessional": "Als Fachkraft registrieren",
-    "notVerified": "Konto noch nicht verifiziert?",
+    "signUpProfessional": "Konto erstellen",
+    "notVerified": "Konto noch nicht bestätigt?",
     "revalidate": "Erneut verifizieren"
   },
   "forgotPassword": {
@@ -90,8 +90,8 @@
     "submit": "Passwort zurücksetzen"
   },
   "signup": {
-    "title": "Erstellen Sie Ihr Fachkonto",
-    "subtitle": "Treten Sie Afrobraid Connect bei und erhalten Sie Buchungen.",
+    "title": "Erstellen Sie Ihr Kundenkonto",
+    "subtitle": "Treten Sie Afrobraid Connect bei und buchen Sie Ihre nächste Frisur.",
     "firstNameLabel": "Vorname",
     "firstNamePlaceholder": "Amara",
     "lastNameLabel": "Nachname",

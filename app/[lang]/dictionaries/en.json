@@ -66,7 +66,7 @@
     "or": "OR",
     "signInWithGoogle": "Sign in with Google",
     "noAccount": "Don't have an account?",
-    "signUpProfessional": "Sign Up as a Professional",
+    "signUpProfessional": "Sign Up for an Account",
     "notVerified": "Haven't verified your account?",
     "revalidate": "Revalidate"
   },
@@ -90,8 +90,8 @@
     "submit": "Reset Password"
   },
   "signup": {
-    "title": "Create your professional account",
-    "subtitle": "Join Afrobraid Connect and start getting booked.",
+    "title": "Create your customer account",
+    "subtitle": "Join Afrobraid Connect and book your next hair style.",
     "firstNameLabel": "First name",
     "firstNamePlaceholder": "Amara",
     "lastNameLabel": "Last name",

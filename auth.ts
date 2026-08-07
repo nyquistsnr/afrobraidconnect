@@ -106,7 +106,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             provider_token: providerToken,
             // Ignored by the backend if the Google account already maps to
             // an existing user — only applies to brand-new sign-ups.
-            user_type: "BRAIDER",
+            user_type: "CUSTOMER",
           });
           return toAuthUser(tokens);
         } catch (error) {

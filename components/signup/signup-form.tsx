@@ -51,7 +51,7 @@ export function SignupForm({
       email: String(formData.get("email") ?? ""),
       phone_number: phone,
       password: String(formData.get("password") ?? ""),
-      user_type: "BRAIDER",
+      user_type: "CUSTOMER",
     });
   }
 
