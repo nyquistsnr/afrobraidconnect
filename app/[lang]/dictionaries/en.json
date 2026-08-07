@@ -1,0 +1,400 @@
+{
+  "common": {
+    "supportEmail": "support@afrobraidconnect.de",
+    "heroImageAlt": "Smiling woman wearing braided hair",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "loading": "Loading…",
+    "backToLogin": "Back to Sign In",
+    "backToDashboard": "Back to Dashboard",
+    "back": "Back",
+    "countrySearchPlaceholder": "Search country",
+    "noCountriesFound": "No countries found",
+    "errors": {
+      "validationError": "Please check the highlighted fields and try again.",
+      "emailAlreadyExists": "An account with this email already exists.",
+      "phoneAlreadyExists": "An account with this phone number already exists.",
+      "invalidCredentials": "Incorrect email or password.",
+      "emailNotVerified": "Please verify your email before signing in.",
+      "userNotActive": "This account has been deactivated.",
+      "invalidOtp": "That code isn't right. Please try again.",
+      "otpExpired": "This code has expired. Request a new one.",
+      "tooManyOtpAttempts": "Too many attempts. Please request a new code.",
+      "socialAuthFailed": "We couldn't sign you in with that provider.",
+      "unsupportedProvider": "That sign-in provider isn't supported.",
+      "userTypeRequired": "Please choose an account type to continue.",
+      "rateLimited": "Too many attempts. Please wait a moment and try again.",
+      "networkError": "Couldn't reach the server. Check your connection and try again.",
+      "forbidden": "You don't have access to this.",
+      "invalidAccessToken": "Your session has expired. Please sign in again.",
+      "invalidLogoUpload": "That image couldn't be uploaded. Please try a JPEG, PNG, or WEBP under 5MB.",
+      "logoNotFound": "We couldn't find that upload. Please try again.",
+      "phoneVerificationUnavailable": "We couldn't send the verification code right now. Please try again shortly.",
+      "invalidVerificationCode": "That code isn't right. Please try again.",
+      "veriffUnavailable": "We couldn't reach our verification provider right now. Please try again shortly.",
+      "veriffSessionNotFound": "We couldn't find a verification session yet. Start one first.",
+      "styleNotFound": "That style couldn't be found.",
+      "styleNotActive": "That style isn't available right now.",
+      "styleAlreadyAdded": "You've already added that style to your menu.",
+      "invalidStyleVariation": "One of the selected variations isn't valid for this style.",
+      "invalidAddon": "One of the selected add-ons isn't valid.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "toasts": {
+      "signupSuccess": "Account created! Check your email for a verification code.",
+      "verifyEmailSuccess": "Email verified! Welcome to Afrobraid Connect.",
+      "resendSuccess": "A new code has been sent to your email.",
+      "loginSuccess": "Welcome back!",
+      "forgotPasswordSuccess": "If that email exists, a reset code is on its way.",
+      "resetPasswordSuccess": "Password reset! Please sign in with your new password.",
+      "logoutSuccess": "You've been signed out."
+    }
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Enter your details to access your account.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "hello@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot Password?",
+    "signIn": "Sign In",
+    "or": "OR",
+    "signInWithGoogle": "Sign in with Google",
+    "noAccount": "Don't have an account?",
+    "signUpProfessional": "Sign Up as a Professional",
+    "notVerified": "Haven't verified your account?",
+    "revalidate": "Revalidate"
+  },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "subtitle": "Enter the email linked to your account and we'll send you a reset code.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "hello@example.com",
+    "submit": "Send Reset Code"
+  },
+  "resetPassword": {
+    "title": "Reset your password",
+    "subtitle": "Enter the 6-digit code we sent to your email, then choose a new password.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "hello@example.com",
+    "codeLabel": "Verification code",
+    "codeHelp": "Didn't get a code?",
+    "resendCode": "Resend code",
+    "newPasswordLabel": "New password",
+    "newPasswordPlaceholder": "Enter a new password",
+    "submit": "Reset Password"
+  },
+  "signup": {
+    "title": "Create your professional account",
+    "subtitle": "Join Afrobraid Connect and start getting booked.",
+    "firstNameLabel": "First name",
+    "firstNamePlaceholder": "Amara",
+    "lastNameLabel": "Last name",
+    "lastNamePlaceholder": "Nwosu",
+    "emailLabel": "Email",
+    "emailPlaceholder": "hello@example.com",
+    "phoneLabel": "Phone number",
+    "phoneOptional": "Optional",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a password",
+    "submit": "Create Account",
+    "or": "OR",
+    "signUpWithGoogle": "Sign up with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In"
+  },
+  "verifyEmail": {
+    "title": "Verify your email",
+    "subtitle": "Enter the 6-digit code we sent to your email.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "hello@example.com",
+    "codeLabel": "Verification code",
+    "codeHelp": "Didn't get a code?",
+    "resendCode": "Resend code",
+    "submit": "Verify Email"
+  },
+  "dashboard": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "bookings": "Bookings",
+      "payment": "Payment",
+      "settings": "Settings",
+      "chat": "Chat",
+      "availability": "Availability",
+      "location": "Location",
+      "serviceStyle": "Service Style",
+      "onboardingStatus": "Onboarding Status",
+      "logout": "Logout"
+    },
+    "header": {
+      "notifications": "Notifications",
+      "messages": "Messages",
+      "logout": "Logout"
+    },
+    "logoutModal": {
+      "title": "Log out?",
+      "description": "Are you sure you want to log out of your account?",
+      "cancel": "Cancel",
+      "confirm": "Log Out"
+    },
+    "home": {
+      "greeting": "Hello There"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "subtitle": "Update your personal details.",
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "e.g. Amara",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "e.g. Nwosu",
+      "phoneLabel": "Phone Number",
+      "saveButton": "Save Changes",
+      "successToast": "Profile updated successfully."
+    }
+  },
+  "bookings": {
+    "title": "Booking Page"
+  },
+  "payment": {
+    "title": "Payment"
+  },
+  "settings": {
+    "title": "Settings"
+  },
+  "chat": {
+    "title": "Chat"
+  },
+  "availability": {
+    "title": "Availability"
+  },
+  "location": {
+    "title": "Location"
+  },
+  "serviceStyle": {
+    "title": "Service Style"
+  },
+  "onboardingStatus": {
+    "title": "Onboarding Status"
+  },
+  "onboarding": {
+    "stepper": {
+      "businessInfo": "Business Info",
+      "phoneVerification": "Phone Verification",
+      "veriff": "Identity Verification",
+      "serviceType": "Service Type",
+      "portfolio": "Portfolio",
+      "serviceLocation": "Service Location",
+      "availability": "Availability",
+      "paymentSetup": "Payment Setup"
+    },
+    "stepOf": "Step {current} of {total}",
+    "resumeHint": "Pick up where you left off: {step} →",
+    "businessInfo": {
+      "title": "Tell us about your business",
+      "subtitle": "This is what clients will see on your profile.",
+      "businessNameLabel": "Business name",
+      "businessNamePlaceholder": "e.g. Amara's Braids",
+      "genderLabel": "Gender",
+      "genderOptions": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other",
+        "preferNotToSay": "Prefer not to say"
+      },
+      "bioLabel": "About your business",
+      "bioPlaceholder": "Tell clients what makes your braiding unique...",
+      "bioTranslatingNote": "Translating your bio into other languages…",
+      "logoLabel": "Business logo",
+      "logoUpload": "Upload logo",
+      "logoChange": "Change logo",
+      "logoRemove": "Remove logo",
+      "logoHelp": "JPEG, PNG or WEBP, up to 5MB.",
+      "continue": "Save & Continue",
+      "continueWithoutWaiting": "Continue without waiting",
+      "translationModal": {
+        "title": "Your bio is ready in other languages",
+        "failed": "Translation wasn't available right now — you can add it manually later.",
+        "continue": "Continue"
+      },
+      "toasts": {
+        "saved": "Business info saved.",
+        "logoUploaded": "Logo uploaded."
+      }
+    },
+    "phoneVerification": {
+      "title": "Verify your phone number",
+      "subtitle": "We'll text you a 6-digit code to confirm it's you.",
+      "phoneLabel": "Phone number",
+      "sendCode": "Send Code",
+      "codeLabel": "Verification code",
+      "codeSentTo": "Code sent to",
+      "changeNumber": "Change number",
+      "resendCode": "Resend code",
+      "verify": "Verify",
+      "toasts": {
+        "codeSent": "Verification code sent.",
+        "verified": "Phone number verified."
+      }
+    },
+    "veriff": {
+      "title": "Verify your identity",
+      "subtitle": "We use Veriff to confirm your identity — it keeps clients safe and helps you get approved faster.",
+      "statusLabel": "Status",
+      "reasonLabel": "Reason",
+      "start": {
+        "description": "You'll be redirected to our verification partner, Veriff, to scan an ID and take a quick selfie. It only takes a couple of minutes.",
+        "button": "Start Verification"
+      },
+      "pending": {
+        "title": "We're verifying your ID",
+        "description": "This usually takes a few minutes, but can occasionally take longer. Check back soon or refresh below.",
+        "refresh": "Refresh status",
+        "resume": "Resume verification"
+      },
+      "failed": {
+        "title": "Verification unsuccessful",
+        "description": "We couldn't verify your identity. Please try again.",
+        "tryAgain": "Try again"
+      },
+      "approved": {
+        "title": "You're verified!",
+        "description": "Your identity has been confirmed.",
+        "continue": "Continue"
+      },
+      "toasts": {
+        "refreshed": "Status updated."
+      }
+    },
+    "serviceType": {
+      "title": "Build your price menu",
+      "subtitle": "Add at least one style you offer, with your price, to continue.",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "All categories",
+      "searchLabel": "Search styles",
+      "searchPlaceholder": "Search by name…",
+      "noResults": "No styles match your filters.",
+      "loadMore": "Load more",
+      "selectButton": "Select",
+      "addedBadge": "Added",
+      "basePriceLabel": "Base price (€)",
+      "basePricePlaceholder": "e.g. 45",
+      "durationLabel": "Duration (minutes)",
+      "durationPlaceholder": "e.g. 120",
+      "variationsTitle": "Variations",
+      "addonsTitle": "Add-ons",
+      "requiredLabel": "Required",
+      "priceLabel": "Price (€)",
+      "cancel": "Cancel",
+      "addButton": "Add to menu",
+      "menuTitle": "Your menu",
+      "emptyMenu": "You haven't added any styles yet.",
+      "continue": "Continue",
+      "toasts": {
+        "added": "Added to your menu."
+      }
+    },
+    "portfolio": {
+      "title": "Showcase your work",
+      "subtitle": "Add at least 3 photos of your best braiding work.",
+      "addPhoto": "Add photo",
+      "removePhoto": "Remove",
+      "captionLabel": "Caption (optional)",
+      "captionPlaceholder": "E.g. Knotless box braids...",
+      "minPhotosRequired": "You need at least 3 photos.",
+      "continue": "Continue",
+      "toasts": {
+        "uploaded": "Photo uploaded.",
+        "removed": "Photo removed.",
+        "captionUpdated": "Caption updated."
+      }
+    },
+    "serviceLocation": {
+      "title": "Where do you work?",
+      "subtitle": "Let clients know where to find you.",
+      "locationTypeLabel": "Workspace type",
+      "locationTypes": {
+        "homeStudio": "Home Studio",
+        "salon": "Salon"
+      },
+      "salonNameLabel": "Salon name",
+      "salonNamePlaceholder": "e.g. Studio 54",
+      "addressLine1Label": "Address line 1",
+      "addressLine1Placeholder": "Street and number",
+      "addressLine2Label": "Address line 2 (optional)",
+      "addressLine2Placeholder": "Apartment, suite, etc.",
+      "cityLabel": "City",
+      "cityPlaceholder": "Berlin",
+      "postalCodeLabel": "Postal code",
+      "postalCodePlaceholder": "10115",
+      "countryLabel": "Country",
+      "offersMobileLabel": "I offer mobile services (I travel to the client)",
+      "travelRadiusLabel": "Travel radius (km)",
+      "travelFeeLabel": "Travel fee (€, optional)",
+      "continue": "Save & Continue",
+      "toasts": {
+        "saved": "Location saved.",
+        "incomplete": "Please fill out all required location details."
+      }
+    },
+    "availability": {
+      "title": "When are you available?",
+      "subtitle": "Set your weekly recurring schedule and exceptions.",
+      "settingsTitle": "Booking Rules",
+      "timezoneLabel": "Timezone",
+      "minNoticeHoursLabel": "Minimum notice (hours)",
+      "maxAdvanceDaysLabel": "Max advance days",
+      "bufferMinutesLabel": "Buffer between appointments (mins)",
+      "weeklyWindowsTitle": "Weekly Schedule",
+      "addWindow": "Add hours",
+      "days": {
+        "MONDAY": "Monday",
+        "TUESDAY": "Tuesday",
+        "WEDNESDAY": "Wednesday",
+        "THURSDAY": "Thursday",
+        "FRIDAY": "Friday",
+        "SATURDAY": "Saturday",
+        "SUNDAY": "Sunday"
+      },
+      "exceptionsTitle": "Date Exceptions",
+      "addException": "Add Exception",
+      "dateLabel": "Date",
+      "exceptionTypeLabel": "Status",
+      "exceptionTypes": {
+        "CLOSED": "Closed",
+        "CUSTOM_HOURS": "Custom Hours"
+      },
+      "startTimeLabel": "Start Time",
+      "endTimeLabel": "End Time",
+      "reasonLabel": "Reason (optional)",
+      "save": "Save",
+      "continue": "Continue",
+      "toasts": {
+        "settingsSaved": "Settings saved",
+        "windowAdded": "Hours added",
+        "windowRemoved": "Hours removed",
+        "exceptionAdded": "Exception added",
+        "exceptionRemoved": "Exception removed"
+      }
+    },
+    "paymentSetup": {
+      "title": "Get Paid",
+      "subtitle": "Connect with Stripe to receive payouts securely.",
+      "connectButton": "Connect with Stripe",
+      "missingRequirements": "You still need to provide some information to verify your account:",
+      "continue": "Continue",
+      "toasts": {
+        "started": "Redirecting to Stripe...",
+        "success": "Stripe account connected!"
+      }
+    },
+    "comingSoon": {
+      "title": "Coming soon",
+      "subtitle": "This step isn't ready yet — check back shortly."
+    }
+  }
+}

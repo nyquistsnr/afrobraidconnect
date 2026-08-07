@@ -1,0 +1,400 @@
+{
+  "common": {
+    "supportEmail": "support@afrobraidconnect.de",
+    "heroImageAlt": "Femme souriante portant des cheveux tressés",
+    "theme": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "loading": "Chargement…",
+    "backToLogin": "Retour à la connexion",
+    "backToDashboard": "Retour au tableau de bord",
+    "back": "Retour",
+    "countrySearchPlaceholder": "Rechercher un pays",
+    "noCountriesFound": "Aucun pays trouvé",
+    "errors": {
+      "validationError": "Veuillez vérifier les champs signalés et réessayer.",
+      "emailAlreadyExists": "Un compte existe déjà avec cet e-mail.",
+      "phoneAlreadyExists": "Un compte existe déjà avec ce numéro de téléphone.",
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "emailNotVerified": "Veuillez vérifier votre e-mail avant de vous connecter.",
+      "userNotActive": "Ce compte a été désactivé.",
+      "invalidOtp": "Ce code n'est pas correct. Veuillez réessayer.",
+      "otpExpired": "Ce code a expiré. Demandez-en un nouveau.",
+      "tooManyOtpAttempts": "Trop de tentatives. Veuillez demander un nouveau code.",
+      "socialAuthFailed": "Impossible de vous connecter avec ce fournisseur.",
+      "unsupportedProvider": "Ce fournisseur de connexion n'est pas pris en charge.",
+      "userTypeRequired": "Veuillez choisir un type de compte pour continuer.",
+      "rateLimited": "Trop de tentatives. Veuillez patienter puis réessayer.",
+      "networkError": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'avez pas accès à cette ressource.",
+      "invalidAccessToken": "Votre session a expiré. Veuillez vous reconnecter.",
+      "invalidLogoUpload": "Cette image n'a pas pu être envoyée. Essayez un fichier JPEG, PNG ou WEBP de moins de 5 Mo.",
+      "logoNotFound": "Nous n'avons pas trouvé ce fichier. Veuillez réessayer.",
+      "phoneVerificationUnavailable": "Impossible d'envoyer le code de vérification pour le moment. Veuillez réessayer bientôt.",
+      "invalidVerificationCode": "Ce code n'est pas correct. Veuillez réessayer.",
+      "veriffUnavailable": "Nous n'avons pas pu joindre notre prestataire de vérification pour le moment. Veuillez réessayer bientôt.",
+      "veriffSessionNotFound": "Nous n'avons pas encore trouvé de session de vérification. Commencez-en une d'abord.",
+      "styleNotFound": "Ce style est introuvable.",
+      "styleNotActive": "Ce style n'est pas disponible pour le moment.",
+      "styleAlreadyAdded": "Vous avez déjà ajouté ce style à votre offre.",
+      "invalidStyleVariation": "L'une des variantes sélectionnées n'est pas valide pour ce style.",
+      "invalidAddon": "L'un des suppléments sélectionnés n'est pas valide.",
+      "generic": "Une erreur s'est produite. Veuillez réessayer."
+    },
+    "toasts": {
+      "signupSuccess": "Compte créé ! Consultez votre e-mail pour le code de vérification.",
+      "verifyEmailSuccess": "E-mail vérifié ! Bienvenue sur Afrobraid Connect.",
+      "resendSuccess": "Un nouveau code a été envoyé à votre e-mail.",
+      "loginSuccess": "Content de vous revoir !",
+      "forgotPasswordSuccess": "Si ce compte existe, un code de réinitialisation est en route.",
+      "resetPasswordSuccess": "Mot de passe réinitialisé ! Veuillez vous connecter avec votre nouveau mot de passe.",
+      "logoutSuccess": "Vous avez été déconnecté."
+    }
+  },
+  "login": {
+    "title": "Content de vous revoir",
+    "subtitle": "Entrez vos informations pour accéder à votre compte.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "hello@example.com",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "or": "OU",
+    "signInWithGoogle": "Se connecter avec Google",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUpProfessional": "Inscrivez-vous en tant que professionnel",
+    "notVerified": "Votre compte n'est pas encore vérifié ?",
+    "revalidate": "Revalider"
+  },
+  "forgotPassword": {
+    "title": "Mot de passe oublié ?",
+    "subtitle": "Entrez l'e-mail associé à votre compte et nous vous enverrons un code de réinitialisation.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "hello@example.com",
+    "submit": "Envoyer le code"
+  },
+  "resetPassword": {
+    "title": "Réinitialiser votre mot de passe",
+    "subtitle": "Entrez le code à 6 chiffres envoyé par e-mail, puis choisissez un nouveau mot de passe.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "hello@example.com",
+    "codeLabel": "Code de vérification",
+    "codeHelp": "Vous n'avez pas reçu de code ?",
+    "resendCode": "Renvoyer le code",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "newPasswordPlaceholder": "Entrez un nouveau mot de passe",
+    "submit": "Réinitialiser le mot de passe"
+  },
+  "signup": {
+    "title": "Créez votre compte professionnel",
+    "subtitle": "Rejoignez Afrobraid Connect et commencez à recevoir des réservations.",
+    "firstNameLabel": "Prénom",
+    "firstNamePlaceholder": "Amara",
+    "lastNameLabel": "Nom",
+    "lastNamePlaceholder": "Nwosu",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "hello@example.com",
+    "phoneLabel": "Numéro de téléphone",
+    "phoneOptional": "Facultatif",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Créez un mot de passe",
+    "submit": "Créer un compte",
+    "or": "OU",
+    "signUpWithGoogle": "S'inscrire avec Google",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter"
+  },
+  "verifyEmail": {
+    "title": "Vérifiez votre e-mail",
+    "subtitle": "Entrez le code à 6 chiffres que nous avons envoyé à votre e-mail.",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "hello@example.com",
+    "codeLabel": "Code de vérification",
+    "codeHelp": "Vous n'avez pas reçu de code ?",
+    "resendCode": "Renvoyer le code",
+    "submit": "Vérifier l'e-mail"
+  },
+  "dashboard": {
+    "sidebar": {
+      "dashboard": "Tableau de bord",
+      "bookings": "Réservations",
+      "payment": "Paiement",
+      "settings": "Paramètres",
+      "chat": "Chat",
+      "availability": "Disponibilité",
+      "location": "Emplacement",
+      "serviceStyle": "Style de service",
+      "onboardingStatus": "Statut d'intégration",
+      "logout": "Déconnexion"
+    },
+    "header": {
+      "notifications": "Notifications",
+      "messages": "Messages",
+      "logout": "Déconnexion"
+    },
+    "logoutModal": {
+      "title": "Déconnexion ?",
+      "description": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?",
+      "cancel": "Annuler",
+      "confirm": "Se déconnecter"
+    },
+    "home": {
+      "greeting": "Bonjour"
+    },
+    "profile": {
+      "title": "Paramètres du profil",
+      "subtitle": "Mettez à jour vos informations personnelles.",
+      "firstNameLabel": "Prénom",
+      "firstNamePlaceholder": "ex: Amara",
+      "lastNameLabel": "Nom",
+      "lastNamePlaceholder": "ex: Nwosu",
+      "phoneLabel": "Numéro de téléphone",
+      "saveButton": "Enregistrer",
+      "successToast": "Profil mis à jour avec succès."
+    }
+  },
+  "bookings": {
+    "title": "Page de réservation"
+  },
+  "payment": {
+    "title": "Paiement"
+  },
+  "settings": {
+    "title": "Paramètres"
+  },
+  "chat": {
+    "title": "Chat"
+  },
+  "availability": {
+    "title": "Disponibilité"
+  },
+  "location": {
+    "title": "Emplacement"
+  },
+  "serviceStyle": {
+    "title": "Style de service"
+  },
+  "onboardingStatus": {
+    "title": "Statut d'intégration"
+  },
+  "onboarding": {
+    "stepper": {
+      "businessInfo": "Infos sur l'entreprise",
+      "phoneVerification": "Vérification du téléphone",
+      "veriff": "Vérification d'identité",
+      "serviceType": "Type de service",
+      "portfolio": "Portfolio",
+      "serviceLocation": "Lieu de service",
+      "availability": "Disponibilité",
+      "paymentSetup": "Configuration du paiement"
+    },
+    "stepOf": "Étape {current} sur {total}",
+    "resumeHint": "Reprenez où vous en étiez : {step} →",
+    "businessInfo": {
+      "title": "Parlez-nous de votre entreprise",
+      "subtitle": "C'est ce que les clients verront sur votre profil.",
+      "businessNameLabel": "Nom de l'entreprise",
+      "businessNamePlaceholder": "ex. Tresses d'Amara",
+      "genderLabel": "Genre",
+      "genderOptions": {
+        "male": "Homme",
+        "female": "Femme",
+        "other": "Autre",
+        "preferNotToSay": "Préfère ne pas dire"
+      },
+      "bioLabel": "À propos de votre entreprise",
+      "bioPlaceholder": "Dites aux clients ce qui rend vos tresses uniques...",
+      "bioTranslatingNote": "Traduction de votre biographie dans les autres langues…",
+      "logoLabel": "Logo de l'entreprise",
+      "logoUpload": "Téléverser le logo",
+      "logoChange": "Changer le logo",
+      "logoRemove": "Supprimer le logo",
+      "logoHelp": "JPEG, PNG ou WEBP, jusqu'à 5 Mo.",
+      "continue": "Enregistrer et continuer",
+      "continueWithoutWaiting": "Continuer sans attendre",
+      "translationModal": {
+        "title": "Votre biographie est prête dans les autres langues",
+        "failed": "La traduction n'était pas disponible pour le moment — vous pourrez l'ajouter manuellement plus tard.",
+        "continue": "Continuer"
+      },
+      "toasts": {
+        "saved": "Informations sur l'entreprise enregistrées.",
+        "logoUploaded": "Logo téléversé."
+      }
+    },
+    "phoneVerification": {
+      "title": "Vérifiez votre numéro de téléphone",
+      "subtitle": "Nous vous enverrons un code à 6 chiffres par SMS pour confirmer votre identité.",
+      "phoneLabel": "Numéro de téléphone",
+      "sendCode": "Envoyer le code",
+      "codeLabel": "Code de vérification",
+      "codeSentTo": "Code envoyé au",
+      "changeNumber": "Changer de numéro",
+      "resendCode": "Renvoyer le code",
+      "verify": "Vérifier",
+      "toasts": {
+        "codeSent": "Code de vérification envoyé.",
+        "verified": "Numéro de téléphone vérifié."
+      }
+    },
+    "veriff": {
+      "title": "Vérifiez votre identité",
+      "subtitle": "Nous utilisons Veriff pour confirmer votre identité — cela protège les clients et accélère votre approbation.",
+      "statusLabel": "Statut",
+      "reasonLabel": "Motif",
+      "start": {
+        "description": "Vous serez redirigé vers notre partenaire de vérification, Veriff, pour scanner une pièce d'identité et prendre un selfie rapide. Cela ne prend que quelques minutes.",
+        "button": "Démarrer la vérification"
+      },
+      "pending": {
+        "title": "Nous vérifions votre pièce d'identité",
+        "description": "Cela prend généralement quelques minutes, mais peut parfois être plus long. Revenez bientôt ou actualisez ci-dessous.",
+        "refresh": "Actualiser le statut",
+        "resume": "Reprendre la vérification"
+      },
+      "failed": {
+        "title": "Échec de la vérification",
+        "description": "Nous n'avons pas pu vérifier votre identité. Veuillez réessayer.",
+        "tryAgain": "Réessayer"
+      },
+      "approved": {
+        "title": "Vous êtes vérifié !",
+        "description": "Votre identité a été confirmée.",
+        "continue": "Continuer"
+      },
+      "toasts": {
+        "refreshed": "Statut mis à jour."
+      }
+    },
+    "serviceType": {
+      "title": "Créez votre carte de prix",
+      "subtitle": "Ajoutez au moins un style que vous proposez, avec votre prix, pour continuer.",
+      "categoryLabel": "Catégorie",
+      "categoryPlaceholder": "Toutes les catégories",
+      "searchLabel": "Rechercher des styles",
+      "searchPlaceholder": "Rechercher par nom…",
+      "noResults": "Aucun style ne correspond à vos filtres.",
+      "loadMore": "Charger plus",
+      "selectButton": "Sélectionner",
+      "addedBadge": "Ajouté",
+      "basePriceLabel": "Prix de base (€)",
+      "basePricePlaceholder": "ex. 45",
+      "durationLabel": "Durée (minutes)",
+      "durationPlaceholder": "ex. 120",
+      "variationsTitle": "Variantes",
+      "addonsTitle": "Suppléments",
+      "requiredLabel": "Obligatoire",
+      "priceLabel": "Prix (€)",
+      "cancel": "Annuler",
+      "addButton": "Ajouter à la carte",
+      "menuTitle": "Votre carte",
+      "emptyMenu": "Vous n'avez encore ajouté aucun style.",
+      "continue": "Continuer",
+      "toasts": {
+        "added": "Ajouté à votre carte."
+      }
+    },
+    "portfolio": {
+      "title": "Montrez votre travail",
+      "subtitle": "Ajoutez au moins 3 photos de vos meilleures tresses.",
+      "addPhoto": "Ajouter une photo",
+      "removePhoto": "Supprimer",
+      "captionLabel": "Légende (facultatif)",
+      "captionPlaceholder": "Ex. Knotless box braids...",
+      "minPhotosRequired": "Vous avez besoin d'au moins 3 photos.",
+      "continue": "Continuer",
+      "toasts": {
+        "uploaded": "Photo téléchargée.",
+        "removed": "Photo supprimée.",
+        "captionUpdated": "Légende mise à jour."
+      }
+    },
+    "serviceLocation": {
+      "title": "Où travaillez-vous ?",
+      "subtitle": "Faites savoir aux clients où vous trouver.",
+      "locationTypeLabel": "Type d'espace de travail",
+      "locationTypes": {
+        "homeStudio": "Studio à domicile",
+        "salon": "Salon"
+      },
+      "salonNameLabel": "Nom du salon",
+      "salonNamePlaceholder": "ex. Studio 54",
+      "addressLine1Label": "Adresse ligne 1",
+      "addressLine1Placeholder": "Rue et numéro",
+      "addressLine2Label": "Adresse ligne 2 (facultatif)",
+      "addressLine2Placeholder": "Appartement, suite, etc.",
+      "cityLabel": "Ville",
+      "cityPlaceholder": "Paris",
+      "postalCodeLabel": "Code postal",
+      "postalCodePlaceholder": "75001",
+      "countryLabel": "Pays",
+      "offersMobileLabel": "Je propose des services à domicile (je me déplace chez le client)",
+      "travelRadiusLabel": "Rayon de déplacement (km)",
+      "travelFeeLabel": "Frais de déplacement (€, facultatif)",
+      "continue": "Enregistrer et continuer",
+      "toasts": {
+        "saved": "Emplacement enregistré.",
+        "incomplete": "Veuillez remplir tous les détails d'emplacement requis."
+      }
+    },
+    "availability": {
+      "title": "Quand êtes-vous disponible ?",
+      "subtitle": "Définissez votre emploi du temps hebdomadaire et vos exceptions.",
+      "settingsTitle": "Règles de réservation",
+      "timezoneLabel": "Fuseau horaire",
+      "minNoticeHoursLabel": "Délai minimum (heures)",
+      "maxAdvanceDaysLabel": "Jours d'avance max",
+      "bufferMinutesLabel": "Marge entre rendez-vous (mins)",
+      "weeklyWindowsTitle": "Emploi du temps hebdomadaire",
+      "addWindow": "Ajouter des heures",
+      "days": {
+        "MONDAY": "Lundi",
+        "TUESDAY": "Mardi",
+        "WEDNESDAY": "Mercredi",
+        "THURSDAY": "Jeudi",
+        "FRIDAY": "Vendredi",
+        "SATURDAY": "Samedi",
+        "SUNDAY": "Dimanche"
+      },
+      "exceptionsTitle": "Exceptions de date",
+      "addException": "Ajouter une exception",
+      "dateLabel": "Date",
+      "exceptionTypeLabel": "Statut",
+      "exceptionTypes": {
+        "CLOSED": "Fermé",
+        "CUSTOM_HOURS": "Heures personnalisées"
+      },
+      "startTimeLabel": "Heure de début",
+      "endTimeLabel": "Heure de fin",
+      "reasonLabel": "Raison (facultatif)",
+      "save": "Enregistrer",
+      "continue": "Continuer",
+      "toasts": {
+        "settingsSaved": "Paramètres enregistrés",
+        "windowAdded": "Heures ajoutées",
+        "windowRemoved": "Heures supprimées",
+        "exceptionAdded": "Exception ajoutée",
+        "exceptionRemoved": "Exception supprimée"
+      }
+    },
+    "paymentSetup": {
+      "title": "Être payé",
+      "subtitle": "Connectez-vous avec Stripe pour recevoir des paiements en toute sécurité.",
+      "connectButton": "Se connecter avec Stripe",
+      "missingRequirements": "Vous devez encore fournir certaines informations pour vérifier votre compte :",
+      "continue": "Continuer",
+      "toasts": {
+        "started": "Redirection vers Stripe...",
+        "success": "Compte Stripe connecté !"
+      }
+    },
+    "comingSoon": {
+      "title": "Bientôt disponible",
+      "subtitle": "Cette étape n'est pas encore prête — revenez bientôt."
+    }
+  }
+}
