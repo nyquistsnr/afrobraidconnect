@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "./dictionaries";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
-import type { PageProps } from "@/lib/types";
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
