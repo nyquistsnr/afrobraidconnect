@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { CalendarCheck2, LogOut, Menu } from "lucide-react";
+import { CalendarCheck2, CircleUserRound, LogOut, Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
