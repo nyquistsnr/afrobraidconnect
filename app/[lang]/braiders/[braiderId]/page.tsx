@@ -45,6 +45,7 @@ export default async function BraiderDetailPage({
           initialDateFrom={initialDateFrom}
           dict={dict.braiderDetail}
           errorsDict={dict.common.errors}
+          reviewsDict={dict.reviews}
         />
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-24 text-center">

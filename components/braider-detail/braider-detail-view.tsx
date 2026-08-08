@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Sparkles } from "lucide-react";
+import { ArrowLeft, MapPin, Sparkles, Star } from "lucide-react";
 import type {
   AvailableSlotResponse,
   BookingCalculationPreviewResponse,
@@ -31,6 +31,7 @@ import { AvailabilitySection } from "@/components/braider-detail/availability-se
 import { BookingSidebar } from "@/components/braider-detail/booking-sidebar";
 import { MobileBookingBar } from "@/components/braider-detail/mobile-booking-bar";
 import { ShareButton } from "@/components/braider-detail/share-button";
+import { BraiderReviewsSection } from "@/components/reviews/braider-reviews-section";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
 export function BraiderDetailView({
@@ -40,6 +41,7 @@ export function BraiderDetailView({
   initialDateFrom,
   dict,
   errorsDict,
+  reviewsDict,
 }: {
   braider: BraiderDetailResponse;
   lang: Locale;
@@ -47,6 +49,7 @@ export function BraiderDetailView({
   initialDateFrom?: string | null;
   dict: BraiderDetailDict;
   errorsDict: Dictionary["common"]["errors"];
+  reviewsDict: Dictionary["reviews"];
 }) {
   const initialDate = initialDateFrom ? fromISODateLocal(initialDateFrom) : null;
   const router = useRouter();
@@ -271,8 +274,14 @@ export function BraiderDetailView({
               </span>
             )}
             <div className="flex min-w-0 flex-col gap-1">
-              <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
-                {businessName || "—"}
+              <h1 className="flex items-center gap-3 text-2xl font-semibold text-foreground sm:text-3xl">
+                <span className="truncate">{businessName || "—"}</span>
+                {braider.rating && (
+                  <span className="flex shrink-0 items-center gap-1 rounded-full bg-surface px-2.5 py-1 text-sm font-bold shadow-sm">
+                    <Star className="size-4 fill-current text-foreground" />
+                    {Number(braider.rating).toFixed(2)}
+                  </span>
+                )}
               </h1>
               {locationLine && (
                 <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -402,6 +411,13 @@ export function BraiderDetailView({
               </div>
             </section>
           )}
+
+          <BraiderReviewsSection
+            braiderId={braider.id}
+            rating={braider.rating}
+            lang={lang}
+            dict={reviewsDict}
+          />
         </div>
 
         <div className="hidden lg:block">

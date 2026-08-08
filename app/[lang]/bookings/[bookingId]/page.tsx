@@ -29,6 +29,7 @@ export default async function BookingDetailPage({
         lang={lang}
         dict={dict.bookingDetail}
         statusDict={dict.common.bookingStatus}
+        reviewsDict={dict.reviews}
       />
     </div>
   );

@@ -852,5 +852,21 @@
     "successMessage": "Profile updated successfully.",
     "errorMessage": "Could not update profile.",
     "emailNote": "Email cannot be changed here."
+  },
+  "reviews": {
+    "title": "Reviews",
+    "noReviews": "No reviews yet.",
+    "rateYourBraider": "Rate your braider",
+    "leaveReview": "Leave a Review",
+    "editReview": "Edit your Review",
+    "ratingLabel": "Rating",
+    "commentLabel": "Tell us about your experience (optional)",
+    "commentPlaceholder": "What did you love about your appointment?",
+    "submit": "Submit Review",
+    "pendingApproval": "Your review is live! Your written comment is awaiting approval and will appear publicly soon.",
+    "failedToLoad": "Failed to load reviews.",
+    "failedToSubmit": "Failed to submit review.",
+    "ratingRequired": "Please select a rating.",
+    "commentTooLong": "Comment must be less than 1000 characters."
   }
 }

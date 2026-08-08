@@ -852,5 +852,21 @@
     "successMessage": "Profil mis à jour avec succès.",
     "errorMessage": "Impossible de mettre à jour le profil.",
     "emailNote": "L'adresse e-mail ne peut pas être modifiée ici."
+  },
+  "reviews": {
+    "title": "Avis",
+    "noReviews": "Aucun avis pour le moment.",
+    "rateYourBraider": "Évaluez votre coiffeuse",
+    "leaveReview": "Laisser un avis",
+    "editReview": "Modifier votre avis",
+    "ratingLabel": "Note",
+    "commentLabel": "Parlez-nous de votre expérience (facultatif)",
+    "commentPlaceholder": "Qu'avez-vous aimé dans votre rendez-vous ?",
+    "submit": "Envoyer l'avis",
+    "pendingApproval": "Votre avis est en ligne ! Votre commentaire écrit est en attente d'approbation et sera bientôt public.",
+    "failedToLoad": "Échec du chargement des avis.",
+    "failedToSubmit": "Échec de l'envoi de l'avis.",
+    "ratingRequired": "Veuillez sélectionner une note.",
+    "commentTooLong": "Le commentaire doit faire moins de 1000 caractères."
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
@@ -21,7 +21,11 @@ import {
 } from "@/components/bookings/format";
 import { BookingStatusBadge } from "@/components/bookings/status-badge";
 import { BalanceRetryBanner } from "@/components/bookings/balance-retry-banner";
+import { ReviewModal } from "@/components/reviews/review-modal";
+import { braidersApi } from "@/lib/api/braiders-client";
+import { Star } from "lucide-react";
 import type { BookingDetailDict, BookingStatusDict } from "@/components/bookings/types";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 // TRAVEL/PLATFORM_FEE/VAT_* items duplicate the response's own flat total
 // fields (platform_fee, vat_total, ...) — only the service-side items are
@@ -39,11 +43,13 @@ export function BookingDetailView({
   lang,
   dict,
   statusDict,
+  reviewsDict,
 }: {
   bookingId: string;
   lang: Locale;
   dict: BookingDetailDict;
   statusDict: BookingStatusDict;
+  reviewsDict: Dictionary["reviews"];
 }) {
   const { data: session, status: sessionStatus } = useSession();
   const accessToken = session?.accessToken;
@@ -60,6 +66,18 @@ export function BookingDetailView({
     retry: false,
   });
   const now = useMemo(() => new Date(), []);
+
+  const isEligibleForReview =
+    booking?.status === "CONFIRMED" || booking?.status === "COMPLETED";
+
+  const { data: myReview } = useQuery({
+    queryKey: ["my-review", booking?.braider_id],
+    queryFn: () => braidersApi.getMyReview(booking!.braider_id, accessToken!),
+    enabled: isEligibleForReview && !!accessToken && !!booking,
+    retry: false, // 404 means no review yet
+  });
+
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   if (isError) {
     return (
@@ -132,6 +150,29 @@ export function BookingDetailView({
         accessToken={accessToken!}
         dict={dict.balanceRetry}
       />
+
+      {isEligibleForReview && (
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-border/70 bg-brand/5 p-4 sm:p-5">
+          <div className="flex flex-col gap-1 text-sm">
+            <span className="font-semibold text-foreground">
+              {myReview ? reviewsDict.title : reviewsDict.rateYourBraider}
+            </span>
+            <span className="text-muted-foreground">
+              {myReview
+                ? myReview.status === "PENDING"
+                  ? reviewsDict.pendingApproval
+                  : "Thank you for your feedback!"
+                : "Help others by sharing your experience."}
+            </span>
+          </div>
+          <button
+            onClick={() => setIsReviewModalOpen(true)}
+            className="shrink-0 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
+          >
+            {myReview ? reviewsDict.editReview : reviewsDict.leaveReview}
+          </button>
+        </div>
+      )}
 
       <div className="rounded-2xl border border-border bg-surface p-5">
         <div className="flex items-start justify-between gap-4">
@@ -256,6 +297,18 @@ export function BookingDetailView({
               : dict.cancellationAfterCutoff}
           </p>
         </div>
+      )}
+
+      {isEligibleForReview && booking && (
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          braiderId={booking.braider_id}
+          accessToken={accessToken!}
+          initialReview={myReview ?? null}
+          lang={lang}
+          dict={reviewsDict}
+        />
       )}
     </div>
   );

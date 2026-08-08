@@ -88,4 +88,59 @@ export const braidersApi = {
       `/braiders/${braiderId}/availability/slots?${query.toString()}`
     );
   },
+
+  getReviews: (
+    braiderId: string,
+    params: { page?: number; page_size?: number } = {},
+    lang?: Locale
+  ) => {
+    const query = new URLSearchParams();
+    query.set("page", String(params.page ?? 1));
+    query.set("page_size", String(params.page_size ?? 20));
+    return get<PaginatedData<import("@/lib/api/types").PublicReview>>(
+      `/braiders/${braiderId}/reviews?${query.toString()}`,
+      lang
+    );
+  },
+
+  getMyReview: (braiderId: string, accessToken: string) => {
+    if (!API_BASE) return Promise.reject(new Error("API_BASE not set"));
+    return fetch(`${API_BASE}/braiders/${braiderId}/reviews/me`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!res.ok || json.status === "error") {
+        const error = json.error ?? { code: "UNKNOWN_ERROR", message: "Error" };
+        throw new ApiError(error.code, error.message, res.status, error.details);
+      }
+      return json.data as import("@/lib/api/types").Review;
+    });
+  },
+
+  putMyReview: (
+    braiderId: string,
+    data: import("@/lib/api/types").ReviewRequest,
+    accessToken: string,
+    lang?: Locale
+  ) => {
+    if (!API_BASE) return Promise.reject(new Error("API_BASE not set"));
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    };
+    if (lang) headers["Accept-Language"] = lang;
+
+    return fetch(`${API_BASE}/braiders/${braiderId}/reviews/me`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(data),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!res.ok || json.status === "error") {
+        const error = json.error ?? { code: "UNKNOWN_ERROR", message: "Error" };
+        throw new ApiError(error.code, error.message, res.status, error.details);
+      }
+      return json.data as import("@/lib/api/types").Review;
+    });
+  },
 };

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ImageOff, MapPin } from "lucide-react";
+import { ImageOff, MapPin, Star } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
@@ -91,11 +91,18 @@ export function BraiderCard({
               {item.business_name ?? "—"}
             </h3>
           </div>
-          {item.distance_km != null && (
-            <span className="shrink-0 text-xs text-muted-foreground">
-              {formatTemplate(dict.distanceAway, { distance: item.distance_km })}
-            </span>
-          )}
+          <div className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
+            {item.rating && (
+              <span className="flex items-center gap-0.5 font-bold text-foreground">
+                <Star className="size-3 fill-current" />
+                {Number(item.rating).toFixed(2)}
+              </span>
+            )}
+            {item.rating && item.distance_km != null && <span>·</span>}
+            {item.distance_km != null && (
+              <span>{formatTemplate(dict.distanceAway, { distance: item.distance_km })}</span>
+            )}
+          </div>
         </div>
         {locationLine && (
           <p className="flex items-center gap-1 truncate text-xs text-muted-foreground">

@@ -852,5 +852,21 @@
     "successMessage": "Profil erfolgreich aktualisiert.",
     "errorMessage": "Profil konnte nicht aktualisiert werden.",
     "emailNote": "E-Mail kann hier nicht geändert werden."
+  },
+  "reviews": {
+    "title": "Bewertungen",
+    "noReviews": "Noch keine Bewertungen.",
+    "rateYourBraider": "Bewerten Sie Ihren Braider",
+    "leaveReview": "Bewertung abgeben",
+    "editReview": "Bewertung bearbeiten",
+    "ratingLabel": "Bewertung",
+    "commentLabel": "Erzählen Sie uns von Ihrer Erfahrung (optional)",
+    "commentPlaceholder": "Was hat Ihnen an Ihrem Termin besonders gefallen?",
+    "submit": "Bewertung abschicken",
+    "pendingApproval": "Ihre Bewertung ist online! Ihr schriftlicher Kommentar wartet auf Freigabe und wird bald veröffentlicht.",
+    "failedToLoad": "Bewertungen konnten nicht geladen werden.",
+    "failedToSubmit": "Bewertung konnte nicht gesendet werden.",
+    "ratingRequired": "Bitte wählen Sie eine Bewertung aus.",
+    "commentTooLong": "Der Kommentar darf maximal 1000 Zeichen lang sein."
   }
 }

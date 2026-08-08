@@ -536,6 +536,7 @@ export interface BraiderSearchItem {
   cover_photo_url: string | null;
   matched_style: MatchedStyleResponse | null;
   styles: MatchedStyleResponse[];
+  rating: string | null;
 }
 
 export interface BraiderSearchParams {
@@ -598,6 +599,7 @@ export interface BraiderDetailResponse {
   location: BraiderLocationResponse | null;
   portfolio: BraiderPortfolioImage[];
   styles: BraiderOfferedStyle[];
+  rating: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -782,3 +784,39 @@ export interface BookingListParams {
   page?: number;
   page_size?: number;
 }
+
+// ---------------------------------------------------------------------------
+// Ratings & Reviews
+// ---------------------------------------------------------------------------
+
+export type ReviewStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface PublicReview {
+  id: string;
+  customer_name: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Review {
+  id: string;
+  braider_id: string;
+  rating: number;
+  comment_en: string | null;
+  comment_de: string | null;
+  comment_fr: string | null;
+  comment_en_source: BioSource | null;
+  comment_de_source: BioSource | null;
+  comment_fr_source: BioSource | null;
+  status: ReviewStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ReviewRequest {
+  rating: number;
+  comment?: string | null;
+}
+
