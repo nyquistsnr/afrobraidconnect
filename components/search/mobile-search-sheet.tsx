@@ -95,8 +95,8 @@ export function MobileSearch({
         <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground">
           <Search className="size-4" />
         </span>
-        <span className="flex flex-col text-left">
-          <span className="text-sm font-semibold text-foreground">
+        <span className="flex min-w-0 flex-1 flex-col text-left">
+          <span className="truncate text-sm font-semibold text-foreground">
             {location?.label ?? dict.searchLocationLabel}
           </span>
           <span className="truncate text-xs text-muted-foreground">

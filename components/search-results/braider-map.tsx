@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { AdvancedMarker, Map, useMap, MapEvent } from "@vis.gl/react-google-maps";
 import { Plus, Minus, Maximize, Minimize, Moon, Sun, Monitor } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
@@ -64,8 +64,19 @@ function MapController({
         map.setZoom(12);
       }
     } else {
-      map.setCenter(FALLBACK_CENTER);
-      map.setZoom(FALLBACK_ZOOM);
+      const currentCenter = map.getCenter();
+      if (
+        !currentCenter ||
+        getDistanceFromLatLonInKm(
+          currentCenter.lat(),
+          currentCenter.lng(),
+          FALLBACK_CENTER.lat,
+          FALLBACK_CENTER.lng
+        ) > 0.1
+      ) {
+        map.setCenter(FALLBACK_CENTER);
+        map.setZoom(FALLBACK_ZOOM);
+      }
     }
   }, [map, center?.lat, center?.lng]);
 
@@ -80,13 +91,22 @@ function FocusActivePin({
   activeId: string | null;
 }) {
   const map = useMap();
+  const lastActiveId = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!map || !activeId) return;
+    if (!map || !activeId) {
+      lastActiveId.current = activeId;
+      return;
+    }
+    
+    // Only pan if the activeId actually changed to a new one
+    if (lastActiveId.current === activeId) return;
+
     const pin = pins.find((p) => p.item.id === activeId);
     if (pin) {
       map.panTo({ lat: pin.lat, lng: pin.lng });
       map.setZoom(15);
+      lastActiveId.current = activeId;
     }
   }, [map, pins, activeId]);
 
@@ -198,6 +218,8 @@ export function BraiderMap({
       ? "DARK"
       : "LIGHT";
 
+  const lastIdleRef = useRef<{ lat: number; lng: number; radius: number } | null>(null);
+
   const handleIdle = useCallback(
     (e: MapEvent) => {
       if (!onMapIdle) return;
@@ -206,16 +228,33 @@ export function BraiderMap({
       const bounds = map.getBounds();
       if (!currentCenter || !bounds) return;
 
+      const lat = currentCenter.lat();
+      const lng = currentCenter.lng();
       const ne = bounds.getNorthEast();
       const radiusKm = getDistanceFromLatLonInKm(
-        currentCenter.lat(),
-        currentCenter.lng(),
+        lat,
+        lng,
         ne.lat(),
         ne.lng()
       );
 
       const cappedRadius = Math.max(1, Math.min(Math.round(radiusKm), 100));
-      onMapIdle(currentCenter.lat(), currentCenter.lng(), cappedRadius);
+
+      // Prevent firing if the map hasn't meaningfully moved (>50 meters) and radius is the same
+      if (lastIdleRef.current) {
+        const dist = getDistanceFromLatLonInKm(
+          lastIdleRef.current.lat,
+          lastIdleRef.current.lng,
+          lat,
+          lng
+        );
+        if (dist < 0.05 && lastIdleRef.current.radius === cappedRadius) {
+          return;
+        }
+      }
+
+      lastIdleRef.current = { lat, lng, radius: cappedRadius };
+      onMapIdle(lat, lng, cappedRadius);
     },
     [onMapIdle]
   );

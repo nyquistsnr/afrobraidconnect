@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BraiderSearchItem, PaginationMeta } from "@/lib/api/types";
 import { BraiderList } from "@/components/search-results/braider-list";
@@ -57,51 +57,56 @@ export function SearchResultsView({
     });
   }
 
-  async function handleMapIdle(lat: number, lng: number, mapRadiusKm: number) {
-    const params = new URLSearchParams(searchParams.toString());
-    const oldLat = params.get("lat");
-    const oldLng = params.get("lng");
-    const oldRadius = params.get("radius_km");
+  const handleMapIdle = useCallback(
+    async (lat: number, lng: number, mapRadiusKm: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      const oldLat = params.get("lat");
+      const oldLng = params.get("lng");
+      const oldRadius = params.get("radius_km");
 
-    // Only update if there's an actual change to avoid infinite loops
-    if (
-      oldLat !== String(lat) ||
-      oldLng !== String(lng) ||
-      oldRadius !== String(mapRadiusKm)
-    ) {
-      params.set("lat", String(lat));
-      params.set("lng", String(lng));
-      params.set("radius_km", String(mapRadiusKm));
-      params.set("page", "1");
+      if (
+        oldLat !== String(lat) ||
+        oldLng !== String(lng) ||
+        oldRadius !== String(mapRadiusKm)
+      ) {
+        params.set("lat", String(lat));
+        params.set("lng", String(lng));
+        params.set("radius_km", String(mapRadiusKm));
+        params.set("page", "1");
 
-      try {
-        if (window.google?.maps?.Geocoder) {
-          const geocoder = new window.google.maps.Geocoder();
-          const response = await geocoder.geocode({ location: { lat, lng } });
-          if (response.results.length > 0) {
-            const result = response.results[0];
-            const locality = result.address_components.find((c) =>
-              c.types.includes("locality")
-            )?.long_name;
-            const sublocality = result.address_components.find((c) =>
-              c.types.includes("sublocality")
-            )?.long_name;
-            
-            const placeName = locality || sublocality || result.formatted_address.split(",")[0];
-            if (placeName) {
-              params.set("location", placeName);
+        try {
+          if (window.google?.maps?.Geocoder) {
+            const geocoder = new window.google.maps.Geocoder();
+            const response = await geocoder.geocode({ location: { lat, lng } });
+            if (response.results.length > 0) {
+              const result = response.results[0];
+              const locality = result.address_components.find((c) =>
+                c.types.includes("locality")
+              )?.long_name;
+              const sublocality = result.address_components.find((c) =>
+                c.types.includes("sublocality")
+              )?.long_name;
+
+              const placeName =
+                locality ||
+                sublocality ||
+                result.formatted_address.split(",")[0];
+              if (placeName) {
+                params.set("location", placeName);
+              }
             }
           }
+        } catch (err) {
+          // Ignore geocoding errors (e.g. over quota, zero results)
         }
-      } catch (err) {
-        // Ignore geocoding errors (e.g. over quota, zero results)
-      }
 
-      startTransition(() => {
-        router.push(`${pathname}?${params.toString()}`);
-      });
-    }
-  }
+        startTransition(() => {
+          router.push(`${pathname}?${params.toString()}`);
+        });
+      }
+    },
+    [searchParams, pathname, router]
+  );
 
   return (
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
