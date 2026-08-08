@@ -41,17 +41,6 @@ export function WherePanel({
   // curated suggestions below — mirrors Airbnb letting you type any
   // destination rather than only picking from a fixed list.
   const placesLibrary = useMapsLibrary("places");
-  const autocompleteService = useMemo(
-    () => (placesLibrary ? new placesLibrary.AutocompleteService() : null),
-    [placesLibrary]
-  );
-  const placesService = useMemo(
-    () =>
-      placesLibrary
-        ? new placesLibrary.PlacesService(document.createElement("div"))
-        : null,
-    [placesLibrary]
-  );
   const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(
     null
   );
@@ -65,33 +54,23 @@ export function WherePanel({
 
   const { data: predictions = [], isFetching: predictionsLoading } = useQuery({
     queryKey: ["header-search-places", debouncedQuery],
-    queryFn: () =>
-      new Promise<google.maps.places.AutocompletePrediction[]>(
-        (resolve, reject) => {
-          if (!autocompleteService) {
-            reject(new Error("Places autocomplete isn't ready yet."));
-            return;
-          }
-          autocompleteService.getPlacePredictions(
-            {
-              input: debouncedQuery,
-              types: ["(cities)"],
-              sessionToken: sessionTokenRef.current ?? undefined,
-            },
-            (results, status) => {
-              if (
-                status === google.maps.places.PlacesServiceStatus.OK &&
-                results
-              ) {
-                resolve(results);
-              } else {
-                resolve([]);
-              }
-            }
-          );
-        }
-      ),
-    enabled: Boolean(autocompleteService) && debouncedQuery.length > 0,
+    queryFn: async () => {
+      if (!placesLibrary) {
+        throw new Error("Places library isn't ready yet.");
+      }
+      const request = {
+        input: debouncedQuery,
+        includedPrimaryTypes: ["locality"],
+        sessionToken: sessionTokenRef.current ?? undefined,
+      };
+      try {
+        const { suggestions } = await placesLibrary.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        return suggestions;
+      } catch (e) {
+        return [];
+      }
+    },
+    enabled: Boolean(placesLibrary) && debouncedQuery.length > 0,
     staleTime: 30_000,
   });
 
@@ -129,37 +108,33 @@ export function WherePanel({
     );
   }
 
-  function handlePredictionSelect(
-    prediction: google.maps.places.AutocompletePrediction
+  async function handlePredictionSelect(
+    suggestion: any
   ) {
-    if (!placesService) {
-      selectLocation({ label: prediction.description });
+    const label = suggestion.placePrediction?.text?.text ?? "";
+    if (!placesLibrary || !suggestion.placePrediction) {
+      selectLocation({ label });
       return;
     }
-    placesService.getDetails(
-      {
-        placeId: prediction.place_id,
-        fields: ["geometry", "name"],
-        sessionToken: sessionTokenRef.current ?? undefined,
-      },
-      (place, status) => {
-        if (
-          status === google.maps.places.PlacesServiceStatus.OK &&
-          place?.geometry?.location
-        ) {
-          selectLocation({
-            label: prediction.description,
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-          });
-        } else {
-          selectLocation({ label: prediction.description });
-        }
-        sessionTokenRef.current = placesLibrary
-          ? new placesLibrary.AutocompleteSessionToken()
-          : null;
+    
+    try {
+      const place = suggestion.placePrediction.toPlace();
+      await place.fetchFields({ fields: ["location", "displayName"] });
+      
+      if (place.location) {
+        selectLocation({
+          label,
+          lat: place.location.lat(),
+          lng: place.location.lng(),
+        });
+      } else {
+        selectLocation({ label });
       }
-    );
+    } catch (e) {
+      selectLocation({ label });
+    }
+    
+    sessionTokenRef.current = new placesLibrary.AutocompleteSessionToken();
   }
 
   const showSearchResults =
@@ -319,14 +294,17 @@ export function WherePanel({
               ))}
 
             {!predictionsLoading &&
-              predictions.map((prediction) => {
-                const isSelected =
-                  !selectedIsNearby && selectedLabel === prediction.description;
+              predictions.map((suggestion: any) => {
+                const prediction = suggestion.placePrediction;
+                if (!prediction) return null;
+                const label = prediction.text?.text ?? "";
+                const isSelected = !selectedIsNearby && selectedLabel === label;
+                
                 return (
-                  <li key={prediction.place_id}>
+                  <li key={prediction.placeId}>
                     <button
                       type="button"
-                      onClick={() => handlePredictionSelect(prediction)}
+                      onClick={() => handlePredictionSelect(suggestion)}
                       aria-pressed={isSelected}
                       className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
                         isSelected ? "bg-brand/5" : "hover:bg-border/40"
@@ -337,10 +315,10 @@ export function WherePanel({
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-foreground">
-                          {prediction.structured_formatting.main_text}
+                          {prediction.mainText?.text}
                         </span>
                         <span className="block truncate text-xs text-muted-foreground">
-                          {prediction.structured_formatting.secondary_text}
+                          {prediction.secondaryText?.text}
                         </span>
                       </span>
                       {isSelected && (

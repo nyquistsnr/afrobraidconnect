@@ -23,6 +23,7 @@ export function BraiderList({
   onChangeRadius,
   isPending,
   lang,
+  dateFrom,
   dict,
 }: {
   items: BraiderSearchItem[];
@@ -37,6 +38,7 @@ export function BraiderList({
   onChangeRadius: (radius: number) => void;
   isPending: boolean;
   lang: Locale;
+  dateFrom: string | null;
   dict: SearchResultsDict;
 }) {
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -121,6 +123,7 @@ export function BraiderList({
                 isHighlighted={hoveredId === item.id || activeId === item.id}
                 onHover={onHover}
                 lang={lang}
+                dateFrom={dateFrom}
                 dict={dict}
               />
             </div>

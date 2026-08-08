@@ -4,6 +4,9 @@ export interface BookingCheckoutDict {
   summaryTitle: string;
   appointmentLabel: string;
   durationLabel: string;
+  locationLabel: string;
+  locationInPersonValue: string;
+  locationMobileValue: string;
   priceDetailsTitle: string;
   serviceSubtotalLabel: string;
   travelFeeLabel: string;

@@ -201,6 +201,13 @@ export function BookingCheckoutView({
   const styleName = booking?.style_name ?? calculation?.style_name ?? "";
   const durationMinutes = booking?.duration_minutes ?? calculation?.duration_minutes;
   const appointmentLabel = formatSlotDateTime(startsAt, lang);
+  const isMobile = booking?.is_mobile ?? calculation?.is_mobile ?? false;
+  const clientAddress = booking?.client_address ?? calculation?.client_address ?? null;
+  const locationValue = isMobile
+    ? formatTemplate(dict.locationMobileValue, { address: clientAddress ?? "" })
+    : formatTemplate(dict.locationInPersonValue, {
+        name: braider.business_name ?? "",
+      });
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
@@ -307,6 +314,10 @@ export function BookingCheckoutView({
                   </span>
                 </div>
               )}
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-muted-foreground">{dict.locationLabel}</span>
+                <span className="text-right text-foreground">{locationValue}</span>
+              </div>
             </div>
 
             {phase === "review" && calculation && (

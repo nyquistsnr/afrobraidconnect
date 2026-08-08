@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { DayPicker } from "react-day-picker";
 import { enUS, fr, de } from "react-day-picker/locale";
@@ -59,6 +60,7 @@ export function AvailabilitySection({
   lang,
   selectedSlot,
   onSelectSlot,
+  initialDate,
   dict,
 }: {
   braiderId: string;
@@ -66,8 +68,13 @@ export function AvailabilitySection({
   lang: Locale;
   selectedSlot: AvailableSlotResponse | null;
   onSelectSlot: (slot: AvailableSlotResponse | null) => void;
+  initialDate?: Date | null;
   dict: BraiderDetailDict;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const today = useMemo(() => startOfLocalDay(new Date()), []);
   const maxMonth = useMemo(
     () => addMonths(startOfMonth(today), MAX_MONTHS_AHEAD),
@@ -76,8 +83,29 @@ export function AvailabilitySection({
 
   const hasDuration = style.duration_minutes != null;
 
-  const [month, setMonth] = useState(() => startOfMonth(today));
-  const [selectedDate, setSelectedDate] = useState(today);
+  // A date carried in from the search bar (or a previously edited/shared
+  // link) only makes sense if it still falls within the bookable window —
+  // a stale or out-of-range link just falls back to today rather than
+  // landing the customer on a calendar page they can't interact with.
+  const clampedInitialDate = useMemo(() => {
+    if (!initialDate) return today;
+    const day = startOfLocalDay(initialDate);
+    if (day < today || day > endOfMonth(maxMonth)) return today;
+    return day;
+  }, [initialDate, today, maxMonth]);
+
+  const [month, setMonth] = useState(() => startOfMonth(clampedInitialDate));
+  const [selectedDate, setSelectedDate] = useState(clampedInitialDate);
+
+  // Keeps the customer's chosen day retrievable on refresh/back-nav/shared
+  // links — merges into whatever else is already on the URL (e.g. style_id)
+  // rather than clobbering it, and replaces instead of pushing so paging
+  // through months doesn't pile up history entries.
+  function syncDateParam(date: Date) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("date_from", toISODateLocal(date));
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
 
   const rangeStart = month < today ? today : month;
   const dateFrom = toISODateLocal(rangeStart);
@@ -122,14 +150,17 @@ export function AvailabilitySection({
 
   function handleMonthChange(nextMonth: Date) {
     const start = startOfMonth(nextMonth);
+    const nextSelectedDate = start < today ? today : start;
     setMonth(start);
-    setSelectedDate(start < today ? today : start);
+    setSelectedDate(nextSelectedDate);
+    syncDateParam(nextSelectedDate);
     onSelectSlot(null);
   }
 
   function handleSelectDay(date: Date | undefined) {
     if (!date) return;
     setSelectedDate(date);
+    syncDateParam(date);
     onSelectSlot(null);
   }
 

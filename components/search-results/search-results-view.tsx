@@ -37,6 +37,7 @@ export function SearchResultsView({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const dateFrom = searchParams.get("date_from");
 
   function handleChangePage(page: number) {
     const params = new URLSearchParams(searchParams.toString());
@@ -131,6 +132,7 @@ export function SearchResultsView({
           onChangeRadius={handleChangeRadius}
           isPending={isPending}
           lang={lang}
+          dateFrom={dateFrom}
           dict={dict}
         />
       </div>

@@ -15,6 +15,12 @@
     "logOut": "Log out",
     "helpCenter": "Help Center",
     "menuLabel": "Open menu",
+    "logoutModal": {
+      "title": "Log out?",
+      "description": "Are you sure you want to log out of your account?",
+      "cancel": "Cancel",
+      "confirm": "Log out"
+    },
     "mobileNav": {
       "explore": "Explore",
       "bookings": "Bookings",
@@ -89,7 +95,7 @@
     "aboutTitle": "About",
     "noBio": "This braider hasn't added a bio yet.",
     "locationTitle": "Location",
-    "locationExactHidden": "Exact address is shared after booking.",
+    "locationExactHidden": "The exact address is shared 48 hours before your appointment.",
     "menuTitle": "Services",
     "menuEmpty": "This braider hasn't added any services yet.",
     "fromPrice": "from €{price}",
@@ -119,6 +125,19 @@
       "previewError": "Couldn't load pricing. Showing an estimate instead.",
       "quoteErrorToast": "We couldn't start your booking. Please try again."
     },
+    "serviceLocation": {
+      "title": "Where should we do your braids?",
+      "inPersonLabel": "Go to {name}",
+      "inPersonSalonNote": "You'll see the full address below.",
+      "inPersonHiddenNote": "The exact address is shared 48 hours before your appointment.",
+      "mobileLabel": "Have them come to you",
+      "mobileFeeNote": "+€{fee} travel fee · up to {radius} km",
+      "mobileFreeNote": "No travel fee · up to {radius} km",
+      "addressLabel": "Your address",
+      "addressPlaceholder": "Enter your address",
+      "addressHint": "Only shared with your braider once you book.",
+      "addressRequiredError": "Enter your address to continue."
+    },
     "availability": {
       "title": "Availability",
       "previousMonth": "Previous month",
@@ -142,6 +161,9 @@
     "summaryTitle": "Your booking",
     "appointmentLabel": "Appointment",
     "durationLabel": "Duration",
+    "locationLabel": "Location",
+    "locationInPersonValue": "At {name}'s place",
+    "locationMobileValue": "They'll come to you — {address}",
     "priceDetailsTitle": "Price details",
     "serviceSubtotalLabel": "Service",
     "travelFeeLabel": "Travel fee",

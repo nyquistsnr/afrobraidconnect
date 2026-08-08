@@ -15,6 +15,12 @@
     "logOut": "Abmelden",
     "helpCenter": "Hilfebereich",
     "menuLabel": "Menü öffnen",
+    "logoutModal": {
+      "title": "Abmelden?",
+      "description": "Möchten Sie sich wirklich von Ihrem Konto abmelden?",
+      "cancel": "Abbrechen",
+      "confirm": "Abmelden"
+    },
     "mobileNav": {
       "explore": "Entdecken",
       "bookings": "Buchungen",
@@ -89,7 +95,7 @@
     "aboutTitle": "Über mich",
     "noBio": "Dieser Braider hat noch keine Beschreibung hinzugefügt.",
     "locationTitle": "Standort",
-    "locationExactHidden": "Die genaue Adresse wird nach der Buchung mitgeteilt.",
+    "locationExactHidden": "Die genaue Adresse wird 48 Stunden vor deinem Termin mitgeteilt.",
     "menuTitle": "Leistungen",
     "menuEmpty": "Dieser Braider hat noch keine Leistungen hinzugefügt.",
     "fromPrice": "ab {price} €",
@@ -119,6 +125,19 @@
       "previewError": "Preis konnte nicht geladen werden. Es wird stattdessen eine Schätzung angezeigt.",
       "quoteErrorToast": "Deine Buchung konnte nicht gestartet werden. Bitte versuche es erneut."
     },
+    "serviceLocation": {
+      "title": "Wo sollen deine Braids gemacht werden?",
+      "inPersonLabel": "Zu {name} gehen",
+      "inPersonSalonNote": "Die vollständige Adresse steht unten.",
+      "inPersonHiddenNote": "Die genaue Adresse wird 48 Stunden vor deinem Termin mitgeteilt.",
+      "mobileLabel": "Zu dir kommen lassen",
+      "mobileFeeNote": "+{fee} € Anfahrtsgebühr · bis zu {radius} km",
+      "mobileFreeNote": "Keine Anfahrtsgebühr · bis zu {radius} km",
+      "addressLabel": "Deine Adresse",
+      "addressPlaceholder": "Adresse eingeben",
+      "addressHint": "Wird erst nach der Buchung mit deinem Braider geteilt.",
+      "addressRequiredError": "Gib deine Adresse ein, um fortzufahren."
+    },
     "availability": {
       "title": "Verfügbarkeit",
       "previousMonth": "Vorheriger Monat",
@@ -142,6 +161,9 @@
     "summaryTitle": "Deine Buchung",
     "appointmentLabel": "Termin",
     "durationLabel": "Dauer",
+    "locationLabel": "Ort",
+    "locationInPersonValue": "Bei {name}",
+    "locationMobileValue": "Kommt zu dir — {address}",
     "priceDetailsTitle": "Preisdetails",
     "serviceSubtotalLabel": "Leistung",
     "travelFeeLabel": "Anfahrtsgebühr",

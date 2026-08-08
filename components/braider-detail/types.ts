@@ -19,6 +19,20 @@ export interface BraiderDetailSidebarDict {
   quoteErrorToast: string;
 }
 
+export interface BraiderDetailServiceLocationDict {
+  title: string;
+  inPersonLabel: string;
+  inPersonSalonNote: string;
+  inPersonHiddenNote: string;
+  mobileLabel: string;
+  mobileFeeNote: string;
+  mobileFreeNote: string;
+  addressLabel: string;
+  addressPlaceholder: string;
+  addressHint: string;
+  addressRequiredError: string;
+}
+
 export interface BraiderDetailAvailabilityDict {
   title: string;
   previousMonth: string;
@@ -61,6 +75,7 @@ export interface BraiderDetailDict {
   addonsLabel: string;
   requiredBadge: string;
   sidebar: BraiderDetailSidebarDict;
+  serviceLocation: BraiderDetailServiceLocationDict;
   availability: BraiderDetailAvailabilityDict;
   errorTitle: string;
   errorSubtitle: string;

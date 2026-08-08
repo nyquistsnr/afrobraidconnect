@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   Compass,
@@ -11,7 +11,6 @@ import {
   CircleUserRound,
   LogIn,
   LogOut,
-  Loader2,
   X,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
@@ -19,6 +18,11 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Modal } from "@/components/ui/modal";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
+import {
+  LogoutConfirmModal,
+  type LogoutModalDict,
+} from "@/components/layout/logout-confirm-modal";
+import { useLogout } from "@/lib/use-logout";
 
 export interface MobileTabBarDict {
   explore: string;
@@ -33,6 +37,7 @@ export interface MobileTabBarDict {
   logIn: string;
   logOut: string;
   helpCenter: string;
+  logoutModal: LogoutModalDict;
 }
 
 // Mirrors Airbnb's mobile bottom nav: a few primary destinations plus a
@@ -49,18 +54,28 @@ export function MobileTabBar({
   common: Dictionary["common"];
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
-  const router = useRouter();
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
+  const { logout, isLoggingOut } = useLogout(lang);
+
+  const homeHref = `/${lang}`;
+  // "Explore" covers the whole browse/discover flow (home, search, braider
+  // profiles), not just the exact home route — mirrors how Airbnb keeps its
+  // Explore tab highlighted while you're browsing listings.
+  const isExploring =
+    pathname === homeHref ||
+    pathname?.startsWith(`/${lang}/search`) ||
+    pathname?.startsWith(`/${lang}/braiders`);
 
   const tabs = [
     {
       key: "explore",
       label: dict.explore,
       icon: Compass,
-      href: `/${lang}`,
-      active: true,
+      href: homeHref,
+      active: isExploring,
     },
     ...(isAuthenticated
       ? ([
@@ -82,46 +97,57 @@ export function MobileTabBar({
       : []),
   ];
 
-  async function handleLogout() {
-    setLoggingOut(true);
-    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
-    setLoggingOut(false);
+  function handleLogoutClick() {
     setProfileOpen(false);
-    router.push(`/${lang}`);
-    router.refresh();
+    setLogoutConfirmOpen(true);
+  }
+
+  async function handleLogoutConfirm() {
+    await logout();
+    setLogoutConfirmOpen(false);
   }
 
   return (
     <>
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center gap-12 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
-        {tabs.map(({ key, label, icon: Icon, href, active }) => (
-          <Link
-            key={key}
-            href={href}
-            className={`flex flex-col items-center gap-1 px-4 py-2.5 text-[11px] font-medium transition-colors ${
-              active
-                ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
+        {/* Each tab is an equal flex-1 share of a capped-width row instead of
+            a fixed gap between fixed-width items — with up to 4 tabs (signed
+            in) plus long localized labels (e.g. German "Nachrichten"), a
+            fixed gap-12 row overflows every real phone width and clips the
+            last tab off-screen. This can never overflow: N tabs always sum
+            to exactly the row width, at any screen size or label length. */}
+        <div className="mx-auto flex w-full max-w-md items-stretch">
+          {tabs.map(({ key, label, icon: Icon, href, active }) => (
+            <Link
+              key={key}
+              href={href}
+              className={`flex min-w-0 flex-1 flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-medium transition-colors ${
+                active
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Icon className="size-5 shrink-0" strokeWidth={active ? 2.5 : 2} />
+              <span className="max-w-full truncate">{label}</span>
+            </Link>
+          ))}
+          <button
+            type="button"
+            onClick={() => setProfileOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={profileOpen}
+            className="flex min-w-0 flex-1 flex-col items-center gap-1 px-1 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            <Icon className="size-5" strokeWidth={active ? 2.5 : 2} />
-            {label}
-          </Link>
-        ))}
-        <button
-          type="button"
-          onClick={() => setProfileOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={profileOpen}
-          className="flex flex-col items-center gap-1 px-4 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {isAuthenticated ? (
-            <CircleUserRound className="size-5" />
-          ) : (
-            <LogIn className="size-5" />
-          )}
-          {isAuthenticated ? dict.profile : dict.logIn}
-        </button>
+            {isAuthenticated ? (
+              <CircleUserRound className="size-5 shrink-0" />
+            ) : (
+              <LogIn className="size-5 shrink-0" />
+            )}
+            <span className="max-w-full truncate">
+              {isAuthenticated ? dict.profile : dict.logIn}
+            </span>
+          </button>
+        </div>
       </nav>
 
       <Modal
@@ -210,21 +236,24 @@ export function MobileTabBar({
               <div className="my-2 border-t border-border" />
               <button
                 type="button"
-                onClick={handleLogout}
-                disabled={loggingOut}
-                className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40 disabled:opacity-60"
+                onClick={handleLogoutClick}
+                className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40"
               >
-                {loggingOut ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <LogOut className="size-4" />
-                )}
+                <LogOut className="size-4" />
                 {dict.logOut}
               </button>
             </>
           )}
         </div>
       </Modal>
+
+      <LogoutConfirmModal
+        open={logoutConfirmOpen}
+        onClose={() => setLogoutConfirmOpen(false)}
+        onConfirm={handleLogoutConfirm}
+        isLoggingOut={isLoggingOut}
+        dict={dict.logoutModal}
+      />
     </>
   );
 }

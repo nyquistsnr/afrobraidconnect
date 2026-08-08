@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GB, FR, DE } from "country-flag-icons/react/3x2";
 import { locales, localeNames, localeCountry, type Locale } from "@/lib/i18n";
 import { OptionPickerModal } from "@/components/ui/option-picker-modal";
@@ -25,11 +25,14 @@ export function LanguageSwitcher({
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   function switchTo(nextLang: Locale) {
     const segments = pathname.split("/");
     segments[1] = nextLang;
-    router.push(segments.join("/") || "/");
+    const nextPath = segments.join("/") || "/";
+    const query = searchParams.toString();
+    router.push(query ? `${nextPath}?${query}` : nextPath);
   }
 
   const CurrentFlag = flags[lang];

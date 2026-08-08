@@ -15,6 +15,12 @@
     "logOut": "Se déconnecter",
     "helpCenter": "Centre d'aide",
     "menuLabel": "Ouvrir le menu",
+    "logoutModal": {
+      "title": "Se déconnecter ?",
+      "description": "Êtes-vous sûr de vouloir vous déconnecter de votre compte ?",
+      "cancel": "Annuler",
+      "confirm": "Se déconnecter"
+    },
     "mobileNav": {
       "explore": "Explorer",
       "bookings": "Réservations",
@@ -89,7 +95,7 @@
     "aboutTitle": "À propos",
     "noBio": "Cette tresseuse n'a pas encore ajouté de description.",
     "locationTitle": "Localisation",
-    "locationExactHidden": "L'adresse exacte est communiquée après la réservation.",
+    "locationExactHidden": "L'adresse exacte est communiquée 48 heures avant votre rendez-vous.",
     "menuTitle": "Services",
     "menuEmpty": "Cette tresseuse n'a pas encore ajouté de services.",
     "fromPrice": "à partir de {price} €",
@@ -119,6 +125,19 @@
       "previewError": "Impossible de charger le tarif. Estimation affichée à la place.",
       "quoteErrorToast": "Impossible de démarrer votre réservation. Veuillez réessayer."
     },
+    "serviceLocation": {
+      "title": "Où souhaitez-vous vos tresses ?",
+      "inPersonLabel": "Se rendre chez {name}",
+      "inPersonSalonNote": "L'adresse complète est indiquée ci-dessous.",
+      "inPersonHiddenNote": "L'adresse exacte est communiquée 48 heures avant votre rendez-vous.",
+      "mobileLabel": "Se faire déplacer",
+      "mobileFeeNote": "+{fee} € de frais de déplacement · jusqu'à {radius} km",
+      "mobileFreeNote": "Sans frais de déplacement · jusqu'à {radius} km",
+      "addressLabel": "Votre adresse",
+      "addressPlaceholder": "Saisissez votre adresse",
+      "addressHint": "Communiquée à votre tresseuse uniquement après la réservation.",
+      "addressRequiredError": "Saisissez votre adresse pour continuer."
+    },
     "availability": {
       "title": "Disponibilités",
       "previousMonth": "Mois précédent",
@@ -142,6 +161,9 @@
     "summaryTitle": "Votre réservation",
     "appointmentLabel": "Rendez-vous",
     "durationLabel": "Durée",
+    "locationLabel": "Lieu",
+    "locationInPersonValue": "Chez {name}",
+    "locationMobileValue": "Elle se déplace chez vous — {address}",
     "priceDetailsTitle": "Détails du prix",
     "serviceSubtotalLabel": "Service",
     "travelFeeLabel": "Frais de déplacement",

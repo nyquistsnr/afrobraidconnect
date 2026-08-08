@@ -14,12 +14,14 @@ export function BraiderCard({
   isHighlighted,
   onHover,
   lang,
+  dateFrom,
   dict,
 }: {
   item: BraiderSearchItem;
   isHighlighted: boolean;
   onHover: (id: string | null) => void;
   lang: Locale;
+  dateFrom: string | null;
   dict: SearchResultsDict;
 }) {
   const style = displayStyle(item);
@@ -28,9 +30,14 @@ export function BraiderCard({
     .join(", ");
   // Only carry the style filter over when it's the one the search actually
   // matched on — not the cheapest-style fallback used just to show a price.
-  const href = item.matched_style
-    ? `/${lang}/braiders/${item.id}?style_id=${item.matched_style.style_id}`
-    : `/${lang}/braiders/${item.id}`;
+  // The searched date carries over too, so the braider's own availability
+  // calendar opens on the day the customer was already looking for instead
+  // of resetting to today.
+  const params = new URLSearchParams();
+  if (item.matched_style) params.set("style_id", item.matched_style.style_id);
+  if (dateFrom) params.set("date_from", dateFrom);
+  const qs = params.toString();
+  const href = `/${lang}/braiders/${item.id}${qs ? `?${qs}` : ""}`;
 
   return (
     <Link

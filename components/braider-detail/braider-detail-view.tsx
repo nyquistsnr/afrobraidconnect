@@ -7,14 +7,26 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Sparkles } from "lucide-react";
-import type { AvailableSlotResponse, BraiderDetailResponse } from "@/lib/api/types";
+import type {
+  AvailableSlotResponse,
+  BookingCalculationPreviewResponse,
+  BraiderDetailResponse,
+} from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
-import { cheapestOfferedStyle, formatPrice } from "@/lib/braider-pricing";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
 import { bookingCalculationsApi } from "@/lib/api/booking-calculations-client";
+import { ApiError } from "@/lib/api/auth-client";
+import { formatClientAddress, fromISODateLocal } from "@/components/braider-detail/format";
 import { PhotoGallery } from "@/components/braider-detail/photo-gallery";
 import { StyleMenu } from "@/components/braider-detail/style-menu";
+import {
+  ServiceLocationSection,
+  type ClientAddress,
+  type ServiceMode,
+} from "@/components/braider-detail/service-location-section";
 import { AvailabilitySection } from "@/components/braider-detail/availability-section";
 import { BookingSidebar } from "@/components/braider-detail/booking-sidebar";
 import { MobileBookingBar } from "@/components/braider-detail/mobile-booking-bar";
@@ -25,25 +37,28 @@ export function BraiderDetailView({
   braider,
   lang,
   initialStyleId,
+  initialDateFrom,
   dict,
+  errorsDict,
 }: {
   braider: BraiderDetailResponse;
   lang: Locale;
   initialStyleId?: string | null;
+  initialDateFrom?: string | null;
   dict: BraiderDetailDict;
+  errorsDict: Dictionary["common"]["errors"];
 }) {
+  const initialDate = initialDateFrom ? fromISODateLocal(initialDateFrom) : null;
   const router = useRouter();
-  const defaultStyle = useMemo(
-    () => cheapestOfferedStyle(braider.styles),
-    [braider.styles]
-  );
-  // A style_id carried over from the search page's style filter (via the
-  // card's link) takes priority, but only if this braider actually offers
-  // it — otherwise fall back to the cheapest style, same as browsing in
-  // without a filter.
+  // No default style is preselected on load — selecting one is what kicks
+  // off the preview/availability API calls, so an auto-picked "cheapest
+  // style" default would fire those requests before the user has done
+  // anything. A style_id carried over from the search page's style filter
+  // (via the card's link) is a real user action, so it's still honored —
+  // but only if this braider actually offers it.
   const initialStyle = initialStyleId
-    ? (braider.styles.find((s) => s.style_id === initialStyleId) ?? defaultStyle)
-    : defaultStyle;
+    ? (braider.styles.find((s) => s.style_id === initialStyleId) ?? null)
+    : null;
 
   const [selectedStyleId, setSelectedStyleId] = useState<string | null>(
     initialStyle?.style_id ?? null
@@ -57,9 +72,28 @@ export function BraiderDetailView({
   const [selectedSlot, setSelectedSlot] = useState<AvailableSlotResponse | null>(
     null
   );
+  const offersMobile = !!braider.location?.offers_mobile;
+  const [serviceMode, setServiceMode] = useState<ServiceMode>("in_person");
+  const [clientAddress, setClientAddress] = useState<ClientAddress | null>(null);
+  const [showAddressError, setShowAddressError] = useState(false);
 
   const selectedStyle =
     braider.styles.find((s) => s.style_id === selectedStyleId) ?? null;
+  // "Mobile" only actually applies once a valid address has been chosen —
+  // until then, price/preview/creation all behave as if in-person, so the
+  // total never blanks out while the customer is mid-autocomplete.
+  const isMobileBooking = offersMobile && serviceMode === "mobile";
+  const hasMobileAddress = isMobileBooking && clientAddress != null;
+
+  function handleServiceModeChange(mode: ServiceMode) {
+    setServiceMode(mode);
+    setShowAddressError(false);
+  }
+
+  function handleClientAddressChange(address: ClientAddress | null) {
+    setClientAddress(address);
+    setShowAddressError(false);
+  }
 
   function handleSelectStyle(id: string) {
     setSelectedStyleId(id);
@@ -89,16 +123,48 @@ export function BraiderDetailView({
       braider_style_variation_id: selectedVariationId ?? undefined,
       braider_style_addon_ids:
         selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
+      ...(hasMobileAddress && clientAddress
+        ? {
+            is_mobile: true,
+            client_address: formatClientAddress(clientAddress),
+            client_latitude: String(clientAddress.lat),
+            client_longitude: String(clientAddress.lng),
+          }
+        : {}),
     };
-  }, [braider.id, selectedStyleId, selectedVariationId, selectedAddonIds]);
+  }, [
+    braider.id,
+    selectedStyleId,
+    selectedVariationId,
+    selectedAddonIds,
+    hasMobileAddress,
+    clientAddress,
+  ]);
   const debouncedPreviewInput = useDebouncedValue(previewInput, 400);
 
-  const { data: preview } = useQuery({
+  const {
+    data: preview,
+    isError: previewIsError,
+    error: previewErrorObj,
+  } = useQuery<BookingCalculationPreviewResponse, ApiError>({
     queryKey: ["booking-calculation-preview", debouncedPreviewInput],
     queryFn: () => bookingCalculationsApi.preview(debouncedPreviewInput!),
     enabled: debouncedPreviewInput != null,
     staleTime: 15_000,
+    // A rejected quote (invalid selection, out-of-range address, etc.) is
+    // deterministic — retrying just delays surfacing it to the customer.
+    retry: false,
   });
+
+  // The debounced address can still land outside the braider's travel
+  // radius — the backend is the only source of truth for that (it knows
+  // the exact route distance), so this only surfaces once the quote
+  // request actually comes back rejected.
+  const mobileLocationOutOfRange =
+    hasMobileAddress &&
+    previewIsError &&
+    previewErrorObj instanceof ApiError &&
+    previewErrorObj.code === "MOBILE_LOCATION_OUT_OF_RANGE";
 
   const createCalculationMutation = useMutation({
     mutationFn: () => {
@@ -111,6 +177,14 @@ export function BraiderDetailView({
         braider_style_variation_id: selectedVariationId ?? undefined,
         braider_style_addon_ids:
           selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
+        ...(hasMobileAddress && clientAddress
+          ? {
+              is_mobile: true,
+              client_address: formatClientAddress(clientAddress),
+              client_latitude: String(clientAddress.lat),
+              client_longitude: String(clientAddress.lng),
+            }
+          : {}),
       });
     },
     onSuccess: (calculation) => {
@@ -127,6 +201,13 @@ export function BraiderDetailView({
 
   function handleContinue() {
     if (!selectedStyle) return;
+    if (isMobileBooking && (!clientAddress || mobileLocationOutOfRange)) {
+      if (!clientAddress) setShowAddressError(true);
+      document
+        .getElementById("service-location-section")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     if (!selectedSlot) {
       document
         .getElementById("availability-section")
@@ -250,6 +331,28 @@ export function BraiderDetailView({
             />
           </section>
 
+          {selectedStyle && offersMobile && braider.location && (
+            <div id="service-location-section" className="scroll-mt-24">
+              <ServiceLocationSection
+                businessName={businessName}
+                location={braider.location}
+                isSalon={isSalon}
+                serviceMode={serviceMode}
+                onServiceModeChange={handleServiceModeChange}
+                clientAddress={clientAddress}
+                onClientAddressChange={handleClientAddressChange}
+                addressError={
+                  mobileLocationOutOfRange
+                    ? errorsDict.mobileLocationOutOfRange
+                    : showAddressError
+                      ? dict.serviceLocation.addressRequiredError
+                      : undefined
+                }
+                dict={dict.serviceLocation}
+              />
+            </div>
+          )}
+
           {selectedStyle && (
             <div id="availability-section" className="scroll-mt-24">
               <AvailabilitySection
@@ -258,6 +361,7 @@ export function BraiderDetailView({
                 lang={lang}
                 selectedSlot={selectedSlot}
                 onSelectSlot={setSelectedSlot}
+                initialDate={initialDate}
                 dict={dict}
               />
             </div>

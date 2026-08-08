@@ -87,6 +87,17 @@ export function toISODateLocal(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
+// Inverse of toISODateLocal — parses as local calendar date, not UTC, so a
+// "2026-08-20" from the URL lands on the same day the customer picked
+// regardless of timezone.
+export function fromISODateLocal(value: string): Date | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) return null;
+  const [, y, m, d] = match;
+  const date = new Date(Number(y), Number(m) - 1, Number(d));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 // Buckets a UTC slot instant by the local calendar day the customer sees it
 // fall on.
 export function localDateKey(iso: string): string {
@@ -119,6 +130,19 @@ export function ctaLabel(
 ): string {
   if (!hasStyle) return dict.sidebar.ctaNoSelection;
   return hasSlot ? dict.sidebar.ctaWithSlot : dict.sidebar.cta;
+}
+
+// The braider needs enough to actually navigate there, not just the street —
+// mirrors how the (braider-facing) Location section itself joins postal code
+// and city.
+export function formatClientAddress(address: {
+  line1: string;
+  city: string;
+  postalCode: string;
+}): string {
+  return [address.line1, [address.postalCode, address.city].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join(", ");
 }
 
 export interface PricingDisplay {

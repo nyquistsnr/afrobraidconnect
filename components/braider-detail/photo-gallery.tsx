@@ -35,7 +35,7 @@ export function PhotoGallery({
 
   if (sorted.length === 0) {
     return (
-      <div className="mx-auto max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
         <div className="flex h-64 items-center justify-center rounded-2xl bg-border/30 sm:h-96">
           <div className="flex flex-col items-center gap-2 text-icon-muted">
             <ImageOff className="size-10" />
@@ -47,7 +47,7 @@ export function PhotoGallery({
   }
 
   return (
-    <div className="mx-auto max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
+    <div className="mx-auto w-full max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
       <div className="relative overflow-hidden rounded-2xl">
         <GalleryGrid images={sorted} alt={alt} onOpen={setLightboxIndex} />
         {sorted.length > 1 && (

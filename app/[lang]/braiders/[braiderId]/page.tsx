@@ -19,6 +19,8 @@ export default async function BraiderDetailPage({
   const sp = await searchParams;
   const styleIdParam = sp.style_id;
   const initialStyleId = Array.isArray(styleIdParam) ? styleIdParam[0] : styleIdParam;
+  const dateFromParam = sp.date_from;
+  const initialDateFrom = Array.isArray(dateFromParam) ? dateFromParam[0] : dateFromParam;
 
   const dict = await getDictionary(lang);
 
@@ -40,7 +42,9 @@ export default async function BraiderDetailPage({
           braider={braider}
           lang={lang}
           initialStyleId={initialStyleId}
+          initialDateFrom={initialDateFrom}
           dict={dict.braiderDetail}
+          errorsDict={dict.common.errors}
         />
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-24 text-center">

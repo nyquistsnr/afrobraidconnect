@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { LogOut, Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -11,6 +12,11 @@ import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
+import {
+  LogoutConfirmModal,
+  type LogoutModalDict,
+} from "@/components/layout/logout-confirm-modal";
+import { useLogout } from "@/lib/use-logout";
 import type {
   SelectedLocation,
   SelectedStyle,
@@ -46,6 +52,7 @@ export interface SiteHeaderDict {
   menuLabel: string;
   search: SearchDict;
   mobileNav: MobileNavDict;
+  logoutModal: LogoutModalDict;
 }
 
 export function SiteHeader({
@@ -65,7 +72,21 @@ export function SiteHeader({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const { logout, isLoggingOut } = useLogout(lang);
+
+  function handleLogoutClick() {
+    setMenuOpen(false);
+    setLogoutConfirmOpen(true);
+  }
+
+  async function handleLogoutConfirm() {
+    await logout();
+    setLogoutConfirmOpen(false);
+  }
 
   const [location, setLocation] = useState<SelectedLocation | null>(
     initialLocation || null
@@ -176,26 +197,30 @@ export function SiteHeader({
                   role="menu"
                   className="absolute top-full right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface py-2 shadow-lg"
                 >
-                  <li role="none">
-                    <Link
-                      role="menuitem"
-                      href={`/${lang}/signup`}
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
-                    >
-                      {dict.signUp}
-                    </Link>
-                  </li>
-                  <li role="none">
-                    <Link
-                      role="menuitem"
-                      href={`/${lang}/login`}
-                      onClick={() => setMenuOpen(false)}
-                      className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
-                    >
-                      {dict.logIn}
-                    </Link>
-                  </li>
+                  {!isAuthenticated && (
+                    <>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/signup`}
+                          onClick={() => setMenuOpen(false)}
+                          className="block px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                        >
+                          {dict.signUp}
+                        </Link>
+                      </li>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/login`}
+                          onClick={() => setMenuOpen(false)}
+                          className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
+                        >
+                          {dict.logIn}
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li role="none" className="my-2 border-t border-border" />
                   <li role="none" className="lg:hidden">
                     <div className="flex items-center justify-between px-4 py-2">
@@ -238,6 +263,22 @@ export function SiteHeader({
                       {dict.helpCenter}
                     </Link>
                   </li>
+                  {isAuthenticated && (
+                    <>
+                      <li role="none" className="my-2 border-t border-border" />
+                      <li role="none">
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onClick={handleLogoutClick}
+                          className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-foreground hover:bg-border/40"
+                        >
+                          <LogOut className="size-4" />
+                          {dict.logOut}
+                        </button>
+                      </li>
+                    </>
+                  )}
                 </ul>
               )}
             </div>
@@ -276,8 +317,17 @@ export function SiteHeader({
           logIn: dict.logIn,
           logOut: dict.logOut,
           helpCenter: dict.helpCenter,
+          logoutModal: dict.logoutModal,
         }}
         common={common}
+      />
+
+      <LogoutConfirmModal
+        open={logoutConfirmOpen}
+        onClose={() => setLogoutConfirmOpen(false)}
+        onConfirm={handleLogoutConfirm}
+        isLoggingOut={isLoggingOut}
+        dict={dict.logoutModal}
       />
     </>
   );

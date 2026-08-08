@@ -10,8 +10,11 @@ import { formatPrice } from "@/lib/braider-pricing";
 import { ctaLabel, resolvePricing } from "@/components/braider-detail/format";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
-// Sits directly above the app-wide MobileTabBar (which is ~60px tall) so the
-// two fixed bars stack cleanly instead of overlapping.
+// Sits directly above the app-wide MobileTabBar. The offset has to add
+// env(safe-area-inset-bottom) on top of the tab bar's own ~64px content
+// height — the tab bar pads itself by that same inset for the home
+// indicator, so on notched phones a flat `bottom-16` would leave a gap
+// between the two bars instead of stacking them flush.
 export function MobileBookingBar({
   selectedStyle,
   selectedVariationId,
@@ -36,7 +39,7 @@ export function MobileBookingBar({
     : null;
 
   return (
-    <div className="fixed inset-x-0 bottom-16 z-30 border-t border-border bg-surface px-4 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] lg:hidden">
+    <div className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-30 border-t border-border bg-surface px-4 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] lg:hidden">
       <div className="mx-auto flex max-w-[1760px] items-center justify-between gap-4">
         <div className="min-w-0">
           <p className="truncate text-xs text-muted-foreground">
