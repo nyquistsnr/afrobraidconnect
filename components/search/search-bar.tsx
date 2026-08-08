@@ -98,7 +98,7 @@ export function SearchBar({
   return (
     <div
       ref={containerRef}
-      className="relative hidden flex-1 justify-center md:flex"
+      className="relative hidden min-w-0 flex-1 justify-center md:flex"
     >
       {activePanel && (
         <div
@@ -108,12 +108,12 @@ export function SearchBar({
         />
       )}
 
-      <div className="relative">
+      <div className="relative w-full min-w-0 max-w-[680px]">
         {!expanded ? (
           <button
             type="button"
             onClick={() => setActivePanel("where")}
-            className="search-fade-in relative z-50 flex h-12 items-center gap-3 rounded-full border border-border bg-surface px-4 shadow-sm transition-shadow hover:shadow-md"
+            className="search-fade-in relative z-50 mx-auto flex w-fit h-12 items-center gap-3 rounded-full border border-border bg-surface px-4 shadow-sm transition-shadow hover:shadow-md"
           >
             <span className="flex size-8 items-center justify-center rounded-full bg-brand text-brand-foreground">
               <Search className="size-4" />
@@ -128,17 +128,17 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("where")}
               aria-expanded={activePanel === "where"}
-              className={`relative flex h-full min-w-[230px] items-center rounded-full px-8 text-left transition-all duration-200 ${
+              className={`relative flex h-full flex-1 min-w-0 items-center rounded-full px-4 lg:px-8 text-left transition-all duration-200 ${
                 activePanel === "where"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
               }`}
             >
-              <span className="flex flex-col">
-                <span className="text-xs font-semibold text-foreground">
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate text-xs font-semibold text-foreground">
                   {dict.searchLocationLabel}
                 </span>
-                <span className="block max-w-[190px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-full truncate text-xs text-muted-foreground lg:max-w-[190px]">
                   {location?.label ?? dict.searchLocationPlaceholder}
                 </span>
               </span>
@@ -156,24 +156,24 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("style")}
               aria-expanded={activePanel === "style"}
-              className={`relative hidden h-full min-w-[210px] items-center rounded-full px-8 text-left transition-all duration-200 lg:flex ${
+              className={`relative flex h-full flex-1 min-w-0 items-center rounded-full px-4 lg:px-8 text-left transition-all duration-200 ${
                 activePanel === "style"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
               }`}
             >
-              <span className="flex flex-col">
-                <span className="text-xs font-semibold text-foreground">
+              <span className="flex min-w-0 flex-col">
+                <span className="truncate text-xs font-semibold text-foreground">
                   {dict.searchStyleLabel}
                 </span>
-                <span className="block max-w-[170px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-full truncate text-xs text-muted-foreground lg:max-w-[170px]">
                   {style?.name ?? dict.searchStylePlaceholder}
                 </span>
               </span>
             </button>
 
             <span
-              className={`hidden h-8 w-px bg-border transition-opacity lg:block ${
+              className={`h-8 w-px bg-border transition-opacity ${
                 activePanel === "style" || activePanel === "when"
                   ? "opacity-0"
                   : "opacity-100"
@@ -184,32 +184,23 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("when")}
               aria-expanded={activePanel === "when"}
-              className={`relative hidden h-full min-w-[260px] items-center rounded-full py-2 pr-2 pl-8 text-left transition-all duration-200 lg:flex ${
+              className={`relative flex h-full flex-[1.2] min-w-0 items-center rounded-full py-2 pr-2 pl-4 lg:pl-8 text-left transition-all duration-200 ${
                 activePanel === "when"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
               }`}
             >
-              <span className="flex flex-1 flex-col">
-                <span className="text-xs font-semibold text-foreground">
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="truncate text-xs font-semibold text-foreground">
                   {dict.searchDateLabel}
                 </span>
-                <span className="block max-w-[160px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-full truncate text-xs text-muted-foreground lg:max-w-[160px]">
                   {dateLabel ?? dict.searchDatePlaceholder}
                 </span>
               </span>
-              <span className="ml-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground">
+              <span className="ml-2 lg:ml-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground">
                 <Search className="size-4" />
               </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActivePanel(null)}
-              aria-label={dict.searchButtonLabel}
-              className="mr-2 ml-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground lg:hidden"
-            >
-              <Search className="size-4" />
             </button>
           </div>
         )}
