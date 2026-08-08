@@ -13,7 +13,30 @@
     "signUp": "Registrieren",
     "logIn": "Anmelden",
     "helpCenter": "Hilfebereich",
-    "menuLabel": "Menü öffnen"
+    "menuLabel": "Menü öffnen",
+    "search": {
+      "clearAll": "Alles löschen",
+      "searchCta": "Suchen",
+      "where": {
+        "searchPlaceholder": "Reiseziel suchen",
+        "nearbyLabel": "In der Nähe",
+        "nearbyDescription": "Braider in deiner Nähe finden",
+        "suggestedHeading": "Vorgeschlagene Reiseziele",
+        "geoDeniedMessage": "Der Standortzugriff wurde verweigert. Du kannst ihn in den Browsereinstellungen aktivieren.",
+        "geoUnsupportedMessage": "Standortdienste sind in diesem Browser nicht verfügbar."
+      },
+      "style": {
+        "searchPlaceholder": "Stil suchen",
+        "noResults": "Keine Stile entsprechen deiner Suche.",
+        "loadError": "Stile konnten nicht geladen werden. Bitte versuche es erneut.",
+        "popularHeading": "Beliebte Stile"
+      },
+      "when": {
+        "heading": "Wann möchtest du deinen Termin?",
+        "clearDates": "Daten löschen",
+        "closeCalendar": "Schließen"
+      }
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",

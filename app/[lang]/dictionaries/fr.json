@@ -13,7 +13,30 @@
     "signUp": "S'inscrire",
     "logIn": "Se connecter",
     "helpCenter": "Centre d'aide",
-    "menuLabel": "Ouvrir le menu"
+    "menuLabel": "Ouvrir le menu",
+    "search": {
+      "clearAll": "Tout effacer",
+      "searchCta": "Rechercher",
+      "where": {
+        "searchPlaceholder": "Rechercher une destination",
+        "nearbyLabel": "À proximité",
+        "nearbyDescription": "Trouvez des tresseuses près de vous",
+        "suggestedHeading": "Destinations suggérées",
+        "geoDeniedMessage": "L'accès à la position a été refusé. Vous pouvez l'activer dans les paramètres de votre navigateur.",
+        "geoUnsupportedMessage": "La localisation n'est pas disponible sur ce navigateur."
+      },
+      "style": {
+        "searchPlaceholder": "Rechercher un style",
+        "noResults": "Aucun style ne correspond à votre recherche.",
+        "loadError": "Impossible de charger les styles. Veuillez réessayer.",
+        "popularHeading": "Styles populaires"
+      },
+      "when": {
+        "heading": "Quand souhaitez-vous votre rendez-vous ?",
+        "clearDates": "Effacer les dates",
+        "closeCalendar": "Fermer"
+      }
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",

@@ -3,11 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
+import { SearchBar } from "@/components/search/search-bar";
+import { MobileSearch } from "@/components/search/mobile-search-sheet";
+import type {
+  SelectedLocation,
+  SelectedStyle,
+  SelectedDateRange,
+  SearchDict,
+} from "@/components/search/types";
 
 export interface SiteHeaderDict {
   logoAlt: string;
@@ -17,12 +25,14 @@ export interface SiteHeaderDict {
   searchStylePlaceholder: string;
   searchDateLabel: string;
   searchDatePlaceholder: string;
+  searchButtonLabel: string;
   startSearch: string;
   becomeABraider: string;
   signUp: string;
   logIn: string;
   helpCenter: string;
   menuLabel: string;
+  search: SearchDict;
 }
 
 export function SiteHeader({
@@ -37,6 +47,10 @@ export function SiteHeader({
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const [location, setLocation] = useState<SelectedLocation | null>(null);
+  const [style, setStyle] = useState<SelectedStyle | null>(null);
+  const [dateRange, setDateRange] = useState<SelectedDateRange>({});
 
   useEffect(() => {
     function handleScroll() {
@@ -65,7 +79,7 @@ export function SiteHeader({
     >
       <div
         className={`mx-auto flex max-w-[1760px] items-center justify-between gap-2 px-4 transition-[height] duration-200 sm:px-6 lg:px-10 ${
-          scrolled ? "h-[72px]" : "h-20"
+          scrolled ? "h-20" : "h-24"
         }`}
       >
         <Link
@@ -83,56 +97,17 @@ export function SiteHeader({
           />
         </Link>
 
-        <div className="hidden flex-1 justify-center md:flex">
-          {scrolled ? (
-            <button
-              type="button"
-              className="flex h-12 items-center gap-3 rounded-full border border-border bg-surface px-4 shadow-sm transition-shadow hover:shadow-md"
-            >
-              <span className="flex size-8 items-center justify-center rounded-full bg-brand text-brand-foreground">
-                <Search className="size-4" />
-              </span>
-              <span className="text-sm font-medium text-foreground">
-                {dict.startSearch}
-              </span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="flex h-14 items-center divide-x divide-border overflow-hidden rounded-full border border-border bg-surface transition-shadow hover:shadow-md"
-            >
-              <span className="px-6 py-2.5 text-left">
-                <span className="block text-xs font-semibold text-foreground">
-                  {dict.searchLocationLabel}
-                </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {dict.searchLocationPlaceholder}
-                </span>
-              </span>
-              <span className="hidden px-6 py-2.5 text-left lg:block">
-                <span className="block text-xs font-semibold text-foreground">
-                  {dict.searchStyleLabel}
-                </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {dict.searchStylePlaceholder}
-                </span>
-              </span>
-              <span className="flex items-center gap-3 py-2 pr-2 pl-6">
-                <span className="hidden text-left lg:block">
-                  <span className="block text-xs font-semibold text-foreground">
-                    {dict.searchDateLabel}
-                  </span>
-                  <span className="block truncate text-xs text-muted-foreground">
-                    {dict.searchDatePlaceholder}
-                  </span>
-                </span>
-                <span className="flex size-8 items-center justify-center rounded-full bg-brand text-brand-foreground">
-                  <Search className="size-4" />
-                </span>
-              </span>
-            </button>
-          )}
-        </div>
+        <SearchBar
+          lang={lang}
+          scrolled={scrolled}
+          dict={dict}
+          location={location}
+          onLocationChange={setLocation}
+          style={style}
+          onStyleChange={setStyle}
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+        />
 
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <Link
@@ -214,22 +189,25 @@ export function SiteHeader({
       </div>
 
       <div className="border-t border-border px-4 py-3 md:hidden">
-        <button
-          type="button"
-          className="flex w-full items-center gap-3 rounded-full border border-border bg-surface px-4 py-3 shadow-sm"
-        >
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground">
-            <Search className="size-4" />
-          </span>
-          <span className="flex flex-col text-left">
-            <span className="text-sm font-semibold text-foreground">
-              {dict.searchLocationLabel}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {dict.startSearch}
-            </span>
-          </span>
-        </button>
+        <MobileSearch
+          lang={lang}
+          dict={{
+            searchLocationLabel: dict.searchLocationLabel,
+            searchStyleLabel: dict.searchStyleLabel,
+            searchDateLabel: dict.searchDateLabel,
+            startSearch: dict.startSearch,
+            searchButtonLabel: dict.searchButtonLabel,
+            closeLabel: common.close,
+            clearAllLabel: dict.search.clearAll,
+            search: dict.search,
+          }}
+          location={location}
+          onLocationChange={setLocation}
+          style={style}
+          onStyleChange={setStyle}
+          dateRange={dateRange}
+          onDateRangeChange={setDateRange}
+        />
       </div>
     </header>
   );

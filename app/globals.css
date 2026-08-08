@@ -106,3 +106,52 @@ body {
   font-size: 0.875rem;
 }
 
+/* Header search: small fade used when the search pill morphs between its
+   collapsed (scrolled) and expanded states. */
+@keyframes search-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-fade-in {
+  animation: search-fade-in 200ms ease-out;
+}
+
+/* Header search: dropdown flyout entrance, and the cross-fade between
+   Where/Style/When panels (each panel remounts via a `key` change). */
+@keyframes search-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.search-panel-in {
+  animation: search-panel-in 180ms cubic-bezier(0.2, 0, 0, 1);
+  transform-origin: top center;
+}
+
+/* Mobile full-screen search sheet: slides up from the bottom. */
+@keyframes search-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.search-sheet-in {
+  animation: search-sheet-in 280ms cubic-bezier(0.2, 0, 0, 1);
+}
+

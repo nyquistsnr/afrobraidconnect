@@ -13,7 +13,30 @@
     "signUp": "Sign up",
     "logIn": "Log in",
     "helpCenter": "Help Center",
-    "menuLabel": "Open menu"
+    "menuLabel": "Open menu",
+    "search": {
+      "clearAll": "Clear all",
+      "searchCta": "Search",
+      "where": {
+        "searchPlaceholder": "Search destinations",
+        "nearbyLabel": "Nearby",
+        "nearbyDescription": "Find braiders around you",
+        "suggestedHeading": "Suggested destinations",
+        "geoDeniedMessage": "Location access was denied. You can enable it in your browser settings.",
+        "geoUnsupportedMessage": "Location isn't available on this browser."
+      },
+      "style": {
+        "searchPlaceholder": "Search styles",
+        "noResults": "No styles match your search.",
+        "loadError": "Couldn't load styles. Please try again.",
+        "popularHeading": "Popular styles"
+      },
+      "when": {
+        "heading": "When would you like your appointment?",
+        "clearDates": "Clear dates",
+        "closeCalendar": "Close"
+      }
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
