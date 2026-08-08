@@ -17,42 +17,10 @@ export interface PhoneInputProps {
   value?: string;
   onChange: (value: string | undefined) => void;
   placeholder?: string;
-  error?: string;
-  searchPlaceholder?: string;
-  noResultsLabel?: string;
-}
-
-export function PhoneInput({
-  id,
-  label,
-  lang,
-  value,
-  onChange,
-  placeholder,
-  error,
-  searchPlaceholder,
-  noResultsLabel,
-}: PhoneInputProps) {
-  return (
-    <div>
-      <label htmlFor={id} className="sr-only">
-        {label}
-      </label>
-      <div
-        className={`rounded-xl border bg-input px-4 py-3 focus-within:border-brand ${
-          error ? "border-red-500" : "border-border"
-        }`}
-      >
-        <RPNInput
-          id={id}
-          international
-          withCountryCallingCode
-          defaultCountry={localeCountry[lang]}
-          labels={localeLabels[lang]}
-          value={value}
           onChange={onChange}
           placeholder={placeholder}
           aria-invalid={!!error}
+          disabled={disabled}
           countrySelectComponent={CountrySelect}
           countrySelectProps={{ searchPlaceholder, noResultsLabel }}
         />

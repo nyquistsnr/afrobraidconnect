@@ -199,17 +199,30 @@ export function SiteHeader({
                   className="absolute top-full right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface py-2 shadow-lg"
                 >
                   {isAuthenticated && (
-                    <li role="none">
-                      <Link
-                        role="menuitem"
-                        href={`/${lang}/bookings`}
-                        onClick={() => setMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
-                      >
-                        <CalendarCheck2 className="size-4" />
-                        {dict.myBookings}
-                      </Link>
-                    </li>
+                    <>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/profile`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                        >
+                          <CircleUserRound className="size-4" />
+                          {dict.profileTitle}
+                        </Link>
+                      </li>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/bookings`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                        >
+                          <CalendarCheck2 className="size-4" />
+                          {dict.myBookings}
+                        </Link>
+                      </li>
+                    </>
                   )}
                   {!isAuthenticated && (
                     <>

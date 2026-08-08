@@ -840,5 +840,17 @@
         ]
       }
     ]
+  },
+  "profile": {
+    "title": "Persönliche Daten",
+    "firstNameLabel": "Vorname",
+    "lastNameLabel": "Nachname",
+    "emailLabel": "E-Mail-Adresse",
+    "phoneLabel": "Telefonnummer",
+    "saveButton": "Änderungen speichern",
+    "savingButton": "Speichern...",
+    "successMessage": "Profil erfolgreich aktualisiert.",
+    "errorMessage": "Profil konnte nicht aktualisiert werden.",
+    "emailNote": "E-Mail kann hier nicht geändert werden."
   }
 }

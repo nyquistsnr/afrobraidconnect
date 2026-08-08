@@ -236,6 +236,14 @@ export function MobileTabBar({
           {isAuthenticated && (
             <>
               <div className="my-2 border-t border-border" />
+              <Link
+                href={`/${lang}/profile`}
+                onClick={() => setProfileOpen(false)}
+                className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40"
+              >
+                <CircleUserRound className="size-4" />
+                {dict.profileTitle}
+              </Link>
               <button
                 type="button"
                 onClick={handleLogoutClick}

@@ -840,5 +840,17 @@
         ]
       }
     ]
+  },
+  "profile": {
+    "title": "Informations personnelles",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom de famille",
+    "emailLabel": "Adresse e-mail",
+    "phoneLabel": "Numéro de téléphone",
+    "saveButton": "Enregistrer les modifications",
+    "savingButton": "Enregistrement...",
+    "successMessage": "Profil mis à jour avec succès.",
+    "errorMessage": "Impossible de mettre à jour le profil.",
+    "emailNote": "L'adresse e-mail ne peut pas être modifiée ici."
   }
 }

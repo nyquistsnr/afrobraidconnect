@@ -840,5 +840,17 @@
         ]
       }
     ]
+  },
+  "profile": {
+    "title": "Personal info",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name",
+    "emailLabel": "Email address",
+    "phoneLabel": "Phone number",
+    "saveButton": "Save changes",
+    "savingButton": "Saving...",
+    "successMessage": "Profile updated successfully.",
+    "errorMessage": "Could not update profile.",
+    "emailNote": "Email cannot be changed here."
   }
 }
