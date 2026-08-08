@@ -554,3 +554,48 @@ export interface BraiderSearchParams {
   page?: number;
   page_size?: number;
 }
+
+// ---------------------------------------------------------------------------
+// Braider public profile (GET /braiders/{braider_id})
+// ---------------------------------------------------------------------------
+
+export interface BraiderPortfolioImage {
+  id: string;
+  url: string;
+  caption: string | null;
+  position: number;
+}
+
+export interface BraiderOfferedStyleVariation {
+  id: string;
+  name: string;
+  price: string;
+}
+
+export interface BraiderOfferedStyleAddon {
+  id: string;
+  name: string;
+  price: string;
+  is_required: boolean;
+}
+
+export interface BraiderOfferedStyle {
+  style_id: string;
+  slug: string;
+  name: string;
+  base_price: string;
+  duration_minutes: number | null;
+  variations: BraiderOfferedStyleVariation[];
+  addons: BraiderOfferedStyleAddon[];
+}
+
+export interface BraiderDetailResponse {
+  id: string;
+  business_name: string | null;
+  logo_url: string | null;
+  bio: string | null;
+  gender: Gender | null;
+  location: BraiderLocationResponse | null;
+  portfolio: BraiderPortfolioImage[];
+  styles: BraiderOfferedStyle[];
+}

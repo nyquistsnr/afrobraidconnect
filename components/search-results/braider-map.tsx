@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+  type RefObject,
+} from "react";
 import { AdvancedMarker, Map, useMap, MapEvent } from "@vis.gl/react-google-maps";
 import { Plus, Minus, Maximize, Minimize, Moon, Sun, Monitor } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
@@ -40,8 +47,10 @@ function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon
 
 function MapController({
   center,
+  suppressNextIdleRef,
 }: {
   center: { lat: number; lng: number } | null;
+  suppressNextIdleRef: RefObject<boolean>;
 }) {
   const map = useMap();
 
@@ -60,6 +69,7 @@ function MapController({
           center.lng
         ) > 0.1
       ) {
+        suppressNextIdleRef.current = true;
         map.setCenter(center);
         map.setZoom(12);
       }
@@ -74,11 +84,12 @@ function MapController({
           FALLBACK_CENTER.lng
         ) > 0.1
       ) {
+        suppressNextIdleRef.current = true;
         map.setCenter(FALLBACK_CENTER);
         map.setZoom(FALLBACK_ZOOM);
       }
     }
-  }, [map, center?.lat, center?.lng]);
+  }, [map, center?.lat, center?.lng, suppressNextIdleRef]);
 
   return null;
 }
@@ -86,9 +97,11 @@ function MapController({
 function FocusActivePin({
   pins,
   activeId,
+  suppressNextIdleRef,
 }: {
   pins: Pin[];
   activeId: string | null;
+  suppressNextIdleRef: RefObject<boolean>;
 }) {
   const map = useMap();
   const lastActiveId = useRef<string | null>(null);
@@ -98,17 +111,18 @@ function FocusActivePin({
       lastActiveId.current = activeId;
       return;
     }
-    
+
     // Only pan if the activeId actually changed to a new one
     if (lastActiveId.current === activeId) return;
 
     const pin = pins.find((p) => p.item.id === activeId);
     if (pin) {
+      suppressNextIdleRef.current = true;
       map.panTo({ lat: pin.lat, lng: pin.lng });
       map.setZoom(15);
       lastActiveId.current = activeId;
     }
-  }, [map, pins, activeId]);
+  }, [map, pins, activeId, suppressNextIdleRef]);
 
   return null;
 }
@@ -219,6 +233,11 @@ export function BraiderMap({
       : "LIGHT";
 
   const lastIdleRef = useRef<{ lat: number; lng: number; radius: number } | null>(null);
+  // Starts true so the idle event fired by the map's initial layout (not a
+  // user gesture) doesn't push a URL update. MapController/FocusActivePin
+  // also set this before any programmatic setCenter/panTo, since those
+  // trigger their own idle event that shouldn't be mistaken for a drag.
+  const suppressNextIdleRef = useRef(true);
 
   const handleIdle = useCallback(
     (e: MapEvent) => {
@@ -239,6 +258,12 @@ export function BraiderMap({
       );
 
       const cappedRadius = Math.max(1, Math.min(Math.round(radiusKm), 100));
+
+      if (suppressNextIdleRef.current) {
+        suppressNextIdleRef.current = false;
+        lastIdleRef.current = { lat, lng, radius: cappedRadius };
+        return;
+      }
 
       // Prevent firing if the map hasn't meaningfully moved (>50 meters) and radius is the same
       if (lastIdleRef.current) {
@@ -294,8 +319,12 @@ export function BraiderMap({
         mapTheme={mapTheme}
         onChangeMapTheme={setMapTheme}
       />
-      <MapController center={center} />
-      <FocusActivePin pins={pins} activeId={activeId} />
+      <MapController center={center} suppressNextIdleRef={suppressNextIdleRef} />
+      <FocusActivePin
+        pins={pins}
+        activeId={activeId}
+        suppressNextIdleRef={suppressNextIdleRef}
+      />
       {pins.map(({ item, lat, lng }) => {
         const style = displayStyle(item);
         const isHighlighted = hoveredId === item.id || activeId === item.id;

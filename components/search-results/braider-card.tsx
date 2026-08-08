@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ImageOff, MapPin } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import type { SearchResultsDict } from "@/components/search-results/types";
@@ -11,13 +13,13 @@ export function BraiderCard({
   item,
   isHighlighted,
   onHover,
-  onSelect,
+  lang,
   dict,
 }: {
   item: BraiderSearchItem;
   isHighlighted: boolean;
   onHover: (id: string | null) => void;
-  onSelect: (id: string) => void;
+  lang: Locale;
   dict: SearchResultsDict;
 }) {
   const style = displayStyle(item);
@@ -26,19 +28,11 @@ export function BraiderCard({
     .join(", ");
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <Link
+      href={`/${lang}/braiders/${item.id}`}
       onMouseEnter={() => onHover(item.id)}
       onMouseLeave={() => onHover(null)}
-      onClick={() => onSelect(item.id)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onSelect(item.id);
-        }
-      }}
-      className={`group flex cursor-pointer flex-col gap-3 rounded-2xl border p-3 outline-none transition-all ${
+      className={`group flex flex-col gap-3 rounded-2xl border p-3 outline-none transition-all ${
         isHighlighted
           ? "border-foreground shadow-md"
           : "border-border/60 hover:border-foreground/25 hover:shadow-sm"
@@ -108,6 +102,6 @@ export function BraiderCard({
           </p>
         )}
       </div>
-    </div>
+    </Link>
   );
 }

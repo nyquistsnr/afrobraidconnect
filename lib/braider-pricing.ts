@@ -1,4 +1,8 @@
-import type { BraiderSearchItem, MatchedStyleResponse } from "@/lib/api/types";
+import type {
+  BraiderOfferedStyle,
+  BraiderSearchItem,
+  MatchedStyleResponse,
+} from "@/lib/api/types";
 
 export function formatPrice(value: string | number): string {
   const num = typeof value === "string" ? Number(value) : value;
@@ -12,6 +16,17 @@ export function displayStyle(item: BraiderSearchItem): MatchedStyleResponse | nu
   if (item.matched_style) return item.matched_style;
   if (!item.styles.length) return null;
   return item.styles.reduce((cheapest, style) =>
+    Number(style.base_price) < Number(cheapest.base_price) ? style : cheapest
+  );
+}
+
+// The profile page's "from €X" headline: the cheapest style on the
+// braider's full menu.
+export function cheapestOfferedStyle(
+  styles: BraiderOfferedStyle[]
+): BraiderOfferedStyle | null {
+  if (!styles.length) return null;
+  return styles.reduce((cheapest, style) =>
     Number(style.base_price) < Number(cheapest.base_price) ? style : cheapest
   );
 }

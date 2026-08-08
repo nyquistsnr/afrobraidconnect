@@ -47,6 +47,7 @@ export default async function SearchPage({
         locationLabel={ui.location?.label ?? null}
         radiusKm={ui.radiusKm ?? 5}
         center={center}
+        lang={lang}
         dict={dict.searchResults}
       />
     </div>

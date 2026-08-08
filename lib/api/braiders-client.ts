@@ -2,6 +2,7 @@
 // locale-resolved server-side via Accept-Language (default "en").
 import type {
   ApiEnvelope,
+  BraiderDetailResponse,
   BraiderSearchItem,
   BraiderSearchParams,
   PaginatedData,
@@ -69,4 +70,7 @@ export const braidersApi = {
       lang
     );
   },
+
+  getById: (braiderId: string, lang?: Locale) =>
+    get<BraiderDetailResponse>(`/braiders/${braiderId}`, lang),
 };

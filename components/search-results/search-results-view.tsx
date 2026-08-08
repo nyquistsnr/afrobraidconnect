@@ -3,6 +3,7 @@
 import { useState, useTransition, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BraiderSearchItem, PaginationMeta } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { BraiderList } from "@/components/search-results/braider-list";
 import { BraiderMap } from "@/components/search-results/braider-map";
 import { MobileViewToggle } from "@/components/search-results/mobile-view-toggle";
@@ -15,6 +16,7 @@ export function SearchResultsView({
   locationLabel,
   radiusKm,
   center,
+  lang,
   dict,
 }: {
   items: BraiderSearchItem[];
@@ -23,6 +25,7 @@ export function SearchResultsView({
   locationLabel: string | null;
   radiusKm: number;
   center: { lat: number; lng: number } | null;
+  lang: Locale;
   dict: SearchResultsDict;
 }) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -124,10 +127,10 @@ export function SearchResultsView({
           hoveredId={hoveredId}
           activeId={activeId}
           onHover={setHoveredId}
-          onSelect={handleSelect}
           onChangePage={handleChangePage}
           onChangeRadius={handleChangeRadius}
           isPending={isPending}
+          lang={lang}
           dict={dict}
         />
       </div>
