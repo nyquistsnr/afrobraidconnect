@@ -75,7 +75,7 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const { logout, isLoggingOut } = useLogout(lang);
 
@@ -191,6 +191,15 @@ export function SiteHeader({
                 className="flex items-center gap-2 rounded-full border border-border py-1.5 pr-2.5 pl-3 transition-shadow hover:shadow-md"
               >
                 <Menu className="size-4 text-foreground" />
+                {isAuthenticated && session?.user?.firstName ? (
+                  <span className="text-sm font-semibold text-foreground px-1">
+                    {session.user.firstName}
+                  </span>
+                ) : (
+                  <div className="flex size-7 items-center justify-center rounded-full bg-border text-muted-foreground">
+                    <CircleUserRound className="size-5" />
+                  </div>
+                )}
               </button>
 
               {menuOpen && (
@@ -208,7 +217,7 @@ export function SiteHeader({
                           className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
                         >
                           <CircleUserRound className="size-4" />
-                          {dict.profileTitle}
+                          {session?.user?.firstName ?? dict.mobileNav.profileTitle}
                         </Link>
                       </li>
                       <li role="none">

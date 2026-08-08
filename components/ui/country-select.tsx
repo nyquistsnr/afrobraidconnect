@@ -164,7 +164,7 @@ function CountryDropdown({
           className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-placeholder"
         />
       </div>
-      <ul className="max-h-64 overflow-y-auto py-1">
+      <ul className="max-h-64 overflow-y-auto py-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {filtered.length === 0 && (
           <li className="px-3 py-2 text-sm text-muted-foreground">
             {noResultsLabel}
