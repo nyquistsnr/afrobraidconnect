@@ -238,8 +238,7 @@ export function SearchBar({
                   onStyleChange(s);
                   setActivePanel("when");
                 }}
-                initialQuery={style?.name ?? ""}
-                selectedId={style?.id}
+                selectedStyle={style}
                 dict={dict.search.style}
               />
             )}

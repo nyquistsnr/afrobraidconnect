@@ -93,12 +93,12 @@ export function MobileTabBar({
 
   return (
     <>
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex items-stretch border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center gap-12 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
         {tabs.map(({ key, label, icon: Icon, href, active }) => (
           <Link
             key={key}
             href={href}
-            className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors ${
+            className={`flex flex-col items-center gap-1 px-4 py-2.5 text-[11px] font-medium transition-colors ${
               active
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -113,7 +113,7 @@ export function MobileTabBar({
           onClick={() => setProfileOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={profileOpen}
-          className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="flex flex-col items-center gap-1 px-4 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           {isAuthenticated ? (
             <CircleUserRound className="size-5" />

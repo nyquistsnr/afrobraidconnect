@@ -160,8 +160,7 @@ export function MobileSearch({
                         onStyleChange(s);
                         setTab("when");
                       }}
-                      initialQuery={style?.name ?? ""}
-                      selectedId={style?.id}
+                      selectedStyle={style}
                       dict={dict.search.style}
                     />
                   )}

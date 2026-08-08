@@ -9,14 +9,14 @@ type ModalSize = "sm" | "lg";
 // its content — e.g. the service-type style configurator — is too tall for
 // a small centered dialog there) and becomes a centered, capped-height
 // dialog from "sm" up. "sm" stays a small centered dialog at every width.
-const WRAPPER_PADDING: Record<ModalSize, string> = {
-  sm: "p-4",
-  lg: "p-0 sm:p-4",
+const WRAPPER_CLASSES: Record<ModalSize, string> = {
+  sm: "items-center p-4",
+  lg: "items-end p-0 sm:items-center sm:p-4",
 };
 
 const PANEL_CLASSES: Record<ModalSize, string> = {
-  sm: "max-w-sm rounded-2xl border border-border p-6",
-  lg: "max-w-2xl max-h-full rounded-t-2xl border-0 p-4 sm:max-h-[90vh] sm:rounded-2xl sm:border sm:border-border sm:p-6",
+  sm: "max-w-sm rounded-2xl border border-border p-6 search-panel-in",
+  lg: "max-w-2xl max-h-full rounded-t-2xl border-0 p-4 sm:max-h-[90vh] sm:rounded-2xl sm:border sm:border-border sm:p-6 search-sheet-in sm:search-panel-in",
 };
 
 export function Modal({
@@ -46,7 +46,7 @@ export function Modal({
 
   return createPortal(
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center ${WRAPPER_PADDING[size]}`}
+      className={`fixed inset-0 z-50 flex justify-center ${WRAPPER_CLASSES[size]}`}
     >
       <div
         className="absolute inset-0 bg-black/50"

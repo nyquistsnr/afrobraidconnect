@@ -12,17 +12,15 @@ import type { SelectedStyle, StylePanelDict } from "@/components/search/types";
 export function StylePanel({
   lang,
   onSelect,
-  initialQuery = "",
-  selectedId,
+  selectedStyle,
   dict,
 }: {
   lang: Locale;
   onSelect: (style: SelectedStyle) => void;
-  initialQuery?: string;
-  selectedId?: string;
+  selectedStyle?: SelectedStyle | null;
   dict: StylePanelDict;
 }) {
-  const [query, setQuery] = useState(initialQuery);
+  const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query, 300);
 
   const { data, isLoading, isError } = useQuery({
@@ -35,7 +33,21 @@ export function StylePanel({
     staleTime: 60_000,
   });
 
-  const items = data?.items ?? [];
+  // Cast to allow mixing the API response (StylePublicResponse) with our simplified SelectedStyle
+  let items: any[] = data?.items ?? [];
+
+  // If there's a selected style and no search query, ensure it appears at the top
+  if (selectedStyle && !debouncedQuery) {
+    if (!items.find((item) => item.id === selectedStyle.id)) {
+      items = [selectedStyle, ...items];
+    } else {
+      // Move to top if already in the list
+      items = [
+        selectedStyle,
+        ...items.filter((item) => item.id !== selectedStyle.id),
+      ];
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -56,7 +68,7 @@ export function StylePanel({
         </p>
       )}
 
-      <ul className="-mx-2 mt-1 flex max-h-[320px] flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <ul className="-mx-2 mt-1 flex max-h-[320px] flex-col overflow-y-auto">
         {isLoading &&
           Array.from({ length: 4 }).map((_, i) => (
             <li key={i} className="flex items-center gap-3.5 px-2 py-2.5">
@@ -83,8 +95,8 @@ export function StylePanel({
         {!isLoading &&
           !isError &&
           items.map((style) => {
-            const imageUrl = style.images[0]?.url;
-            const isSelected = selectedId === style.id;
+            const imageUrl = "imageUrl" in style ? style.imageUrl : style.images?.[0]?.url;
+            const isSelected = selectedStyle?.id === style.id;
             return (
               <li key={style.id}>
                 <button
