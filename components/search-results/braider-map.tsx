@@ -5,6 +5,8 @@ import { AdvancedMarker, Map, useMap } from "@vis.gl/react-google-maps";
 import type { BraiderSearchItem } from "@/lib/api/types";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 
+import { useTheme } from "@/components/theme/theme-provider";
+
 // Advanced Markers need a Map ID to render custom HTML content (otherwise
 // they silently fall back to the default red pin). No real Map ID has been
 // provisioned in Google Cloud Console yet, so this uses Google's public demo
@@ -99,6 +101,8 @@ export function BraiderMap({
   onHoverPin: (id: string | null) => void;
   onSelectPin: (id: string) => void;
 }) {
+  const { resolvedTheme } = useTheme();
+
   const pins = useMemo<Pin[]>(() => {
     const result: Pin[] = [];
     for (const item of items) {
@@ -120,6 +124,7 @@ export function BraiderMap({
       mapId={MAP_ID}
       defaultCenter={center ?? FALLBACK_CENTER}
       defaultZoom={center ? 12 : FALLBACK_ZOOM}
+      colorScheme={resolvedTheme === "dark" ? "DARK" : "LIGHT"}
       gestureHandling="greedy"
       disableDefaultUI
       zoomControl
