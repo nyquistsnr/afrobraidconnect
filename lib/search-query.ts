@@ -65,6 +65,9 @@ export function buildSearchHref(lang: Locale, state: SearchQueryState): string {
   if (style?.id) {
     params.set("style_id", style.id);
     params.set("style_name", style.name);
+    if (style.imageUrl) {
+      params.set("style_image_url", style.imageUrl);
+    }
   }
 
   if (dateRange.from) {
@@ -93,6 +96,7 @@ export function parseSearchParams(
   const countryCode = first(searchParams.country_code);
   const styleId = first(searchParams.style_id);
   const styleName = first(searchParams.style_name);
+  const styleImageUrl = first(searchParams.style_image_url);
   const dateFrom = first(searchParams.date_from);
   const dateTo = first(searchParams.date_to);
   const radiusKmStr = first(searchParams.radius_km);
@@ -117,7 +121,7 @@ export function parseSearchParams(
           countryCode: countryCode || undefined,
         }
       : null,
-    style: styleId ? { id: styleId, name: styleName ?? "" } : null,
+    style: styleId ? { id: styleId, name: styleName ?? "", imageUrl: styleImageUrl } : null,
     dateRange: {
       from: dateFrom ? fromISODate(dateFrom) : undefined,
       to: dateTo ? fromISODate(dateTo) : undefined,
