@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ImageOff, MapPin, Star } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
+import type { SearchLinkContext } from "@/lib/search-query";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import type { SearchResultsDict } from "@/components/search-results/types";
@@ -14,14 +15,14 @@ export function BraiderCard({
   isHighlighted,
   onHover,
   lang,
-  dateFrom,
+  searchLinkContext,
   dict,
 }: {
   item: BraiderSearchItem;
   isHighlighted: boolean;
   onHover: (id: string | null) => void;
   lang: Locale;
-  dateFrom: string | null;
+  searchLinkContext: SearchLinkContext;
   dict: SearchResultsDict;
 }) {
   const style = displayStyle(item);
@@ -30,12 +31,22 @@ export function BraiderCard({
     .join(", ");
   // Only carry the style filter over when it's the one the search actually
   // matched on — not the cheapest-style fallback used just to show a price.
-  // The searched date carries over too, so the braider's own availability
-  // calendar opens on the day the customer was already looking for instead
-  // of resetting to today.
+  // The rest of the search (location/date/radius) carries over too, so both
+  // the braider's own availability calendar and the header search bar on
+  // their profile page reflect what the customer was already looking for
+  // instead of resetting.
   const params = new URLSearchParams();
-  if (item.matched_style) params.set("style_id", item.matched_style.style_id);
-  if (dateFrom) params.set("date_from", dateFrom);
+  if (item.matched_style) {
+    params.set("style_id", item.matched_style.style_id);
+    params.set("style_name", item.matched_style.name);
+  }
+  if (searchLinkContext.date_from) params.set("date_from", searchLinkContext.date_from);
+  if (searchLinkContext.date_to) params.set("date_to", searchLinkContext.date_to);
+  if (searchLinkContext.location) params.set("location", searchLinkContext.location);
+  if (searchLinkContext.lat) params.set("lat", searchLinkContext.lat);
+  if (searchLinkContext.lng) params.set("lng", searchLinkContext.lng);
+  if (searchLinkContext.country_code) params.set("country_code", searchLinkContext.country_code);
+  if (searchLinkContext.radius_km) params.set("radius_km", searchLinkContext.radius_km);
   const qs = params.toString();
   const href = `/${lang}/braiders/${item.id}${qs ? `?${qs}` : ""}`;
 

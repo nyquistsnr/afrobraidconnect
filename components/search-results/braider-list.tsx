@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { AlertCircle, SearchX } from "lucide-react";
 import type { BraiderSearchItem, PaginationMeta } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
+import type { SearchLinkContext } from "@/lib/search-query";
 import { formatTemplate } from "@/lib/format-template";
 import { BraiderCard } from "@/components/search-results/braider-card";
 import { PaginationControl } from "@/components/search-results/pagination-control";
@@ -23,7 +24,7 @@ export function BraiderList({
   onChangeRadius,
   isPending,
   lang,
-  dateFrom,
+  searchLinkContext,
   dict,
 }: {
   items: BraiderSearchItem[];
@@ -38,7 +39,7 @@ export function BraiderList({
   onChangeRadius: (radius: number) => void;
   isPending: boolean;
   lang: Locale;
-  dateFrom: string | null;
+  searchLinkContext: SearchLinkContext;
   dict: SearchResultsDict;
 }) {
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -123,7 +124,7 @@ export function BraiderList({
                 isHighlighted={hoveredId === item.id || activeId === item.id}
                 onHover={onHover}
                 lang={lang}
-                dateFrom={dateFrom}
+                searchLinkContext={searchLinkContext}
                 dict={dict}
               />
             </div>

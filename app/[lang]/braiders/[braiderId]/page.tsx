@@ -7,6 +7,7 @@ import { BraiderDetailView } from "@/components/braider-detail/braider-detail-vi
 import { RetryButton } from "@/components/braider-detail/retry-button";
 import { braidersApi } from "@/lib/api/braiders-client";
 import { ApiError } from "@/lib/api/auth-client";
+import { parseSearchParams } from "@/lib/search-query";
 import type { BraiderDetailResponse } from "@/lib/api/types";
 
 export default async function BraiderDetailPage({
@@ -22,6 +23,10 @@ export default async function BraiderDetailPage({
   const dateFromParam = sp.date_from;
   const initialDateFrom = Array.isArray(dateFromParam) ? dateFromParam[0] : dateFromParam;
 
+  // Feeds the header's search bar so it reflects the same location/style/
+  // date the customer already had set on /search, instead of resetting.
+  const { ui: searchBarState } = parseSearchParams(sp);
+
   const dict = await getDictionary(lang);
 
   let braider: BraiderDetailResponse | null = null;
@@ -33,6 +38,18 @@ export default async function BraiderDetailPage({
     status = err instanceof ApiError && err.status === 404 ? "not_found" : "error";
   }
 
+  // A braider-card link always includes style_name, but a hand-typed/shared
+  // URL might only carry style_id — fall back to the braider's own style
+  // list so the search bar doesn't show a blank style name.
+  if (braider && searchBarState.style && !searchBarState.style.name) {
+    const matched = braider.styles.find(
+      (s) => s.style_id === searchBarState.style!.id
+    );
+    if (matched) {
+      searchBarState.style = { ...searchBarState.style, name: matched.name };
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader
@@ -40,6 +57,9 @@ export default async function BraiderDetailPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
+        initialLocation={searchBarState.location}
+        initialStyle={searchBarState.style}
+        initialDateRange={searchBarState.dateRange}
       />
 
       {status === "ok" && braider ? (

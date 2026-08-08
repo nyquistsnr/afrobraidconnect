@@ -4,6 +4,7 @@ import { useState, useTransition, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BraiderSearchItem, PaginationMeta } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
+import type { SearchLinkContext } from "@/lib/search-query";
 import { BraiderList } from "@/components/search-results/braider-list";
 import { BraiderMap } from "@/components/search-results/braider-map";
 import { MobileViewToggle } from "@/components/search-results/mobile-view-toggle";
@@ -37,7 +38,17 @@ export function SearchResultsView({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const dateFrom = searchParams.get("date_from");
+  // Carried onto each braider profile link so its header search bar shows
+  // the same location/date/radius the customer already had set here.
+  const searchLinkContext: SearchLinkContext = {
+    location: searchParams.get("location"),
+    lat: searchParams.get("lat"),
+    lng: searchParams.get("lng"),
+    country_code: searchParams.get("country_code"),
+    date_from: searchParams.get("date_from"),
+    date_to: searchParams.get("date_to"),
+    radius_km: searchParams.get("radius_km"),
+  };
 
   function handleChangePage(page: number) {
     const params = new URLSearchParams(searchParams.toString());
@@ -132,7 +143,7 @@ export function SearchResultsView({
           onChangeRadius={handleChangeRadius}
           isPending={isPending}
           lang={lang}
-          dateFrom={dateFrom}
+          searchLinkContext={searchLinkContext}
           dict={dict}
         />
       </div>

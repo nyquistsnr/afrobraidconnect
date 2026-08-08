@@ -155,3 +155,35 @@ body {
   animation: search-sheet-in 280ms cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Home page hero <-> header search handoff: the header's search bar starts
+   hidden (home page only) and fades/settles into place as the hero pill
+   fades away, so the two read as one continuous motion. Plain opacity +
+   a small translateY only — no scale() here, since scaling a bordered,
+   shadowed pill during a transition produces a faint rendering seam
+   (looks like a stray "shadow") on some GPUs. Same duration/easing as the
+   other search transitions above, just slightly longer since this is a
+   bigger visual jump (hero to header). */
+.header-search-slot {
+  transition:
+    opacity 260ms cubic-bezier(0.2, 0, 0, 1),
+    transform 260ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.header-search-slot-hidden {
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+
+.hero-search-trigger {
+  transition:
+    opacity 260ms cubic-bezier(0.2, 0, 0, 1),
+    transform 260ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.hero-search-trigger-hidden {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+

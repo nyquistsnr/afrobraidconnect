@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "./dictionaries";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { HomePageShell } from "@/components/home/home-page-shell";
 
 export default async function Home({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -11,15 +10,17 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   const dict = await getDictionary(lang);
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col bg-background">
-      <SiteHeader
-        lang={lang}
-        dict={dict.siteHeader}
-        common={dict.common}
-        notificationsDict={dict.notifications}
-      />
-      <main className="flex-1 pb-16 md:pb-0" />
-      <SiteFooter lang={lang} dict={dict.common.footer} />
-    </div>
+    <HomePageShell
+      lang={lang}
+      siteHeaderDict={dict.siteHeader}
+      common={dict.common}
+      notificationsDict={dict.notifications}
+      heroDict={{
+        title: dict.home.title,
+        subtitle: dict.home.subtitle,
+        startSearch: dict.siteHeader.startSearch,
+      }}
+      footerDict={dict.common.footer}
+    />
   );
 }

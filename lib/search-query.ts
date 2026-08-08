@@ -17,6 +17,20 @@ export interface SearchQueryState {
   radiusKm?: number;
 }
 
+// The subset of the /search URL's own query params (location/date/radius —
+// not style, which is per-braider-card via matched_style) that should carry
+// over onto a braider profile link, so the header search bar there reflects
+// the same search the customer was already doing instead of resetting.
+export interface SearchLinkContext {
+  location: string | null;
+  lat: string | null;
+  lng: string | null;
+  country_code: string | null;
+  date_from: string | null;
+  date_to: string | null;
+  radius_km: string | null;
+}
+
 function toISODate(date: Date): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

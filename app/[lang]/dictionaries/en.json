@@ -952,5 +952,9 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "pageOf": "Page {current} of {total}"
+  },
+  "home": {
+    "title": "Book your next braid style with ease.",
+    "subtitle": "AfroBraid Connect is the easiest way to find, book and review top-rated braiders in your city. Explore styles you love, and book your next look in just a few clicks."
   }
 }

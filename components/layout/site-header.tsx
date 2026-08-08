@@ -18,6 +18,7 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
 import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
+import { useScrolled } from "@/lib/use-scrolled";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
@@ -74,6 +75,9 @@ export function SiteHeader({
   initialLocation = null,
   initialStyle = null,
   initialDateRange = {},
+  searchDocked,
+  onSearchActiveChange,
+  searchActivateSignal,
 }: {
   lang: Locale;
   dict: SiteHeaderDict;
@@ -82,8 +86,36 @@ export function SiteHeader({
   initialLocation?: SelectedLocation | null;
   initialStyle?: SelectedStyle | null;
   initialDateRange?: SelectedDateRange;
+  // Home-page-only: when provided, the header's search bar is hidden
+  // (crossfaded away) whenever searchDocked is explicitly false, instead of
+  // always showing — every other page leaves these undefined and renders
+  // exactly as before.
+  searchDocked?: boolean;
+  onSearchActiveChange?: (open: boolean) => void;
+  searchActivateSignal?: number;
 }) {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrolled();
+  const isLandingSearch = searchDocked !== undefined;
+  // Rather than fading the wrapper in the instant searchDocked flips true,
+  // wait one frame first: `scrolled` (and therefore SearchBar's own
+  // expanded/collapsed shape) may be changing at the very same moment
+  // (scroll-triggered docking), and fading opacity while the content is
+  // simultaneously snapping shape reads as a glitchy "flash". Letting the
+  // shape settle first (while still fully hidden), then fading the now-
+  // stable content in on the next frame, avoids that entirely.
+  const [searchVisible, setSearchVisible] = useState(() => searchDocked !== false);
+  useEffect(() => {
+    if (!isLandingSearch) return;
+    if (!searchDocked) {
+      // Immediate hide is intentional (no rAF): there's no shape-change
+      // risk on the way out, only on the way in (see comment above).
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSearchVisible(false);
+      return;
+    }
+    const timer = setTimeout(() => setSearchVisible(true), 0);
+    return () => clearTimeout(timer);
+  }, [isLandingSearch, searchDocked]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const chatUnreadTotal = useChatUnreadTotal();
@@ -119,15 +151,6 @@ export function SiteHeader({
     initialLocation?.lng,
     initialLocation?.countryCode,
   ]);
-
-  useEffect(() => {
-    function handleScroll() {
-      setScrolled(window.scrollY > 4);
-    }
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -166,17 +189,27 @@ export function SiteHeader({
             />
           </Link>
 
-          <SearchBar
-            lang={lang}
-            scrolled={scrolled}
-            dict={dict}
-            location={location}
-            onLocationChange={setLocation}
-            style={style}
-            onStyleChange={setStyle}
-            dateRange={dateRange}
-            onDateRangeChange={setDateRange}
-          />
+          <div
+            className={`header-search-slot flex-1 min-w-0 ${
+              isLandingSearch && !searchVisible ? "header-search-slot-hidden" : ""
+            }`}
+            inert={isLandingSearch && !searchVisible}
+          >
+            <SearchBar
+              lang={lang}
+              scrolled={scrolled}
+              dict={dict}
+              location={location}
+              onLocationChange={setLocation}
+              style={style}
+              onStyleChange={setStyle}
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+              onActiveChange={onSearchActiveChange}
+              activateSignal={searchActivateSignal}
+              disableEntranceAnimation={isLandingSearch}
+            />
+          </div>
 
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             <div className="hidden items-center gap-1 sm:gap-2 lg:flex">

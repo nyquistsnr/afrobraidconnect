@@ -53,6 +53,9 @@ export function SearchBar({
   onStyleChange,
   dateRange,
   onDateRangeChange,
+  onActiveChange,
+  activateSignal,
+  disableEntranceAnimation,
 }: {
   lang: Locale;
   scrolled: boolean;
@@ -63,6 +66,16 @@ export function SearchBar({
   onStyleChange: (style: SelectedStyle | null) => void;
   dateRange: SelectedDateRange;
   onDateRangeChange: (range: SelectedDateRange) => void;
+  // Lets a parent (the home page's hero trigger) know whether a panel is
+  // open, and command this bar to open its "where" panel from the outside —
+  // both optional, unused by every page except the home page.
+  onActiveChange?: (open: boolean) => void;
+  activateSignal?: number;
+  // The home page drives this bar's entrance itself (see
+  // .header-search-slot in globals.css) when it docks into the header —
+  // the bar's own short pill<->expanded fade would otherwise stack on top
+  // of that and look like a double/ghosting motion.
+  disableEntranceAnimation?: boolean;
 }) {
   const [activePanel, setActivePanel] = useState<SearchPanelKey | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,8 +83,22 @@ export function SearchBar({
 
   const expanded = !scrolled || activePanel !== null;
 
+  useEffect(() => {
+    onActiveChange?.(activePanel !== null);
+  }, [activePanel, onActiveChange]);
+
+  const activateSignalRef = useRef(activateSignal);
+  useEffect(() => {
+    if (activateSignal === undefined) return;
+    if (activateSignalRef.current === activateSignal) return;
+    activateSignalRef.current = activateSignal;
+    setActivePanel("where");
+  }, [activateSignal]);
+
   function handleSearch() {
-    setActivePanel(null);
+    // Don't collapse the panel first — SiteHeader (and this bar with it)
+    // unmounts as part of navigating to /search anyway, so closing it here
+    // just adds a premature "did that work?" flash before the page changes.
     router.push(buildSearchHref(lang, { location, style, dateRange }));
   }
 
@@ -121,7 +148,7 @@ export function SearchBar({
           <button
             type="button"
             onClick={() => setActivePanel("where")}
-            className="search-fade-in relative z-50 mx-auto flex w-fit h-12 items-center gap-3 rounded-full border border-border bg-surface px-4 shadow-sm transition-shadow hover:shadow-md"
+            className={`${disableEntranceAnimation ? "" : "search-fade-in "}relative z-50 mx-auto flex w-fit h-12 items-center gap-3 rounded-full border border-border bg-surface px-4 shadow-sm transition-shadow hover:shadow-md`}
           >
             <span className="flex size-8 items-center justify-center rounded-full bg-brand text-brand-foreground">
               <Search className="size-4" />
@@ -131,7 +158,9 @@ export function SearchBar({
             </span>
           </button>
         ) : (
-          <div className="search-fade-in relative z-50 flex h-16 items-center rounded-full border border-border bg-surface shadow-sm">
+          <div
+            className={`${disableEntranceAnimation ? "" : "search-fade-in "}relative z-50 flex h-16 items-center rounded-full border border-border bg-surface shadow-sm`}
+          >
             <button
               type="button"
               onClick={() => toggle("where")}

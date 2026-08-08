@@ -952,5 +952,9 @@
     "previousPage": "Vorherige Seite",
     "nextPage": "Nächste Seite",
     "pageOf": "Seite {current} von {total}"
+  },
+  "home": {
+    "title": "Buchen Sie ganz einfach Ihren nächsten Braiding-Look.",
+    "subtitle": "AfroBraid Connect ist der einfachste Weg, um erstklassige Braiderinnen in Ihrer Stadt zu finden, zu buchen und zu bewerten. Entdecken Sie Styles, die Sie lieben, und buchen Sie Ihren nächsten Look in nur wenigen Klicks."
   }
 }
