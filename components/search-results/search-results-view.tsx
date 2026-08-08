@@ -57,6 +57,28 @@ export function SearchResultsView({
     });
   }
 
+  function handleMapIdle(lat: number, lng: number, mapRadiusKm: number) {
+    const params = new URLSearchParams(searchParams.toString());
+    const oldLat = params.get("lat");
+    const oldLng = params.get("lng");
+    const oldRadius = params.get("radius_km");
+
+    // Only update if there's an actual change to avoid infinite loops
+    if (
+      oldLat !== String(lat) ||
+      oldLng !== String(lng) ||
+      oldRadius !== String(mapRadiusKm)
+    ) {
+      params.set("lat", String(lat));
+      params.set("lng", String(lng));
+      params.set("radius_km", String(mapRadiusKm));
+      params.set("page", "1");
+      startTransition(() => {
+        router.push(`${pathname}?${params.toString()}`);
+      });
+    }
+  }
+
   return (
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div
@@ -95,6 +117,7 @@ export function SearchResultsView({
           onSelectPin={handleSelect}
           isExpanded={isMapExpanded}
           onToggleExpand={() => setIsMapExpanded(!isMapExpanded)}
+          onMapIdle={handleMapIdle}
         />
       </div>
 

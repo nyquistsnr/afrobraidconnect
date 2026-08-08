@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { AdvancedMarker, Map, useMap } from "@vis.gl/react-google-maps";
-import { Plus, Minus, Maximize, Minimize } from "lucide-react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { AdvancedMarker, Map, useMap, MapEvent } from "@vis.gl/react-google-maps";
+import { Plus, Minus, Maximize, Minimize, Moon, Sun, Monitor } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 
@@ -26,11 +26,21 @@ interface Pin {
   lng: number;
 }
 
-function FitBounds({
-  pins,
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371; // Radius of the earth in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function MapController({
   center,
 }: {
-  pins: Pin[];
   center: { lat: number; lng: number } | null;
 }) {
   const map = useMap();
@@ -38,30 +48,26 @@ function FitBounds({
   useEffect(() => {
     if (!map) return;
 
-    if (pins.length === 1) {
-      map.setCenter({ lat: pins[0].lat, lng: pins[0].lng });
-      map.setZoom(13);
-      return;
-    }
-
-    if (pins.length > 1) {
-      const bounds = new google.maps.LatLngBounds();
-      pins.forEach((pin) => bounds.extend({ lat: pin.lat, lng: pin.lng }));
-      map.fitBounds(bounds, 64);
-      return;
-    }
-
     if (center) {
-      map.setCenter(center);
-      map.setZoom(12);
+      const currentCenter = map.getCenter();
+      // If we don't have a center or it's further than ~100 meters, update it
+      if (
+        !currentCenter ||
+        getDistanceFromLatLonInKm(
+          currentCenter.lat(),
+          currentCenter.lng(),
+          center.lat,
+          center.lng
+        ) > 0.1
+      ) {
+        map.setCenter(center);
+        map.setZoom(12);
+      }
     } else {
       map.setCenter(FALLBACK_CENTER);
       map.setZoom(FALLBACK_ZOOM);
     }
-    // Only re-run when the pin set or center actually changes, not on every
-    // map instance re-render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, pins.length, center?.lat, center?.lng]);
+  }, [map, center?.lat, center?.lng]);
 
   return null;
 }
@@ -90,9 +96,13 @@ function FocusActivePin({
 function CustomMapControls({
   isExpanded,
   onToggleExpand,
+  mapTheme,
+  onChangeMapTheme,
 }: {
   isExpanded?: boolean;
   onToggleExpand?: () => void;
+  mapTheme: "system" | "dark" | "light";
+  onChangeMapTheme: (theme: "system" | "dark" | "light") => void;
 }) {
   const map = useMap();
 
@@ -116,6 +126,26 @@ function CustomMapControls({
           <Minus className="size-5" />
         </button>
       </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          const next =
+            mapTheme === "system"
+              ? "dark"
+              : mapTheme === "dark"
+              ? "light"
+              : "system";
+          onChangeMapTheme(next);
+        }}
+        className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface/90 backdrop-blur-md shadow-lg border border-border text-foreground hover:bg-muted transition-colors active:bg-muted/80"
+        aria-label="Toggle map theme"
+        title={`Map theme: ${mapTheme}`}
+      >
+        {mapTheme === "dark" && <Moon className="size-5" />}
+        {mapTheme === "light" && <Sun className="size-5" />}
+        {mapTheme === "system" && <Monitor className="size-5" />}
+      </button>
 
       {onToggleExpand && (
         <button
@@ -144,6 +174,7 @@ export function BraiderMap({
   onSelectPin,
   isExpanded,
   onToggleExpand,
+  onMapIdle,
 }: {
   items: BraiderSearchItem[];
   center: { lat: number; lng: number } | null;
@@ -153,8 +184,41 @@ export function BraiderMap({
   onSelectPin: (id: string) => void;
   isExpanded?: boolean;
   onToggleExpand?: () => void;
+  onMapIdle?: (lat: number, lng: number, radiusKm: number) => void;
 }) {
   const { resolvedTheme } = useTheme();
+  const [mapTheme, setMapTheme] = useState<"system" | "dark" | "light">("system");
+  
+  const effectiveColorScheme =
+    mapTheme === "system"
+      ? resolvedTheme === "dark"
+        ? "DARK"
+        : "LIGHT"
+      : mapTheme === "dark"
+      ? "DARK"
+      : "LIGHT";
+
+  const handleIdle = useCallback(
+    (e: MapEvent) => {
+      if (!onMapIdle) return;
+      const map = e.map;
+      const currentCenter = map.getCenter();
+      const bounds = map.getBounds();
+      if (!currentCenter || !bounds) return;
+
+      const ne = bounds.getNorthEast();
+      const radiusKm = getDistanceFromLatLonInKm(
+        currentCenter.lat(),
+        currentCenter.lng(),
+        ne.lat(),
+        ne.lng()
+      );
+
+      const cappedRadius = Math.max(1, Math.min(Math.round(radiusKm), 100));
+      onMapIdle(currentCenter.lat(), currentCenter.lng(), cappedRadius);
+    },
+    [onMapIdle]
+  );
 
   const pins = useMemo<Pin[]>(() => {
     const result: Pin[] = [];
@@ -177,14 +241,21 @@ export function BraiderMap({
       mapId={MAP_ID}
       defaultCenter={center ?? FALLBACK_CENTER}
       defaultZoom={center ? 12 : FALLBACK_ZOOM}
-      colorScheme={resolvedTheme === "dark" ? "DARK" : "LIGHT"}
+      minZoom={4}
+      colorScheme={effectiveColorScheme}
       gestureHandling="greedy"
       disableDefaultUI
       zoomControl={false}
       className="h-full w-full"
+      onIdle={handleIdle}
     >
-      <CustomMapControls isExpanded={isExpanded} onToggleExpand={onToggleExpand} />
-      <FitBounds pins={pins} center={center} />
+      <CustomMapControls
+        isExpanded={isExpanded}
+        onToggleExpand={onToggleExpand}
+        mapTheme={mapTheme}
+        onChangeMapTheme={setMapTheme}
+      />
+      <MapController center={center} />
       <FocusActivePin pins={pins} activeId={activeId} />
       {pins.map(({ item, lat, lng }) => {
         const style = displayStyle(item);
