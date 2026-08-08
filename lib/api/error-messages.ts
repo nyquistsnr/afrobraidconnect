@@ -46,6 +46,7 @@ const CODE_TO_KEY: Record<string, keyof ErrorsDict> = {
   BOOKING_PRICE_DRIFT: "bookingPriceDrift",
   BOOKING_SLOT_UNAVAILABLE: "bookingSlotUnavailable",
   BOOKING_NOT_FOUND: "bookingNotFound",
+  INVALID_BOOKING_DATE_RANGE: "invalidBookingDateRange",
 };
 
 // `code` here is whatever error.code the backend returned (see ApiError),

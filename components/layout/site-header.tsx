@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { LogOut, Menu } from "lucide-react";
+import { CalendarCheck2, LogOut, Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
@@ -48,6 +48,7 @@ export interface SiteHeaderDict {
   signUp: string;
   logIn: string;
   logOut: string;
+  myBookings: string;
   helpCenter: string;
   menuLabel: string;
   search: SearchDict;
@@ -197,6 +198,19 @@ export function SiteHeader({
                   role="menu"
                   className="absolute top-full right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface py-2 shadow-lg"
                 >
+                  {isAuthenticated && (
+                    <li role="none">
+                      <Link
+                        role="menuitem"
+                        href={`/${lang}/bookings`}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                      >
+                        <CalendarCheck2 className="size-4" />
+                        {dict.myBookings}
+                      </Link>
+                    </li>
+                  )}
                   {!isAuthenticated && (
                     <>
                       <li role="none">

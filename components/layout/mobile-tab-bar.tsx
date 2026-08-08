@@ -68,6 +68,8 @@ export function MobileTabBar({
     pathname === homeHref ||
     pathname?.startsWith(`/${lang}/search`) ||
     pathname?.startsWith(`/${lang}/braiders`);
+  const bookingsHref = `/${lang}/bookings`;
+  const isViewingBookings = pathname?.startsWith(bookingsHref) ?? false;
 
   const tabs = [
     {
@@ -83,8 +85,8 @@ export function MobileTabBar({
             key: "bookings",
             label: dict.bookings,
             icon: CalendarCheck2,
-            href: "#",
-            active: false,
+            href: bookingsHref,
+            active: isViewingBookings,
           },
           {
             key: "messages",

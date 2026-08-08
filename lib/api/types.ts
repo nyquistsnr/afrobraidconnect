@@ -705,6 +705,8 @@ export interface BookingResponse {
   reference: string;
   status: BookingStatus;
   braider_id: string;
+  braider_name: string;
+  customer_name: string;
   style_id: string;
   style_name: string;
   duration_minutes: number;
@@ -731,4 +733,31 @@ export interface BookingResponse {
   cancellation_cutoff_at: string;
   payments: BookingPaymentResponse[];
   created_at: string;
+}
+
+// ---------------------------------------------------------------------------
+// Customer bookings list (GET /bookings)
+// ---------------------------------------------------------------------------
+
+export interface BookingSummary {
+  id: string;
+  reference: string;
+  status: BookingStatus;
+  braider_id: string;
+  braider_name: string;
+  customer_name: string;
+  style_name: string;
+  starts_at: string;
+  ends_at: string;
+  total: string;
+  currency: "EUR";
+}
+
+export interface BookingListParams {
+  status?: BookingStatus;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+  page?: number;
+  page_size?: number;
 }
