@@ -128,7 +128,7 @@ export function GoogleSignInButton({
         type="button"
         tabIndex={-1}
         aria-hidden="true"
-        className="pointer-events-none flex h-10 w-full items-center justify-center gap-3 border border-border bg-input text-sm font-semibold text-foreground"
+        className="pointer-events-none flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-border bg-input text-sm font-semibold text-foreground"
       >
         <GoogleIcon className="size-5 shrink-0" />
         {label}

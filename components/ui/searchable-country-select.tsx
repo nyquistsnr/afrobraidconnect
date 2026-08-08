@@ -130,7 +130,7 @@ export function SearchableCountrySelect({
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className={`flex w-full items-center gap-3 border bg-input px-4 py-3 text-left text-sm outline-none focus:border-brand ${
+        className={`flex w-full items-center gap-3 rounded-xl border bg-input px-4 py-3 text-left text-sm outline-none focus:border-brand ${
           error ? "border-red-500" : "border-border"
         }`}
       >
@@ -150,7 +150,7 @@ export function SearchableCountrySelect({
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-20 mt-2 border border-border bg-surface shadow-lg">
+        <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-border bg-surface shadow-lg">
           <div className="flex items-center gap-2 border-b border-border p-2">
             <Search className="size-4 shrink-0 text-icon-muted" />
             <input

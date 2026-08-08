@@ -22,7 +22,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         {label}
       </label>
       <div
-        className={`flex items-center gap-3 border bg-input px-4 py-3 focus-within:border-brand ${
+        className={`flex items-center gap-3 rounded-xl border bg-input px-4 py-3 focus-within:border-brand ${
           error ? "border-red-500" : "border-border"
         }`}
       >

@@ -87,11 +87,6 @@ body {
   filter: invert(1);
 }
 
-/* House style: no rounded corners anywhere, including native form controls. */
-* {
-  border-radius: 0 !important;
-}
-
 /* react-phone-number-input: fold its input into our bordered field wrapper
    instead of the library's own boxed styling. */
 .PhoneInput {

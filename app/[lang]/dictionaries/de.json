@@ -1,4 +1,20 @@
 {
+  "siteHeader": {
+    "logoAlt": "Afrobraids Connect",
+    "searchLocationLabel": "Wo",
+    "searchLocationPlaceholder": "Reiseziel suchen",
+    "searchStyleLabel": "Stil",
+    "searchStylePlaceholder": "Stil hinzufügen",
+    "searchDateLabel": "Wann",
+    "searchDatePlaceholder": "Daten hinzufügen",
+    "searchButtonLabel": "Suchen",
+    "startSearch": "Suche starten",
+    "becomeABraider": "Braider werden",
+    "signUp": "Registrieren",
+    "logIn": "Anmelden",
+    "helpCenter": "Hilfebereich",
+    "menuLabel": "Menü öffnen"
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Lächelnde Frau mit geflochtenem Haar",

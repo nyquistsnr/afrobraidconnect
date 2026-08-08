@@ -1,4 +1,20 @@
 {
+  "siteHeader": {
+    "logoAlt": "Afrobraids Connect",
+    "searchLocationLabel": "Où",
+    "searchLocationPlaceholder": "Rechercher une destination",
+    "searchStyleLabel": "Style",
+    "searchStylePlaceholder": "Ajouter un style",
+    "searchDateLabel": "Quand",
+    "searchDatePlaceholder": "Ajouter des dates",
+    "searchButtonLabel": "Rechercher",
+    "startSearch": "Lancer une recherche",
+    "becomeABraider": "Devenir tresseuse",
+    "signUp": "S'inscrire",
+    "logIn": "Se connecter",
+    "helpCenter": "Centre d'aide",
+    "menuLabel": "Ouvrir le menu"
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Femme souriante portant des cheveux tressés",

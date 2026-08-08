@@ -60,7 +60,7 @@ export function ComboboxInput({
         {label}
       </label>
       <div
-        className={`relative flex items-center gap-3 border bg-input px-4 py-3 focus-within:border-brand ${
+        className={`relative flex items-center gap-3 rounded-xl border bg-input px-4 py-3 focus-within:border-brand ${
           error ? "border-red-500" : "border-border"
         }`}
       >
@@ -97,7 +97,7 @@ export function ComboboxInput({
       </div>
 
       {open && filteredOptions.length > 0 && (
-        <ul className="absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-y-auto border border-border bg-surface py-1 shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <ul className="absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-y-auto rounded-xl border border-border bg-surface py-1 shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {filteredOptions.map((opt) => (
             <li key={opt}>
               <button

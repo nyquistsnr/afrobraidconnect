@@ -49,7 +49,7 @@ export function LanguageSwitcher({
         onClick={() => setOpen((value) => !value)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground hover:bg-border/40 hover:text-foreground"
+        className="flex items-center gap-1.5 rounded-full px-2 py-1 text-muted-foreground hover:bg-border/40 hover:text-foreground"
       >
         <CurrentFlag title={localeCountry[lang]} className="h-3.5 w-5" />
         <span className="font-medium uppercase">{lang}</span>
@@ -61,7 +61,7 @@ export function LanguageSwitcher({
       {open && (
         <ul
           role="listbox"
-          className={`absolute right-0 w-40 overflow-hidden border border-border bg-surface py-1 shadow-lg ${
+          className={`absolute right-0 w-40 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-lg ${
             dropDirection === "up" ? "bottom-full mb-2" : "top-full mt-2"
           }`}
         >

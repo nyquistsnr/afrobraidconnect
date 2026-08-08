@@ -39,7 +39,7 @@ export function PhoneInput({
         {label}
       </label>
       <div
-        className={`border bg-input px-4 py-3 focus-within:border-brand ${
+        className={`rounded-xl border bg-input px-4 py-3 focus-within:border-brand ${
           error ? "border-red-500" : "border-border"
         }`}
       >

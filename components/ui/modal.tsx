@@ -15,8 +15,8 @@ const WRAPPER_PADDING: Record<ModalSize, string> = {
 };
 
 const PANEL_CLASSES: Record<ModalSize, string> = {
-  sm: "max-w-sm border border-border p-6",
-  lg: "max-w-2xl max-h-full border-0 p-4 sm:max-h-[90vh] sm:border sm:border-border sm:p-6",
+  sm: "max-w-sm rounded-2xl border border-border p-6",
+  lg: "max-w-2xl max-h-full rounded-t-2xl border-0 p-4 sm:max-h-[90vh] sm:rounded-2xl sm:border sm:border-border sm:p-6",
 };
 
 export function Modal({

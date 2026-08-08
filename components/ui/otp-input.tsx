@@ -86,7 +86,7 @@ export function OtpInput({
             autoComplete={index === 0 ? "one-time-code" : "off"}
             maxLength={1}
             aria-invalid={!!error}
-            className={`h-14 w-full border bg-input text-center text-lg font-semibold text-foreground outline-none focus:border-brand sm:h-16 ${
+            className={`h-14 w-full rounded-xl border bg-input text-center text-lg font-semibold text-foreground outline-none focus:border-brand sm:h-16 ${
               error ? "border-red-500" : "border-border"
             }`}
           />
