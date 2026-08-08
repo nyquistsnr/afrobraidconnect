@@ -1,9 +1,14 @@
 "use client";
 
 import { toast } from "react-toastify";
-import type { BraiderOfferedStyle } from "@/lib/api/types";
+import type { AvailableSlotResponse, BraiderOfferedStyle } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { formatPrice } from "@/lib/braider-pricing";
-import { calcEstimatedTotal } from "@/components/braider-detail/format";
+import {
+  calcEstimatedTotal,
+  comingSoonMessage,
+  ctaLabel,
+} from "@/components/braider-detail/format";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
 // Sits directly above the app-wide MobileTabBar (which is ~60px tall) so the
@@ -12,11 +17,15 @@ export function MobileBookingBar({
   selectedStyle,
   selectedVariationId,
   selectedAddonIds,
+  selectedSlot,
+  lang,
   dict,
 }: {
   selectedStyle: BraiderOfferedStyle | null;
   selectedVariationId: string | null;
   selectedAddonIds: ReadonlySet<string>;
+  selectedSlot: AvailableSlotResponse | null;
+  lang: Locale;
   dict: BraiderDetailDict;
 }) {
   const total = selectedStyle
@@ -24,7 +33,7 @@ export function MobileBookingBar({
     : null;
 
   function handleCta() {
-    toast.info(dict.sidebar.comingSoonToast);
+    toast.info(comingSoonMessage(dict, selectedSlot, lang));
   }
 
   return (
@@ -44,7 +53,7 @@ export function MobileBookingBar({
           disabled={!selectedStyle}
           className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {selectedStyle ? dict.sidebar.cta : dict.sidebar.ctaNoSelection}
+          {ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
         </button>
       </div>
     </div>

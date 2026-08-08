@@ -104,10 +104,23 @@
       "durationLabel": "Durée",
       "baseLabel": "Prix de base",
       "addonsLabel": "Suppléments",
+      "timeLabel": "Horaire",
       "totalLabel": "Total estimé",
       "cta": "Vérifier les disponibilités",
+      "ctaWithSlot": "Continuer",
       "ctaNoSelection": "Sélectionnez un service",
-      "comingSoonToast": "La réservation arrive bientôt — revenez prochainement !"
+      "comingSoonToast": "La réservation arrive bientôt — revenez prochainement !",
+      "comingSoonToastWithTime": "La réservation pour {time} arrive bientôt — revenez prochainement !"
+    },
+    "availability": {
+      "title": "Disponibilités",
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant",
+      "noDuration": "Ce service n'est pas encore configuré pour la réservation en ligne.",
+      "notConfigured": "Cette tresseuse n'a pas encore défini ses disponibilités.",
+      "loadError": "Impossible de charger les disponibilités. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "noSlotsForDay": "Aucun créneau ce jour-là — essayez une autre date."
     },
     "errorTitle": "Une erreur s'est produite",
     "errorSubtitle": "Impossible de charger ce profil pour le moment. Veuillez réessayer.",

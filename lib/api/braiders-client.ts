@@ -2,6 +2,7 @@
 // locale-resolved server-side via Accept-Language (default "en").
 import type {
   ApiEnvelope,
+  AvailableSlotResponse,
   BraiderDetailResponse,
   BraiderSearchItem,
   BraiderSearchParams,
@@ -73,4 +74,18 @@ export const braidersApi = {
 
   getById: (braiderId: string, lang?: Locale) =>
     get<BraiderDetailResponse>(`/braiders/${braiderId}`, lang),
+
+  getAvailabilitySlots: (
+    braiderId: string,
+    params: { style_id: string; date_from: string; date_to: string }
+  ) => {
+    const query = new URLSearchParams({
+      style_id: params.style_id,
+      date_from: params.date_from,
+      date_to: params.date_to,
+    });
+    return get<AvailableSlotResponse[]>(
+      `/braiders/${braiderId}/availability/slots?${query.toString()}`
+    );
+  },
 };

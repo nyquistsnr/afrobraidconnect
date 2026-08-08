@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Sparkles } from "lucide-react";
-import type { BraiderDetailResponse } from "@/lib/api/types";
+import type { AvailableSlotResponse, BraiderDetailResponse } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import { cheapestOfferedStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import { PhotoGallery } from "@/components/braider-detail/photo-gallery";
 import { StyleMenu } from "@/components/braider-detail/style-menu";
+import { AvailabilitySection } from "@/components/braider-detail/availability-section";
 import { BookingSidebar } from "@/components/braider-detail/booking-sidebar";
 import { MobileBookingBar } from "@/components/braider-detail/mobile-booking-bar";
 import { ShareButton } from "@/components/braider-detail/share-button";
@@ -19,10 +20,12 @@ import type { BraiderDetailDict } from "@/components/braider-detail/types";
 export function BraiderDetailView({
   braider,
   lang,
+  initialStyleId,
   dict,
 }: {
   braider: BraiderDetailResponse;
   lang: Locale;
+  initialStyleId?: string | null;
   dict: BraiderDetailDict;
 }) {
   const router = useRouter();
@@ -30,14 +33,25 @@ export function BraiderDetailView({
     () => cheapestOfferedStyle(braider.styles),
     [braider.styles]
   );
+  // A style_id carried over from the search page's style filter (via the
+  // card's link) takes priority, but only if this braider actually offers
+  // it — otherwise fall back to the cheapest style, same as browsing in
+  // without a filter.
+  const initialStyle = initialStyleId
+    ? (braider.styles.find((s) => s.style_id === initialStyleId) ?? defaultStyle)
+    : defaultStyle;
+
   const [selectedStyleId, setSelectedStyleId] = useState<string | null>(
-    defaultStyle?.style_id ?? null
+    initialStyle?.style_id ?? null
   );
   const [selectedVariationId, setSelectedVariationId] = useState<string | null>(
     null
   );
   const [selectedAddonIds, setSelectedAddonIds] = useState<Set<string>>(
     new Set()
+  );
+  const [selectedSlot, setSelectedSlot] = useState<AvailableSlotResponse | null>(
+    null
   );
 
   const selectedStyle =
@@ -47,6 +61,7 @@ export function BraiderDetailView({
     setSelectedStyleId(id);
     setSelectedVariationId(null);
     setSelectedAddonIds(new Set());
+    setSelectedSlot(null);
   }
 
   function handleToggleAddon(id: string) {
@@ -172,6 +187,17 @@ export function BraiderDetailView({
             />
           </section>
 
+          {selectedStyle && (
+            <AvailabilitySection
+              braiderId={braider.id}
+              style={selectedStyle}
+              lang={lang}
+              selectedSlot={selectedSlot}
+              onSelectSlot={setSelectedSlot}
+              dict={dict}
+            />
+          )}
+
           {braider.location && (
             <section className="flex flex-col gap-3 border-t border-border pt-8">
               <h2 className="text-lg font-semibold text-foreground">
@@ -215,6 +241,8 @@ export function BraiderDetailView({
               selectedStyle={selectedStyle}
               selectedVariationId={selectedVariationId}
               selectedAddonIds={selectedAddonIds}
+              selectedSlot={selectedSlot}
+              lang={lang}
               dict={dict}
             />
           </div>
@@ -225,6 +253,8 @@ export function BraiderDetailView({
         selectedStyle={selectedStyle}
         selectedVariationId={selectedVariationId}
         selectedAddonIds={selectedAddonIds}
+        selectedSlot={selectedSlot}
+        lang={lang}
         dict={dict}
       />
     </div>

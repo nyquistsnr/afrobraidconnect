@@ -26,10 +26,15 @@ export function BraiderCard({
   const locationLine = [item.location?.city, item.location?.country]
     .filter(Boolean)
     .join(", ");
+  // Only carry the style filter over when it's the one the search actually
+  // matched on — not the cheapest-style fallback used just to show a price.
+  const href = item.matched_style
+    ? `/${lang}/braiders/${item.id}?style_id=${item.matched_style.style_id}`
+    : `/${lang}/braiders/${item.id}`;
 
   return (
     <Link
-      href={`/${lang}/braiders/${item.id}`}
+      href={href}
       onMouseEnter={() => onHover(item.id)}
       onMouseLeave={() => onHover(null)}
       className={`group flex flex-col gap-3 rounded-2xl border p-3 outline-none transition-all ${

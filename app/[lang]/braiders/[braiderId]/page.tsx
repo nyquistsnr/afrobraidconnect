@@ -11,9 +11,14 @@ import type { BraiderDetailResponse } from "@/lib/api/types";
 
 export default async function BraiderDetailPage({
   params,
+  searchParams,
 }: PageProps<"/[lang]/braiders/[braiderId]">) {
   const { lang, braiderId } = await params;
   if (!hasLocale(lang)) notFound();
+
+  const sp = await searchParams;
+  const styleIdParam = sp.style_id;
+  const initialStyleId = Array.isArray(styleIdParam) ? styleIdParam[0] : styleIdParam;
 
   const dict = await getDictionary(lang);
 
@@ -31,7 +36,12 @@ export default async function BraiderDetailPage({
       <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
 
       {status === "ok" && braider ? (
-        <BraiderDetailView braider={braider} lang={lang} dict={dict.braiderDetail} />
+        <BraiderDetailView
+          braider={braider}
+          lang={lang}
+          initialStyleId={initialStyleId}
+          dict={dict.braiderDetail}
+        />
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-24 text-center">
           {status === "not_found" ? (

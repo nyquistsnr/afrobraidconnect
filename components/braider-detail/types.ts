@@ -3,10 +3,24 @@ export interface BraiderDetailSidebarDict {
   durationLabel: string;
   baseLabel: string;
   addonsLabel: string;
+  timeLabel: string;
   totalLabel: string;
   cta: string;
+  ctaWithSlot: string;
   ctaNoSelection: string;
   comingSoonToast: string;
+  comingSoonToastWithTime: string;
+}
+
+export interface BraiderDetailAvailabilityDict {
+  title: string;
+  previousMonth: string;
+  nextMonth: string;
+  noDuration: string;
+  notConfigured: string;
+  loadError: string;
+  retry: string;
+  noSlotsForDay: string;
 }
 
 export interface BraiderDetailDict {
@@ -40,6 +54,7 @@ export interface BraiderDetailDict {
   addonsLabel: string;
   requiredBadge: string;
   sidebar: BraiderDetailSidebarDict;
+  availability: BraiderDetailAvailabilityDict;
   errorTitle: string;
   errorSubtitle: string;
   retry: string;

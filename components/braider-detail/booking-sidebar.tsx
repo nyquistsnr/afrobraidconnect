@@ -1,20 +1,31 @@
 "use client";
 
 import { toast } from "react-toastify";
-import type { BraiderOfferedStyle } from "@/lib/api/types";
+import type { AvailableSlotResponse, BraiderOfferedStyle } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { formatPrice } from "@/lib/braider-pricing";
-import { calcEstimatedTotal, formatDuration } from "@/components/braider-detail/format";
+import {
+  calcEstimatedTotal,
+  comingSoonMessage,
+  ctaLabel,
+  formatDuration,
+  formatSlotDateTime,
+} from "@/components/braider-detail/format";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
 export function BookingSidebar({
   selectedStyle,
   selectedVariationId,
   selectedAddonIds,
+  selectedSlot,
+  lang,
   dict,
 }: {
   selectedStyle: BraiderOfferedStyle | null;
   selectedVariationId: string | null;
   selectedAddonIds: ReadonlySet<string>;
+  selectedSlot: AvailableSlotResponse | null;
+  lang: Locale;
   dict: BraiderDetailDict;
 }) {
   const variation =
@@ -30,7 +41,7 @@ export function BookingSidebar({
     : null;
 
   function handleCta() {
-    toast.info(dict.sidebar.comingSoonToast);
+    toast.info(comingSoonMessage(dict, selectedSlot, lang));
   }
 
   return (
@@ -69,6 +80,14 @@ export function BookingSidebar({
                 <span className="text-foreground">+€{formatPrice(addonsTotal)}</span>
               </div>
             )}
+            {selectedSlot && (
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">{dict.sidebar.timeLabel}</span>
+                <span className="text-foreground">
+                  {formatSlotDateTime(selectedSlot.start_at, lang)}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-between border-t border-border pt-3 font-semibold text-foreground">
@@ -84,7 +103,7 @@ export function BookingSidebar({
         disabled={!selectedStyle}
         className="mt-5 flex w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {selectedStyle ? dict.sidebar.cta : dict.sidebar.ctaNoSelection}
+        {ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
       </button>
     </div>
   );

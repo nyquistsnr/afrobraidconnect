@@ -104,10 +104,23 @@
       "durationLabel": "Dauer",
       "baseLabel": "Grundpreis",
       "addonsLabel": "Zusatzleistungen",
+      "timeLabel": "Uhrzeit",
       "totalLabel": "Geschätzter Gesamtpreis",
       "cta": "Verfügbarkeit prüfen",
+      "ctaWithSlot": "Weiter",
       "ctaNoSelection": "Leistung auswählen",
-      "comingSoonToast": "Buchung ist bald verfügbar — schau bald wieder vorbei!"
+      "comingSoonToast": "Buchung ist bald verfügbar — schau bald wieder vorbei!",
+      "comingSoonToastWithTime": "Buchung für {time} ist bald verfügbar — schau bald wieder vorbei!"
+    },
+    "availability": {
+      "title": "Verfügbarkeit",
+      "previousMonth": "Vorheriger Monat",
+      "nextMonth": "Nächster Monat",
+      "noDuration": "Für diese Leistung ist die Online-Buchung noch nicht eingerichtet.",
+      "notConfigured": "Dieser Braider hat seine Verfügbarkeit noch nicht festgelegt.",
+      "loadError": "Verfügbarkeit konnte nicht geladen werden. Bitte versuche es erneut.",
+      "retry": "Erneut versuchen",
+      "noSlotsForDay": "An diesem Tag sind keine Termine frei — versuche ein anderes Datum."
     },
     "errorTitle": "Etwas ist schiefgelaufen",
     "errorSubtitle": "Dieses Profil konnte gerade nicht geladen werden. Bitte versuche es erneut.",

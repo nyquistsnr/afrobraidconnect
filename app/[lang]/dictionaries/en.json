@@ -104,10 +104,23 @@
       "durationLabel": "Duration",
       "baseLabel": "Base price",
       "addonsLabel": "Add-ons",
+      "timeLabel": "Time",
       "totalLabel": "Estimated total",
       "cta": "Check availability",
+      "ctaWithSlot": "Continue",
       "ctaNoSelection": "Select a service",
-      "comingSoonToast": "Booking is coming soon — check back shortly!"
+      "comingSoonToast": "Booking is coming soon — check back shortly!",
+      "comingSoonToastWithTime": "Booking for {time} is coming soon — check back shortly!"
+    },
+    "availability": {
+      "title": "Availability",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "noDuration": "This service isn't set up for online booking yet.",
+      "notConfigured": "This braider hasn't set their availability yet.",
+      "loadError": "Couldn't load availability. Please try again.",
+      "retry": "Try again",
+      "noSlotsForDay": "No openings on this day — try another date."
     },
     "errorTitle": "Something went wrong",
     "errorSubtitle": "We couldn't load this profile right now. Please try again.",
