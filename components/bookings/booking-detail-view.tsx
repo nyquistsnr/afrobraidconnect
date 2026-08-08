@@ -178,7 +178,7 @@ export function BookingDetailView({
         <div className="mt-3 flex flex-col gap-2 text-sm">
           {includedItems.map((item, index) => (
             <div key={`${item.item_type}-${index}`} className="flex items-center justify-between gap-4">
-              <span className="text-foreground">{item.name}</span>
+              <span className="text-foreground">{item.name ?? item.item_type}</span>
               <span className="shrink-0 text-muted-foreground">
                 €{formatPrice(item.line_amount)}
               </span>
