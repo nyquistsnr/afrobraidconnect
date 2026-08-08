@@ -14,6 +14,7 @@ export interface SearchQueryState {
   location: SelectedLocation | null;
   style: SelectedStyle | null;
   dateRange: SelectedDateRange;
+  radiusKm?: number;
 }
 
 function toISODate(date: Date): string {
@@ -57,6 +58,10 @@ export function buildSearchHref(lang: Locale, state: SearchQueryState): string {
     params.set("date_to", toISODate(dateRange.to ?? dateRange.from));
   }
 
+  if (state.radiusKm) {
+    params.set("radius_km", String(state.radiusKm));
+  }
+
   const qs = params.toString();
   return `/${lang}/search${qs ? `?${qs}` : ""}`;
 }
@@ -76,6 +81,7 @@ export function parseSearchParams(
   const styleName = first(searchParams.style_name);
   const dateFrom = first(searchParams.date_from);
   const dateTo = first(searchParams.date_to);
+  const radiusKmStr = first(searchParams.radius_km);
   const page = Number(first(searchParams.page)) || 1;
 
   const parsedLat = lat ? Number(lat) : undefined;
@@ -85,6 +91,8 @@ export function parseSearchParams(
     !Number.isNaN(parsedLat) &&
     parsedLng != null &&
     !Number.isNaN(parsedLng);
+    
+  const radiusKm = radiusKmStr && !Number.isNaN(Number(radiusKmStr)) ? Number(radiusKmStr) : 5;
 
   const ui: SearchQueryState = {
     location: location
@@ -100,6 +108,7 @@ export function parseSearchParams(
       from: dateFrom ? fromISODate(dateFrom) : undefined,
       to: dateTo ? fromISODate(dateTo) : undefined,
     },
+    radiusKm,
   };
 
   const api: BraiderSearchParams = {
@@ -109,6 +118,7 @@ export function parseSearchParams(
     style_id: styleId || undefined,
     date_from: dateFrom || undefined,
     date_to: dateTo || undefined,
+    radius_km: hasCoords ? radiusKm : undefined,
     page,
   };
 

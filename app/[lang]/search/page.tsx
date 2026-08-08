@@ -20,7 +20,13 @@ export default async function SearchPage({
   let result: PaginatedData<BraiderSearchItem> | null = null;
   let hasError = false;
   try {
+    console.log(`\n--- SEARCH REQUEST ---`);
+    console.log(`Endpoint: GET /v1/braiders`);
+    console.log(`Params:`, JSON.stringify(api, null, 2));
+    console.log(`Language:`, lang);
+    
     result = await braidersApi.search(api, lang);
+    console.log("Search API Response:", JSON.stringify(result, null, 2));
   } catch {
     hasError = true;
   }
@@ -31,7 +37,7 @@ export default async function SearchPage({
       : null;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background md:h-screen md:overflow-hidden">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
       <SiteHeader
         lang={lang}
         dict={dict.siteHeader}
@@ -45,6 +51,7 @@ export default async function SearchPage({
         pagination={result?.pagination ?? null}
         hasError={hasError}
         locationLabel={ui.location?.label ?? null}
+        radiusKm={ui.radiusKm ?? 5}
         center={center}
         dict={dict.searchResults}
       />

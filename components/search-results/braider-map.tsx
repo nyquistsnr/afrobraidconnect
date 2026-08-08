@@ -63,6 +63,27 @@ function FitBounds({
   return null;
 }
 
+function FocusActivePin({
+  pins,
+  activeId,
+}: {
+  pins: Pin[];
+  activeId: string | null;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || !activeId) return;
+    const pin = pins.find((p) => p.item.id === activeId);
+    if (pin) {
+      map.panTo({ lat: pin.lat, lng: pin.lng });
+      map.setZoom(15);
+    }
+  }, [map, pins, activeId]);
+
+  return null;
+}
+
 export function BraiderMap({
   items,
   center,
@@ -81,9 +102,15 @@ export function BraiderMap({
   const pins = useMemo<Pin[]>(() => {
     const result: Pin[] = [];
     for (const item of items) {
-      const lat = item.location?.latitude;
-      const lng = item.location?.longitude;
-      if (lat != null && lng != null) result.push({ item, lat, lng });
+      const latRaw = item.location?.latitude;
+      const lngRaw = item.location?.longitude;
+      if (latRaw != null && lngRaw != null) {
+        const lat = Number(latRaw);
+        const lng = Number(lngRaw);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          result.push({ item, lat, lng });
+        }
+      }
     }
     return result;
   }, [items]);
@@ -99,6 +126,7 @@ export function BraiderMap({
       className="h-full w-full"
     >
       <FitBounds pins={pins} center={center} />
+      <FocusActivePin pins={pins} activeId={activeId} />
       {pins.map(({ item, lat, lng }) => {
         const style = displayStyle(item);
         const isHighlighted = hoveredId === item.id || activeId === item.id;

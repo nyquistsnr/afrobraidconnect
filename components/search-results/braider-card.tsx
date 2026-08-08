@@ -38,8 +38,10 @@ export function BraiderCard({
           onSelect(item.id);
         }
       }}
-      className={`group flex cursor-pointer flex-col gap-3 rounded-2xl p-2 outline-none transition-colors ${
-        isHighlighted ? "bg-border/40" : "hover:bg-border/30"
+      className={`group flex cursor-pointer flex-col gap-3 rounded-2xl border p-3 outline-none transition-all ${
+        isHighlighted
+          ? "border-foreground shadow-md"
+          : "border-border/60 hover:border-foreground/25 hover:shadow-sm"
       }`}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-border/50">
@@ -50,8 +52,8 @@ export function BraiderCard({
               name: item.business_name ?? "",
             })}
             fill
-            sizes="(min-width: 768px) 33vw, 100vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            sizes="(min-width: 1280px) 20vw, (min-width: 768px) 22vw, (min-width: 640px) 42vw, 90vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
@@ -67,9 +69,22 @@ export function BraiderCard({
 
       <div className="flex flex-col gap-0.5 px-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="truncate text-sm font-semibold text-foreground">
-            {item.business_name ?? "—"}
-          </h3>
+          <div className="flex min-w-0 items-center gap-2">
+            {item.logo_url && (
+              <span className="relative size-6 shrink-0 overflow-hidden rounded-full border border-border bg-border/30">
+                <Image
+                  src={item.logo_url}
+                  alt=""
+                  fill
+                  sizes="24px"
+                  className="object-cover"
+                />
+              </span>
+            )}
+            <h3 className="truncate text-sm font-semibold text-foreground">
+              {item.business_name ?? "—"}
+            </h3>
+          </div>
           {item.distance_km != null && (
             <span className="shrink-0 text-xs text-muted-foreground">
               {formatTemplate(dict.distanceAway, { distance: item.distance_km })}

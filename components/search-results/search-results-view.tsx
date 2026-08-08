@@ -13,6 +13,7 @@ export function SearchResultsView({
   pagination,
   hasError,
   locationLabel,
+  radiusKm,
   center,
   dict,
 }: {
@@ -20,6 +21,7 @@ export function SearchResultsView({
   pagination: PaginationMeta | null;
   hasError: boolean;
   locationLabel: string | null;
+  radiusKm: number;
   center: { lat: number; lng: number } | null;
   dict: SearchResultsDict;
 }) {
@@ -44,10 +46,20 @@ export function SearchResultsView({
     setActiveId((current) => (current === id ? null : id));
   }
 
+  function handleChangeRadius(radius: number) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("radius_km", String(radius));
+    // Reset page to 1 when changing radius
+    params.set("page", "1");
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
+  }
+
   return (
-    <div className="flex flex-1 flex-col pb-16 md:min-h-0 md:flex-row md:pb-0">
+    <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div
-        className={`flex-1 overflow-y-auto md:max-w-[560px] lg:max-w-[640px] xl:max-w-[720px] ${
+        className={`min-h-0 w-full md:w-[500px] lg:w-[650px] xl:w-[750px] flex-shrink-0 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
           mobileView === "map" ? "hidden md:block" : "block"
         }`}
       >
@@ -56,21 +68,21 @@ export function SearchResultsView({
           pagination={pagination}
           hasError={hasError}
           locationLabel={locationLabel}
+          radiusKm={radiusKm}
           hoveredId={hoveredId}
           activeId={activeId}
           onHover={setHoveredId}
           onSelect={handleSelect}
           onChangePage={handleChangePage}
+          onChangeRadius={handleChangeRadius}
           isPending={isPending}
           dict={dict}
         />
       </div>
 
       <div
-        className={`relative flex-1 ${
-          mobileView === "list"
-            ? "hidden md:block"
-            : "block h-[calc(100dvh-12.5rem)] md:h-auto"
+        className={`relative min-h-0 flex-1 md:m-4 md:overflow-hidden md:rounded-2xl md:shadow-md ${
+          mobileView === "list" ? "hidden md:block" : "block"
         }`}
       >
         <BraiderMap
