@@ -68,11 +68,21 @@ export function SiteHeader({
   const menuRef = useRef<HTMLDivElement>(null);
 
   const [location, setLocation] = useState<SelectedLocation | null>(
-    initialLocation
+    initialLocation || null
   );
-  const [style, setStyle] = useState<SelectedStyle | null>(initialStyle);
+  const [style, setStyle] = useState<SelectedStyle | null>(initialStyle || null);
   const [dateRange, setDateRange] =
     useState<SelectedDateRange>(initialDateRange);
+
+  // Sync state when props change from URL updates (like reverse geocoding on map drag)
+  useEffect(() => {
+    setLocation(initialLocation || null);
+  }, [
+    initialLocation?.label,
+    initialLocation?.lat,
+    initialLocation?.lng,
+    initialLocation?.countryCode,
+  ]);
 
   useEffect(() => {
     function handleScroll() {
