@@ -1,14 +1,13 @@
 "use client";
 
-import { toast } from "react-toastify";
-import type { AvailableSlotResponse, BraiderOfferedStyle } from "@/lib/api/types";
-import type { Locale } from "@/lib/i18n";
+import { Loader2 } from "lucide-react";
+import type {
+  AvailableSlotResponse,
+  BookingCalculationPreviewResponse,
+  BraiderOfferedStyle,
+} from "@/lib/api/types";
 import { formatPrice } from "@/lib/braider-pricing";
-import {
-  calcEstimatedTotal,
-  comingSoonMessage,
-  ctaLabel,
-} from "@/components/braider-detail/format";
+import { ctaLabel, resolvePricing } from "@/components/braider-detail/format";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
 // Sits directly above the app-wide MobileTabBar (which is ~60px tall) so the
@@ -18,23 +17,23 @@ export function MobileBookingBar({
   selectedVariationId,
   selectedAddonIds,
   selectedSlot,
-  lang,
+  preview,
+  onContinue,
+  isContinuing,
   dict,
 }: {
   selectedStyle: BraiderOfferedStyle | null;
   selectedVariationId: string | null;
   selectedAddonIds: ReadonlySet<string>;
   selectedSlot: AvailableSlotResponse | null;
-  lang: Locale;
+  preview: BookingCalculationPreviewResponse | null;
+  onContinue: () => void;
+  isContinuing: boolean;
   dict: BraiderDetailDict;
 }) {
-  const total = selectedStyle
-    ? calcEstimatedTotal(selectedStyle, selectedVariationId, selectedAddonIds)
+  const pricing = selectedStyle
+    ? resolvePricing(selectedStyle, selectedVariationId, selectedAddonIds, preview)
     : null;
-
-  function handleCta() {
-    toast.info(comingSoonMessage(dict, selectedSlot, lang));
-  }
 
   return (
     <div className="fixed inset-x-0 bottom-16 z-30 border-t border-border bg-surface px-4 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] lg:hidden">
@@ -44,16 +43,19 @@ export function MobileBookingBar({
             {dict.sidebar.startingFrom}
           </p>
           <p className="text-lg font-semibold text-foreground">
-            {total != null ? `€${formatPrice(total)}` : "—"}
+            {pricing ? `€${formatPrice(pricing.total)}` : "—"}
           </p>
         </div>
         <button
           type="button"
-          onClick={handleCta}
-          disabled={!selectedStyle}
-          className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={onContinue}
+          disabled={!selectedStyle || isContinuing}
+          className="flex shrink-0 items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
+          {isContinuing && <Loader2 className="size-4 animate-spin" />}
+          {isContinuing
+            ? dict.sidebar.ctaLoading
+            : ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
         </button>
       </div>
     </div>

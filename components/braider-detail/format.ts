@@ -1,4 +1,7 @@
-import type { AvailableSlotResponse, BraiderOfferedStyle } from "@/lib/api/types";
+import type {
+  BookingCalculationPreviewResponse,
+  BraiderOfferedStyle,
+} from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import { formatTemplate } from "@/lib/format-template";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
@@ -118,13 +121,53 @@ export function ctaLabel(
   return hasSlot ? dict.sidebar.ctaWithSlot : dict.sidebar.cta;
 }
 
-export function comingSoonMessage(
-  dict: BraiderDetailDict,
-  slot: AvailableSlotResponse | null,
-  lang: Locale
-): string {
-  if (!slot) return dict.sidebar.comingSoonToast;
-  return formatTemplate(dict.sidebar.comingSoonToastWithTime, {
-    time: formatSlotDateTime(slot.start_at, lang),
-  });
+export interface PricingDisplay {
+  subtotal: number;
+  travelFee: number;
+  platformFee: number;
+  vat: number;
+  total: number;
+  depositAmount: number | null;
+  balanceAmount: number | null;
+  // True while showing the naive client-side estimate (base + addons) —
+  // either the live quote hasn't loaded yet, or it's still priced against a
+  // previous style selection. Never shown as final: the real total/deposit
+  // split is only trustworthy once the API quote for the *current*
+  // selection has resolved.
+  isEstimate: boolean;
+}
+
+// Prefers the live API quote (accurate VAT/platform fee/deposit split) but
+// falls back to the instant client-side estimate so the sidebar never shows
+// a blank state while the debounced preview request is in flight.
+export function resolvePricing(
+  style: BraiderOfferedStyle,
+  selectedVariationId: string | null,
+  selectedAddonIds: ReadonlySet<string>,
+  preview: BookingCalculationPreviewResponse | null
+): PricingDisplay {
+  if (preview && preview.style_id === style.style_id) {
+    return {
+      subtotal: Number(preview.service_subtotal),
+      travelFee: Number(preview.travel_fee),
+      platformFee: Number(preview.platform_fee),
+      vat: Number(preview.vat_total),
+      total: Number(preview.total),
+      depositAmount: Number(preview.deposit_amount),
+      balanceAmount: Number(preview.balance_amount),
+      isEstimate: false,
+    };
+  }
+
+  const fallback = calcEstimatedTotal(style, selectedVariationId, selectedAddonIds);
+  return {
+    subtotal: fallback,
+    travelFee: 0,
+    platformFee: 0,
+    vat: 0,
+    total: fallback,
+    depositAmount: null,
+    balanceAmount: null,
+    isEstimate: true,
+  };
 }

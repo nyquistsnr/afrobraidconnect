@@ -4,12 +4,19 @@ export interface BraiderDetailSidebarDict {
   baseLabel: string;
   addonsLabel: string;
   timeLabel: string;
+  subtotalLabel: string;
+  travelFeeLabel: string;
+  platformFeeLabel: string;
+  vatLabel: string;
   totalLabel: string;
+  depositLabel: string;
+  balanceLabel: string;
   cta: string;
   ctaWithSlot: string;
   ctaNoSelection: string;
-  comingSoonToast: string;
-  comingSoonToastWithTime: string;
+  ctaLoading: string;
+  previewError: string;
+  quoteErrorToast: string;
 }
 
 export interface BraiderDetailAvailabilityDict {

@@ -599,3 +599,136 @@ export interface BraiderDetailResponse {
   portfolio: BraiderPortfolioImage[];
   styles: BraiderOfferedStyle[];
 }
+
+// ---------------------------------------------------------------------------
+// Booking calculations (public quote engine) + bookings (auth required)
+// ---------------------------------------------------------------------------
+
+export interface BookingCalculationInput {
+  braider_id: string;
+  style_id: string;
+  braider_style_variation_id?: string;
+  braider_style_addon_ids?: string[];
+  is_mobile?: boolean;
+  client_address?: string;
+  client_latitude?: string;
+  client_longitude?: string;
+}
+
+export type BookingCalculationUpdateRequest = Partial<BookingCalculationInput>;
+
+export type BookingLineItemType =
+  | "SERVICE"
+  | "VARIATION"
+  | "ADDON"
+  | "TRAVEL"
+  | "PLATFORM_FEE"
+  | "VAT_SERVICE"
+  | "VAT_PLATFORM_FEE";
+
+export interface BookingLineItem {
+  item_type: BookingLineItemType;
+  name: string | null;
+  quantity: number;
+  unit_amount: string;
+  line_amount: string;
+  is_required: boolean;
+}
+
+export interface BookingCalculationPreviewResponse {
+  currency: "EUR";
+  braider_id: string;
+  style_id: string;
+  style_name: string;
+  duration_minutes: number;
+  is_mobile: boolean;
+  client_address: string | null;
+  client_latitude: string | null;
+  client_longitude: string | null;
+  items: BookingLineItem[];
+  service_subtotal: string;
+  travel_fee: string;
+  subtotal: string;
+  platform_fee: string;
+  vat_on_service: string;
+  vat_on_platform_fee: string;
+  vat_rate: string;
+  country: string | null;
+  vat_total: string;
+  total: string;
+  deposit_amount: string;
+  balance_amount: string;
+  deposit_note: string;
+}
+
+export type BookingCalculationStatus = "DRAFT" | "CONSUMED" | "EXPIRED";
+
+export interface BookingCalculationResponse
+  extends BookingCalculationPreviewResponse {
+  id: string;
+  status: BookingCalculationStatus;
+  expires_at: string;
+}
+
+export type BookingStatus =
+  | "PENDING_PAYMENT"
+  | "CONFIRMED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "NO_SHOW"
+  | "CANCELLED_BY_CUSTOMER"
+  | "CANCELLED_BY_BRAIDER"
+  | "CANCELLED_NO_PAYMENT"
+  | "EXPIRED"
+  | "DISPUTED";
+
+export type PaymentSchedule = "FULL_UPFRONT" | "DEPOSIT_THEN_BALANCE";
+export type PaymentPurpose = "FULL" | "DEPOSIT" | "BALANCE";
+export type PaymentStatus = "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELED";
+
+export interface BookingPaymentResponse {
+  purpose: PaymentPurpose;
+  status: PaymentStatus;
+  amount: string;
+  currency: "EUR";
+  client_secret: string | null;
+}
+
+export interface CreateBookingRequest {
+  booking_calculation_id: string;
+  starts_at: string;
+  terms_accepted: true;
+}
+
+export interface BookingResponse {
+  id: string;
+  reference: string;
+  status: BookingStatus;
+  braider_id: string;
+  style_id: string;
+  style_name: string;
+  duration_minutes: number;
+  is_mobile: boolean;
+  client_address: string | null;
+  client_latitude: string | null;
+  client_longitude: string | null;
+  country: string;
+  currency: "EUR";
+  starts_at: string;
+  ends_at: string;
+  items: BookingLineItem[];
+  service_subtotal: string;
+  travel_fee: string;
+  subtotal: string;
+  platform_fee: string;
+  vat_on_service: string;
+  vat_on_platform_fee: string;
+  vat_total: string;
+  total: string;
+  deposit_amount: string;
+  balance_amount: string;
+  payment_schedule: PaymentSchedule;
+  cancellation_cutoff_at: string;
+  payments: BookingPaymentResponse[];
+  created_at: string;
+}

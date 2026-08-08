@@ -1,0 +1,37 @@
+export interface BookingCheckoutDict {
+  backToProfile: string;
+  pageTitle: string;
+  summaryTitle: string;
+  appointmentLabel: string;
+  durationLabel: string;
+  priceDetailsTitle: string;
+  serviceSubtotalLabel: string;
+  travelFeeLabel: string;
+  platformFeeLabel: string;
+  vatLabel: string;
+  totalLabel: string;
+  dueTodayLabel: string;
+  dueLaterLabel: string;
+  termsLabel: string;
+  confirmButton: string;
+  confirmButtonLoading: string;
+  paymentTitle: string;
+  paymentSubtitle: string;
+  payButton: string;
+  payButtonLoading: string;
+  confirmingPaymentTitle: string;
+  confirmingPaymentSubtitle: string;
+  stillProcessingNotice: string;
+  successTitle: string;
+  successSubtitle: string;
+  referenceLabel: string;
+  balanceNotice: string;
+  backToProfileCta: string;
+  backHomeCta: string;
+  loadErrorTitle: string;
+  loadErrorSubtitle: string;
+  reconfigureCta: string;
+  genericErrorTitle: string;
+  paymentErrorFallback: string;
+  depositNoteFallback: string;
+}

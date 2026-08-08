@@ -1,15 +1,18 @@
 "use client";
 
-import { toast } from "react-toastify";
-import type { AvailableSlotResponse, BraiderOfferedStyle } from "@/lib/api/types";
+import { Loader2 } from "lucide-react";
+import type {
+  AvailableSlotResponse,
+  BookingCalculationPreviewResponse,
+  BraiderOfferedStyle,
+} from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import { formatPrice } from "@/lib/braider-pricing";
 import {
-  calcEstimatedTotal,
-  comingSoonMessage,
   ctaLabel,
   formatDuration,
   formatSlotDateTime,
+  resolvePricing,
 } from "@/components/braider-detail/format";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
 
@@ -18,6 +21,9 @@ export function BookingSidebar({
   selectedVariationId,
   selectedAddonIds,
   selectedSlot,
+  preview,
+  onContinue,
+  isContinuing,
   lang,
   dict,
 }: {
@@ -25,24 +31,21 @@ export function BookingSidebar({
   selectedVariationId: string | null;
   selectedAddonIds: ReadonlySet<string>;
   selectedSlot: AvailableSlotResponse | null;
+  preview: BookingCalculationPreviewResponse | null;
+  onContinue: () => void;
+  isContinuing: boolean;
   lang: Locale;
   dict: BraiderDetailDict;
 }) {
   const variation =
     selectedStyle?.variations.find((v) => v.id === selectedVariationId) ?? null;
-  const includedAddons = selectedStyle
-    ? selectedStyle.addons.filter(
-        (a) => a.is_required || selectedAddonIds.has(a.id)
-      )
-    : [];
-  const addonsTotal = includedAddons.reduce((sum, a) => sum + Number(a.price), 0);
-  const total = selectedStyle
-    ? calcEstimatedTotal(selectedStyle, selectedVariationId, selectedAddonIds)
+  const pricing = selectedStyle
+    ? resolvePricing(selectedStyle, selectedVariationId, selectedAddonIds, preview)
     : null;
-
-  function handleCta() {
-    toast.info(comingSoonMessage(dict, selectedSlot, lang));
-  }
+  const hasPartialDeposit =
+    !pricing?.isEstimate &&
+    pricing?.depositAmount != null &&
+    pricing.depositAmount < pricing.total;
 
   return (
     <div className="rounded-2xl border border-border bg-surface p-5 shadow-md">
@@ -50,10 +53,10 @@ export function BookingSidebar({
         {dict.sidebar.startingFrom}
       </p>
       <p className="mt-1 text-2xl font-semibold text-foreground">
-        {total != null ? `€${formatPrice(total)}` : "—"}
+        {pricing ? `€${formatPrice(pricing.total)}` : "—"}
       </p>
 
-      {selectedStyle && (
+      {selectedStyle && pricing && (
         <div className="mt-5 flex flex-col gap-3 border-t border-border pt-4">
           <div>
             <p className="font-medium text-foreground">
@@ -69,16 +72,42 @@ export function BookingSidebar({
 
           <div className="flex flex-col gap-1.5 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">{dict.sidebar.baseLabel}</span>
+              <span className="text-muted-foreground">
+                {dict.sidebar.subtotalLabel}
+              </span>
               <span className="text-foreground">
-                €{formatPrice(variation ? variation.price : selectedStyle.base_price)}
+                €{formatPrice(pricing.subtotal)}
               </span>
             </div>
-            {includedAddons.length > 0 && (
+            {pricing.travelFee > 0 && (
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">{dict.sidebar.addonsLabel}</span>
-                <span className="text-foreground">+€{formatPrice(addonsTotal)}</span>
+                <span className="text-muted-foreground">
+                  {dict.sidebar.travelFeeLabel}
+                </span>
+                <span className="text-foreground">
+                  +€{formatPrice(pricing.travelFee)}
+                </span>
               </div>
+            )}
+            {!pricing.isEstimate && (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">
+                    {dict.sidebar.platformFeeLabel}
+                  </span>
+                  <span className="text-foreground">
+                    +€{formatPrice(pricing.platformFee)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">
+                    {dict.sidebar.vatLabel}
+                  </span>
+                  <span className="text-foreground">
+                    +€{formatPrice(pricing.vat)}
+                  </span>
+                </div>
+              </>
             )}
             {selectedSlot && (
               <div className="flex items-center justify-between">
@@ -92,18 +121,28 @@ export function BookingSidebar({
 
           <div className="flex items-center justify-between border-t border-border pt-3 font-semibold text-foreground">
             <span>{dict.sidebar.totalLabel}</span>
-            <span>€{formatPrice(total ?? 0)}</span>
+            <span>€{formatPrice(pricing.total)}</span>
           </div>
+
+          {hasPartialDeposit && (
+            <p className="text-xs text-muted-foreground">
+              {dict.sidebar.depositLabel} €{formatPrice(pricing.depositAmount!)} ·{" "}
+              {dict.sidebar.balanceLabel} €{formatPrice(pricing.balanceAmount ?? 0)}
+            </p>
+          )}
         </div>
       )}
 
       <button
         type="button"
-        onClick={handleCta}
-        disabled={!selectedStyle}
-        className="mt-5 flex w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+        onClick={onContinue}
+        disabled={!selectedStyle || isContinuing}
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
+        {isContinuing && <Loader2 className="size-4 animate-spin" />}
+        {isContinuing
+          ? dict.sidebar.ctaLoading
+          : ctaLabel(dict, !!selectedStyle, !!selectedSlot)}
       </button>
     </div>
   );

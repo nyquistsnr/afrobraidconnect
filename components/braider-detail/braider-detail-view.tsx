@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MapPin, Sparkles } from "lucide-react";
@@ -9,6 +11,8 @@ import type { AvailableSlotResponse, BraiderDetailResponse } from "@/lib/api/typ
 import type { Locale } from "@/lib/i18n";
 import { cheapestOfferedStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { bookingCalculationsApi } from "@/lib/api/booking-calculations-client";
 import { PhotoGallery } from "@/components/braider-detail/photo-gallery";
 import { StyleMenu } from "@/components/braider-detail/style-menu";
 import { AvailabilitySection } from "@/components/braider-detail/availability-section";
@@ -71,6 +75,65 @@ export function BraiderDetailView({
       else next.add(id);
       return next;
     });
+  }
+
+  // Live, accurate quote (VAT/platform fee/deposit split) for the sidebar —
+  // debounced so rapid addon toggles don't spam the rate-limited endpoint.
+  // Cheap client math (format.ts's resolvePricing) covers the gap while
+  // this is in flight so the price never blanks out.
+  const previewInput = useMemo(() => {
+    if (!selectedStyleId) return null;
+    return {
+      braider_id: braider.id,
+      style_id: selectedStyleId,
+      braider_style_variation_id: selectedVariationId ?? undefined,
+      braider_style_addon_ids:
+        selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
+    };
+  }, [braider.id, selectedStyleId, selectedVariationId, selectedAddonIds]);
+  const debouncedPreviewInput = useDebouncedValue(previewInput, 400);
+
+  const { data: preview } = useQuery({
+    queryKey: ["booking-calculation-preview", debouncedPreviewInput],
+    queryFn: () => bookingCalculationsApi.preview(debouncedPreviewInput!),
+    enabled: debouncedPreviewInput != null,
+    staleTime: 15_000,
+  });
+
+  const createCalculationMutation = useMutation({
+    mutationFn: () => {
+      if (!selectedStyle || !selectedSlot) {
+        return Promise.reject(new Error("Missing style or slot selection"));
+      }
+      return bookingCalculationsApi.create({
+        braider_id: braider.id,
+        style_id: selectedStyle.style_id,
+        braider_style_variation_id: selectedVariationId ?? undefined,
+        braider_style_addon_ids:
+          selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
+      });
+    },
+    onSuccess: (calculation) => {
+      const params = new URLSearchParams({
+        calculation_id: calculation.id,
+        starts_at: selectedSlot!.start_at,
+      });
+      router.push(`/${lang}/braiders/${braider.id}/book?${params.toString()}`);
+    },
+    onError: () => {
+      toast.error(dict.sidebar.quoteErrorToast);
+    },
+  });
+
+  function handleContinue() {
+    if (!selectedStyle) return;
+    if (!selectedSlot) {
+      document
+        .getElementById("availability-section")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    createCalculationMutation.mutate();
   }
 
   const businessName = braider.business_name ?? "";
@@ -188,14 +251,16 @@ export function BraiderDetailView({
           </section>
 
           {selectedStyle && (
-            <AvailabilitySection
-              braiderId={braider.id}
-              style={selectedStyle}
-              lang={lang}
-              selectedSlot={selectedSlot}
-              onSelectSlot={setSelectedSlot}
-              dict={dict}
-            />
+            <div id="availability-section" className="scroll-mt-24">
+              <AvailabilitySection
+                braiderId={braider.id}
+                style={selectedStyle}
+                lang={lang}
+                selectedSlot={selectedSlot}
+                onSelectSlot={setSelectedSlot}
+                dict={dict}
+              />
+            </div>
           )}
 
           {braider.location && (
@@ -242,6 +307,9 @@ export function BraiderDetailView({
               selectedVariationId={selectedVariationId}
               selectedAddonIds={selectedAddonIds}
               selectedSlot={selectedSlot}
+              preview={preview ?? null}
+              onContinue={handleContinue}
+              isContinuing={createCalculationMutation.isPending}
               lang={lang}
               dict={dict}
             />
@@ -254,7 +322,9 @@ export function BraiderDetailView({
         selectedVariationId={selectedVariationId}
         selectedAddonIds={selectedAddonIds}
         selectedSlot={selectedSlot}
-        lang={lang}
+        preview={preview ?? null}
+        onContinue={handleContinue}
+        isContinuing={createCalculationMutation.isPending}
         dict={dict}
       />
     </div>
