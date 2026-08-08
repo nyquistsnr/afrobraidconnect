@@ -27,6 +27,8 @@ declare global {
         };
       };
     };
+    _gsiInitialized?: boolean;
+    _gsiCallback?: (response: { credential: string }) => void;
   }
 }
 
@@ -91,12 +93,15 @@ export function GoogleSignInButton({
         return;
       }
 
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID as string,
-        // The ID token is short-lived and single-use for verification —
-        // it's handed straight to authorize(), never cached or replayed.
-        callback: (response) => googleSignInMutation.mutate(response.credential),
-      });
+      window._gsiCallback = (response) => googleSignInMutation.mutate(response.credential);
+
+      if (!window._gsiInitialized) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID as string,
+          callback: (response) => window._gsiCallback?.(response),
+        });
+        window._gsiInitialized = true;
+      }
 
       // Google's own rendered button is the only supported way to get an
       // ID token (rather than an access token) from a click — but its
