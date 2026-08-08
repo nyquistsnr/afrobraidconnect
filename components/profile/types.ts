@@ -9,4 +9,7 @@ export interface ProfileDict {
   successMessage: string;
   errorMessage: string;
   emailNote: string;
+  chatLanguageLabel: string;
+  chatLanguageNotSet: string;
+  chatLanguageNote: string;
 }

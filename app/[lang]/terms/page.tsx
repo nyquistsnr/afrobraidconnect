@@ -19,7 +19,13 @@ export default async function TermsPage({
 
   return (
     <div className="flex min-h-screen flex-1 flex-col bg-background">
-      <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
+      <SiteHeader
+        lang={lang}
+        dict={dict.siteHeader}
+        common={dict.common}
+        notificationsDict={dict.notifications}
+        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
+      />
       <main className="flex-1">
         <LegalPage
           title={dict.terms.title}

@@ -35,7 +35,13 @@ export default async function BraiderDetailPage({
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
+      <SiteHeader
+        lang={lang}
+        dict={dict.siteHeader}
+        common={dict.common}
+        notificationsDict={dict.notifications}
+        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
+      />
 
       {status === "ok" && braider ? (
         <BraiderDetailView

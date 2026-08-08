@@ -3,12 +3,12 @@ import { auth } from "@/auth";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { loginPath } from "@/lib/auth-redirect";
 import { SiteHeader } from "@/components/layout/site-header";
-import { BookingDetailView } from "@/components/bookings/booking-detail-view";
+import { ChatThreadView } from "@/components/chat/chat-thread-view";
 
-export default async function BookingDetailPage({
+export default async function ChatThreadPage({
   params,
-}: PageProps<"/[lang]/bookings/[bookingId]">) {
-  const { lang, bookingId } = await params;
+}: PageProps<"/[lang]/chat/[threadId]">) {
+  const { lang, threadId } = await params;
   if (!hasLocale(lang)) notFound();
 
   const session = await auth();
@@ -22,7 +22,7 @@ export default async function BookingDetailPage({
   const dict = await getDictionary(lang);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-24 md:pb-0">
+    <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-background pb-16 md:pb-0">
       <SiteHeader
         lang={lang}
         dict={dict.siteHeader}
@@ -30,14 +30,12 @@ export default async function BookingDetailPage({
         notificationsDict={dict.notifications}
         chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
-      <BookingDetailView
-        bookingId={bookingId}
+      <ChatThreadView
+        threadId={threadId}
         lang={lang}
-        dict={dict.bookingDetail}
-        statusDict={dict.common.bookingStatus}
-        reviewsDict={dict.reviews}
-        chatButtonDict={dict.chatButton}
-        errorsDict={dict.common.errors}
+        dict={dict.chatThread}
+        reportDict={dict.chatReport}
+        common={dict.common}
       />
     </div>
   );

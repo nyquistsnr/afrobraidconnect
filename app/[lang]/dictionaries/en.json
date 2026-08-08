@@ -347,6 +347,14 @@
       "bookingSlotUnavailable": "That time was just booked by someone else. Please pick another time.",
       "bookingNotFound": "This booking couldn't be found.",
       "invalidBookingDateRange": "The end date can't be before the start date.",
+      "invalidChatLocale": "That chat language isn't supported.",
+      "chatNotAvailable": "Chat isn't available for this booking yet.",
+      "chatThreadNotFound": "This conversation couldn't be found.",
+      "chatAccessDenied": "You don't have access to this conversation.",
+      "chatMessageNotFound": "That message couldn't be found.",
+      "chatReportNotFound": "That report couldn't be found.",
+      "notificationNotFound": "That notification couldn't be found.",
+      "invalidDateRange": "The end date can't be before the start date.",
       "generic": "Something went wrong. Please try again."
     },
     "bookingStatus": {
@@ -851,7 +859,10 @@
     "savingButton": "Saving...",
     "successMessage": "Profile updated successfully.",
     "errorMessage": "Could not update profile.",
-    "emailNote": "Email cannot be changed here."
+    "emailNote": "Email cannot be changed here.",
+    "chatLanguageLabel": "Chat language",
+    "chatLanguageNotSet": "Not set",
+    "chatLanguageNote": "Messages are translated automatically when you and your braider set different chat languages."
   },
   "reviews": {
     "title": "Reviews",
@@ -868,5 +879,78 @@
     "failedToSubmit": "Failed to submit review.",
     "ratingRequired": "Please select a rating.",
     "commentTooLong": "Comment must be less than 1000 characters."
+  },
+  "chatInbox": {
+    "navAriaLabel": "Chat",
+    "pageTitle": "Messages",
+    "pageSubtitle": "Conversations with your braiders about upcoming and past bookings.",
+    "emptyTitle": "No conversations yet",
+    "emptySubtitle": "Once you book and pay for an appointment, you can chat with your braider here.",
+    "errorTitle": "Couldn't load your messages",
+    "errorSubtitle": "Something went wrong. Please try again.",
+    "retry": "Try again",
+    "flaggedPreview": "Message withheld",
+    "noMessagesYet": "Say hello!",
+    "unreadAria": "{count} unread",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "pageOf": "Page {current} of {total}"
+  },
+  "chatThread": {
+    "backToInbox": "Back to messages",
+    "loadErrorTitle": "Couldn't load this conversation",
+    "loadErrorSubtitle": "Something went wrong. Please try again.",
+    "loadEarlier": "Load earlier messages",
+    "composerPlaceholder": "Write a message…",
+    "sendButton": "Send",
+    "flaggedFallback": "This message was withheld because it looks like it shares contact details or payment/account information.",
+    "translatedFromLabel": "Translated from {locale}",
+    "seeOriginal": "See original",
+    "seeTranslation": "See translation",
+    "reportAction": "Report",
+    "languageNudgeTitle": "Set your chat language",
+    "languageNudgeBody": "Messages are translated automatically once both you and your braider set a chat language.",
+    "languageNudgeCta": "Set language",
+    "languageNudgeDismiss": "Dismiss"
+  },
+  "chatReport": {
+    "title": "Report this conversation",
+    "reasonLabel": "Reason",
+    "reasons": {
+      "HARASSMENT": "Harassment",
+      "INAPPROPRIATE_CONTENT": "Inappropriate content",
+      "SPAM": "Spam",
+      "SCAM_OR_FRAUD": "Scam or fraud",
+      "OFF_PLATFORM_SOLICITATION": "Asked to pay or communicate outside the app",
+      "OTHER": "Other"
+    },
+    "detailsLabel": "Additional details (optional)",
+    "detailsPlaceholder": "Tell us what happened…",
+    "cancel": "Cancel",
+    "submit": "Submit report",
+    "submitting": "Submitting…",
+    "successMessage": "Thanks — our team will review this.",
+    "errorMessage": "Couldn't submit your report. Please try again."
+  },
+  "chatButton": {
+    "label": "Chat with braider",
+    "errorMessage": "Couldn't open the conversation. Please try again."
+  },
+  "notifications": {
+    "bellAriaLabel": "Notifications",
+    "panelTitle": "Notifications",
+    "emptyTitle": "You're all caught up",
+    "emptySubtitle": "New notifications will show up here.",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all",
+    "deleteAria": "Delete notification",
+    "pageTitle": "Notifications",
+    "pageSubtitle": "Updates about your bookings and messages.",
+    "errorTitle": "Couldn't load your notifications",
+    "errorSubtitle": "Something went wrong. Please try again.",
+    "retry": "Try again",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "pageOf": "Page {current} of {total}"
   }
 }

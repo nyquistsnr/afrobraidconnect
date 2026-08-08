@@ -29,12 +29,16 @@ export interface UserPublic {
   email: string;
   phone_number: string | null;
   user_type: UserType;
+  chat_locale: string | null;
 }
 
 export interface UserProfileUpdateRequest {
   first_name?: string;
   last_name?: string | null;
   phone_number?: string | null;
+  // Send "" to clear. Allowed values are whatever the backend's
+  // supported_locales is configured to (currently en/de/fr).
+  chat_locale?: string;
 }
 
 // Returned by verify-email, login, social/{provider}, refresh.
@@ -819,4 +823,118 @@ export interface ReviewRequest {
   rating: number;
   comment?: string | null;
 }
+
+// ---------------------------------------------------------------------------
+// Chat
+// ---------------------------------------------------------------------------
+
+export interface ChatThreadResponse {
+  id: string;
+  booking_id: string;
+  other_participant_id: string;
+  other_participant_name: string;
+  last_message_at: string | null;
+  last_message_preview: string | null;
+  last_message_flagged: boolean;
+  unread_count: number;
+  created_at: string;
+}
+
+export type ChatMessageStatus = "SENT" | "FLAGGED";
+
+export interface ChatMessageResponse {
+  id: string;
+  thread_id: string;
+  sender_id: string;
+  status: ChatMessageStatus;
+  body: string | null;
+  body_locale: string | null;
+  translated_body: string | null;
+  translated_locale: string | null;
+  violation_notice: string | null;
+  created_at: string;
+}
+
+export interface ChatMessageSendRequest {
+  body: string;
+}
+
+export type ChatReportReason =
+  | "HARASSMENT"
+  | "INAPPROPRIATE_CONTENT"
+  | "SPAM"
+  | "SCAM_OR_FRAUD"
+  | "OFF_PLATFORM_SOLICITATION"
+  | "OTHER";
+
+export interface ChatReportRequest {
+  reason: ChatReportReason;
+  details?: string;
+  message_id?: string | null;
+}
+
+export type ChatReportStatus = "OPEN" | "UNDER_REVIEW" | "RESOLVED" | "DISMISSED";
+
+export interface ChatReportResponse {
+  id: string;
+  thread_id: string;
+  reported_user_id: string;
+  reason: ChatReportReason;
+  status: ChatReportStatus;
+  created_at: string;
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+// ---------------------------------------------------------------------------
+
+export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
+
+export interface NotificationResponse {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  related_type: string | null;
+  related_id: string | null;
+  is_read: boolean;
+  read_at: string | null;
+  created_at: string;
+}
+
+export interface NotificationListParams {
+  is_read?: boolean;
+  date_from?: string;
+  date_to?: string;
+  page?: number;
+  page_size?: number;
+}
+
+// ---------------------------------------------------------------------------
+// Realtime (WebSocket) event payloads
+// ---------------------------------------------------------------------------
+
+export interface ChatMessageEvent {
+  type: "chat_message";
+  thread_id: string;
+  message: ChatMessageResponse;
+}
+
+export interface ChatMessageTranslatedEvent {
+  type: "chat_message_translated";
+  thread_id: string;
+  message_id: string;
+  translated_body: string;
+  translated_locale: string;
+}
+
+export interface NotificationEvent {
+  type: "notification";
+  notification: NotificationResponse;
+}
+
+export type RealtimeEvent =
+  | ChatMessageEvent
+  | ChatMessageTranslatedEvent
+  | NotificationEvent;
 

@@ -1,22 +1,19 @@
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getDictionary, hasLocale } from "../../dictionaries";
+import { getDictionary, hasLocale } from "../dictionaries";
 import { loginPath } from "@/lib/auth-redirect";
 import { SiteHeader } from "@/components/layout/site-header";
-import { BookingDetailView } from "@/components/bookings/booking-detail-view";
+import { NotificationsListView } from "@/components/notifications/notifications-list-view";
 
-export default async function BookingDetailPage({
+export default async function NotificationsPage({
   params,
-}: PageProps<"/[lang]/bookings/[bookingId]">) {
-  const { lang, bookingId } = await params;
+}: PageProps<"/[lang]/notifications">) {
+  const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
   const session = await auth();
   if (!session?.user) {
     redirect(await loginPath(lang));
-  }
-  if (session.user.userType !== "CUSTOMER") {
-    redirect(`/${lang}`);
   }
 
   const dict = await getDictionary(lang);
@@ -30,15 +27,7 @@ export default async function BookingDetailPage({
         notificationsDict={dict.notifications}
         chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
-      <BookingDetailView
-        bookingId={bookingId}
-        lang={lang}
-        dict={dict.bookingDetail}
-        statusDict={dict.common.bookingStatus}
-        reviewsDict={dict.reviews}
-        chatButtonDict={dict.chatButton}
-        errorsDict={dict.common.errors}
-      />
+      <NotificationsListView lang={lang} dict={dict.notifications} />
     </div>
   );
 }

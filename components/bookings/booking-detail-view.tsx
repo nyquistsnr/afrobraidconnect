@@ -24,8 +24,19 @@ import { BalanceRetryBanner } from "@/components/bookings/balance-retry-banner";
 import { ReviewModal } from "@/components/reviews/review-modal";
 import { braidersApi } from "@/lib/api/braiders-client";
 import { Star } from "lucide-react";
+import { ChatButton } from "@/components/chat/chat-button";
+import type { ChatButtonDict } from "@/components/chat/types";
 import type { BookingDetailDict, BookingStatusDict } from "@/components/bookings/types";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+
+// Every status except these implies a successful deposit/full payment went
+// through — chat stays available even after cancellation (matches the API
+// doc's "gate the Chat button on booking status instead" guidance).
+const CHAT_UNAVAILABLE_STATUSES = new Set([
+  "PENDING_PAYMENT",
+  "EXPIRED",
+  "CANCELLED_NO_PAYMENT",
+]);
 
 // TRAVEL/PLATFORM_FEE/VAT_* items duplicate the response's own flat total
 // fields (platform_fee, vat_total, ...) — only the service-side items are
@@ -44,12 +55,16 @@ export function BookingDetailView({
   dict,
   statusDict,
   reviewsDict,
+  chatButtonDict,
+  errorsDict,
 }: {
   bookingId: string;
   lang: Locale;
   dict: BookingDetailDict;
   statusDict: BookingStatusDict;
   reviewsDict: Dictionary["reviews"];
+  chatButtonDict: ChatButtonDict;
+  errorsDict: Dictionary["common"]["errors"];
 }) {
   const { data: session, status: sessionStatus } = useSession();
   const accessToken = session?.accessToken;
@@ -182,7 +197,18 @@ export function BookingDetailView({
             </h1>
             <p className="text-sm text-muted-foreground">{booking.braider_name}</p>
           </div>
-          <BookingStatusBadge status={booking.status} dict={statusDict} />
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <BookingStatusBadge status={booking.status} dict={statusDict} />
+            {!CHAT_UNAVAILABLE_STATUSES.has(booking.status) && (
+              <ChatButton
+                bookingId={booking.id}
+                lang={lang}
+                accessToken={accessToken!}
+                dict={chatButtonDict}
+                errorsDict={errorsDict}
+              />
+            )}
+          </div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
           <span>

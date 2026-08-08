@@ -9,6 +9,8 @@ import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
+import { NotificationBell } from "@/components/notifications/notification-bell";
+import { ChatNavIcon } from "@/components/chat/chat-nav-icon";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
@@ -23,6 +25,7 @@ import type {
   SelectedDateRange,
   SearchDict,
 } from "@/components/search/types";
+import type { NotificationBellDict } from "@/components/notifications/types";
 
 export interface MobileNavDict {
   explore: string;
@@ -60,6 +63,8 @@ export function SiteHeader({
   lang,
   dict,
   common,
+  notificationsDict,
+  chatNavAriaLabel,
   initialLocation = null,
   initialStyle = null,
   initialDateRange = {},
@@ -67,6 +72,8 @@ export function SiteHeader({
   lang: Locale;
   dict: SiteHeaderDict;
   common: Dictionary["common"];
+  notificationsDict: NotificationBellDict;
+  chatNavAriaLabel: string;
   initialLocation?: SelectedLocation | null;
   initialStyle?: SelectedStyle | null;
   initialDateRange?: SelectedDateRange;
@@ -173,6 +180,12 @@ export function SiteHeader({
             </Link>
 
             <div className="hidden items-center gap-1 sm:gap-2 lg:flex">
+              {isAuthenticated && (
+                <>
+                  <ChatNavIcon lang={lang} ariaLabel={chatNavAriaLabel} />
+                  <NotificationBell lang={lang} dict={notificationsDict} />
+                </>
+              )}
               <ThemeToggle dict={common.theme} closeLabel={common.close} />
               <LanguageSwitcher
                 lang={lang}
@@ -321,6 +334,11 @@ export function SiteHeader({
           </div>
         </div>
 
+        {isAuthenticated && (
+          <div className="flex items-center justify-end gap-1 px-4 pt-2 md:hidden">
+            <NotificationBell lang={lang} dict={notificationsDict} />
+          </div>
+        )}
         <div className="border-b border-border px-4 py-3 md:hidden">
           <MobileSearch
             lang={lang}

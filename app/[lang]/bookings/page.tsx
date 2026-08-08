@@ -25,7 +25,13 @@ export default async function BookingsPage({
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-24 md:pb-0">
-      <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
+      <SiteHeader
+        lang={lang}
+        dict={dict.siteHeader}
+        common={dict.common}
+        notificationsDict={dict.notifications}
+        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
+      />
       <BookingsListView
         lang={lang}
         dict={dict.bookingsList}

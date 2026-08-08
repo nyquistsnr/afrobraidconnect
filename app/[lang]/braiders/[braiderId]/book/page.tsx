@@ -51,7 +51,13 @@ export default async function BookingCheckoutPage({
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
+      <SiteHeader
+        lang={lang}
+        dict={dict.siteHeader}
+        common={dict.common}
+        notificationsDict={dict.notifications}
+        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
+      />
       <BookingCheckoutView
         lang={lang}
         braider={braider}

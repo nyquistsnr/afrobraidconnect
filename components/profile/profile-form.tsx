@@ -8,8 +8,9 @@ import { Loader2 } from "lucide-react";
 import { usersApi } from "@/lib/api/users-client";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { Select } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import type { Locale } from "@/lib/i18n";
+import { locales, localeNames, type Locale } from "@/lib/i18n";
 import type { ProfileDict } from "@/components/profile/types";
 
 export function ProfileForm({
@@ -27,7 +28,8 @@ export function ProfileForm({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  
+  const [chatLocale, setChatLocale] = useState<Locale | "">("");
+
   // Track if we've initialized the form state from API data
   const [initialized, setInitialized] = useState(false);
 
@@ -39,6 +41,7 @@ export function ProfileForm({
         setFirstName(data.first_name ?? "");
         setLastName(data.last_name ?? "");
         setPhoneNumber(data.phone_number ?? "");
+        setChatLocale((data.chat_locale as Locale | null) ?? "");
         setInitialized(true);
       }
       return data;
@@ -51,6 +54,7 @@ export function ProfileForm({
         first_name: firstName || undefined,
         last_name: lastName || undefined,
         phone_number: phoneNumber || undefined,
+        chat_locale: chatLocale,
       });
     },
     onSuccess: async (updatedProfile) => {
@@ -126,10 +130,35 @@ export function ProfileForm({
         disabled={mutation.isPending}
       />
 
+      <div className="flex flex-col gap-1">
+        <Select
+          id="chatLocale"
+          label={dict.chatLanguageLabel}
+          showLabel
+          value={chatLocale}
+          onChange={setChatLocale}
+          placeholder={dict.chatLanguageNotSet}
+          options={[
+            { value: "" as const, label: dict.chatLanguageNotSet },
+            ...locales.map((locale) => ({
+              value: locale as Locale | "",
+              label: localeNames[locale],
+            })),
+          ]}
+        />
+        <p className="text-xs text-muted-foreground">{dict.chatLanguageNote}</p>
+      </div>
+
       <div className="mt-4 flex justify-end">
         <Button
           type="submit"
-          disabled={mutation.isPending || (firstName === profile.first_name && lastName === profile.last_name && phoneNumber === (profile.phone_number ?? ""))}
+          disabled={
+            mutation.isPending ||
+            (firstName === profile.first_name &&
+              lastName === profile.last_name &&
+              phoneNumber === (profile.phone_number ?? "") &&
+              chatLocale === (profile.chat_locale ?? ""))
+          }
         >
           {mutation.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
           {mutation.isPending ? dict.savingButton : dict.saveButton}

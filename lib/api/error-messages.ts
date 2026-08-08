@@ -47,6 +47,14 @@ const CODE_TO_KEY: Record<string, keyof ErrorsDict> = {
   BOOKING_SLOT_UNAVAILABLE: "bookingSlotUnavailable",
   BOOKING_NOT_FOUND: "bookingNotFound",
   INVALID_BOOKING_DATE_RANGE: "invalidBookingDateRange",
+  INVALID_CHAT_LOCALE: "invalidChatLocale",
+  CHAT_NOT_AVAILABLE: "chatNotAvailable",
+  CHAT_THREAD_NOT_FOUND: "chatThreadNotFound",
+  CHAT_ACCESS_DENIED: "chatAccessDenied",
+  CHAT_MESSAGE_NOT_FOUND: "chatMessageNotFound",
+  CHAT_REPORT_NOT_FOUND: "chatReportNotFound",
+  NOTIFICATION_NOT_FOUND: "notificationNotFound",
+  INVALID_DATE_RANGE: "invalidDateRange",
 };
 
 // `code` here is whatever error.code the backend returned (see ApiError),

@@ -12,10 +12,12 @@ import {
   LogIn,
   LogOut,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Modal } from "@/components/ui/modal";
+import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
@@ -59,6 +61,7 @@ export function MobileTabBar({
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const { logout, isLoggingOut } = useLogout(lang);
+  const chatUnreadTotal = useChatUnreadTotal();
 
   const homeHref = `/${lang}`;
   // "Explore" covers the whole browse/discover flow (home, search, braider
@@ -71,7 +74,14 @@ export function MobileTabBar({
   const bookingsHref = `/${lang}/bookings`;
   const isViewingBookings = pathname?.startsWith(bookingsHref) ?? false;
 
-  const tabs = [
+  const tabs: {
+    key: string;
+    label: string;
+    icon: LucideIcon;
+    href: string;
+    active: boolean;
+    badge?: number;
+  }[] = [
     {
       key: "explore",
       label: dict.explore,
@@ -80,7 +90,7 @@ export function MobileTabBar({
       active: isExploring,
     },
     ...(isAuthenticated
-      ? ([
+      ? [
           {
             key: "bookings",
             label: dict.bookings,
@@ -92,10 +102,11 @@ export function MobileTabBar({
             key: "messages",
             label: dict.messages,
             icon: MessageCircle,
-            href: "#",
-            active: false,
+            href: `/${lang}/chat`,
+            active: pathname?.startsWith(`/${lang}/chat`) ?? false,
+            badge: chatUnreadTotal,
           },
-        ] as const)
+        ]
       : []),
   ];
 
@@ -119,7 +130,7 @@ export function MobileTabBar({
             last tab off-screen. This can never overflow: N tabs always sum
             to exactly the row width, at any screen size or label length. */}
         <div className="mx-auto flex w-full max-w-md items-stretch">
-          {tabs.map(({ key, label, icon: Icon, href, active }) => (
+          {tabs.map(({ key, label, icon: Icon, href, active, badge }) => (
             <Link
               key={key}
               href={href}
@@ -129,7 +140,14 @@ export function MobileTabBar({
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Icon className="size-5 shrink-0" strokeWidth={active ? 2.5 : 2} />
+              <span className="relative">
+                <Icon className="size-5 shrink-0" strokeWidth={active ? 2.5 : 2} />
+                {!!badge && badge > 0 && (
+                  <span className="absolute -top-1.5 -right-2 flex size-4 items-center justify-center rounded-full bg-brand text-[9px] font-semibold text-brand-foreground">
+                    {badge > 9 ? "9+" : badge}
+                  </span>
+                )}
+              </span>
               <span className="max-w-full truncate">{label}</span>
             </Link>
           ))}

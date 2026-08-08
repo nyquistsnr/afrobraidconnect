@@ -347,6 +347,14 @@
       "bookingSlotUnavailable": "Ce créneau vient d'être réservé par quelqu'un d'autre. Veuillez en choisir un autre.",
       "bookingNotFound": "Cette réservation est introuvable.",
       "invalidBookingDateRange": "La date de fin ne peut pas être antérieure à la date de début.",
+      "invalidChatLocale": "Cette langue de discussion n'est pas prise en charge.",
+      "chatNotAvailable": "La discussion n'est pas encore disponible pour cette réservation.",
+      "chatThreadNotFound": "Cette conversation est introuvable.",
+      "chatAccessDenied": "Vous n'avez pas accès à cette conversation.",
+      "chatMessageNotFound": "Ce message est introuvable.",
+      "chatReportNotFound": "Ce signalement est introuvable.",
+      "notificationNotFound": "Cette notification est introuvable.",
+      "invalidDateRange": "La date de fin ne peut pas être antérieure à la date de début.",
       "generic": "Une erreur s'est produite. Veuillez réessayer."
     },
     "bookingStatus": {
@@ -851,7 +859,10 @@
     "savingButton": "Enregistrement...",
     "successMessage": "Profil mis à jour avec succès.",
     "errorMessage": "Impossible de mettre à jour le profil.",
-    "emailNote": "L'adresse e-mail ne peut pas être modifiée ici."
+    "emailNote": "L'adresse e-mail ne peut pas être modifiée ici.",
+    "chatLanguageLabel": "Langue de discussion",
+    "chatLanguageNotSet": "Non définie",
+    "chatLanguageNote": "Les messages sont traduits automatiquement lorsque vous et votre coiffeuse définissez des langues de discussion différentes."
   },
   "reviews": {
     "title": "Avis",
@@ -868,5 +879,78 @@
     "failedToSubmit": "Échec de l'envoi de l'avis.",
     "ratingRequired": "Veuillez sélectionner une note.",
     "commentTooLong": "Le commentaire doit faire moins de 1000 caractères."
+  },
+  "chatInbox": {
+    "navAriaLabel": "Discussion",
+    "pageTitle": "Messages",
+    "pageSubtitle": "Conversations avec vos coiffeuses à propos de réservations à venir et passées.",
+    "emptyTitle": "Aucune conversation pour le moment",
+    "emptySubtitle": "Une fois que vous avez réservé et payé un rendez-vous, vous pouvez discuter ici avec votre coiffeuse.",
+    "errorTitle": "Impossible de charger vos messages",
+    "errorSubtitle": "Une erreur est survenue. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "flaggedPreview": "Message retenu",
+    "noMessagesYet": "Dites bonjour !",
+    "unreadAria": "{count} non lu(s)",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "pageOf": "Page {current} sur {total}"
+  },
+  "chatThread": {
+    "backToInbox": "Retour aux messages",
+    "loadErrorTitle": "Impossible de charger cette conversation",
+    "loadErrorSubtitle": "Une erreur est survenue. Veuillez réessayer.",
+    "loadEarlier": "Charger les messages précédents",
+    "composerPlaceholder": "Écrivez un message…",
+    "sendButton": "Envoyer",
+    "flaggedFallback": "Ce message a été retenu car il semble partager des coordonnées ou des informations de paiement/compte.",
+    "translatedFromLabel": "Traduit depuis {locale}",
+    "seeOriginal": "Voir l'original",
+    "seeTranslation": "Voir la traduction",
+    "reportAction": "Signaler",
+    "languageNudgeTitle": "Définissez votre langue de discussion",
+    "languageNudgeBody": "Les messages sont traduits automatiquement dès que vous et votre coiffeuse définissez une langue de discussion.",
+    "languageNudgeCta": "Définir la langue",
+    "languageNudgeDismiss": "Ignorer"
+  },
+  "chatReport": {
+    "title": "Signaler cette conversation",
+    "reasonLabel": "Motif",
+    "reasons": {
+      "HARASSMENT": "Harcèlement",
+      "INAPPROPRIATE_CONTENT": "Contenu inapproprié",
+      "SPAM": "Indésirable",
+      "SCAM_OR_FRAUD": "Arnaque ou fraude",
+      "OFF_PLATFORM_SOLICITATION": "Sollicitation de paiement ou de contact en dehors de l'application",
+      "OTHER": "Autre"
+    },
+    "detailsLabel": "Détails supplémentaires (facultatif)",
+    "detailsPlaceholder": "Dites-nous ce qui s'est passé…",
+    "cancel": "Annuler",
+    "submit": "Envoyer le signalement",
+    "submitting": "Envoi en cours…",
+    "successMessage": "Merci — notre équipe va examiner cela.",
+    "errorMessage": "Impossible d'envoyer votre signalement. Veuillez réessayer."
+  },
+  "chatButton": {
+    "label": "Discuter avec la coiffeuse",
+    "errorMessage": "Impossible d'ouvrir la conversation. Veuillez réessayer."
+  },
+  "notifications": {
+    "bellAriaLabel": "Notifications",
+    "panelTitle": "Notifications",
+    "emptyTitle": "Vous êtes à jour",
+    "emptySubtitle": "Les nouvelles notifications apparaîtront ici.",
+    "markAllRead": "Tout marquer comme lu",
+    "viewAll": "Tout voir",
+    "deleteAria": "Supprimer la notification",
+    "pageTitle": "Notifications",
+    "pageSubtitle": "Mises à jour sur vos réservations et messages.",
+    "errorTitle": "Impossible de charger vos notifications",
+    "errorSubtitle": "Une erreur est survenue. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "pageOf": "Page {current} sur {total}"
   }
 }

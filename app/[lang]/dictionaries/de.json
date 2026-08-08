@@ -347,6 +347,14 @@
       "bookingSlotUnavailable": "Dieser Termin wurde gerade von jemand anderem gebucht. Bitte wähle eine andere Zeit.",
       "bookingNotFound": "Diese Buchung konnte nicht gefunden werden.",
       "invalidBookingDateRange": "Das Enddatum darf nicht vor dem Startdatum liegen.",
+      "invalidChatLocale": "Diese Chatsprache wird nicht unterstützt.",
+      "chatNotAvailable": "Der Chat ist für diese Buchung noch nicht verfügbar.",
+      "chatThreadNotFound": "Diese Unterhaltung wurde nicht gefunden.",
+      "chatAccessDenied": "Sie haben keinen Zugriff auf diese Unterhaltung.",
+      "chatMessageNotFound": "Diese Nachricht wurde nicht gefunden.",
+      "chatReportNotFound": "Diese Meldung wurde nicht gefunden.",
+      "notificationNotFound": "Diese Benachrichtigung wurde nicht gefunden.",
+      "invalidDateRange": "Das Enddatum darf nicht vor dem Startdatum liegen.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     },
     "bookingStatus": {
@@ -851,7 +859,10 @@
     "savingButton": "Speichern...",
     "successMessage": "Profil erfolgreich aktualisiert.",
     "errorMessage": "Profil konnte nicht aktualisiert werden.",
-    "emailNote": "E-Mail kann hier nicht geändert werden."
+    "emailNote": "E-Mail kann hier nicht geändert werden.",
+    "chatLanguageLabel": "Chatsprache",
+    "chatLanguageNotSet": "Nicht festgelegt",
+    "chatLanguageNote": "Nachrichten werden automatisch übersetzt, wenn Sie und Ihre Braiderin unterschiedliche Chatsprachen festlegen."
   },
   "reviews": {
     "title": "Bewertungen",
@@ -868,5 +879,78 @@
     "failedToSubmit": "Bewertung konnte nicht gesendet werden.",
     "ratingRequired": "Bitte wählen Sie eine Bewertung aus.",
     "commentTooLong": "Der Kommentar darf maximal 1000 Zeichen lang sein."
+  },
+  "chatInbox": {
+    "navAriaLabel": "Chat",
+    "pageTitle": "Nachrichten",
+    "pageSubtitle": "Unterhaltungen mit Ihren Braiderinnen zu bevorstehenden und vergangenen Buchungen.",
+    "emptyTitle": "Noch keine Unterhaltungen",
+    "emptySubtitle": "Sobald Sie einen Termin gebucht und bezahlt haben, können Sie hier mit Ihrer Braiderin chatten.",
+    "errorTitle": "Ihre Nachrichten konnten nicht geladen werden",
+    "errorSubtitle": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "flaggedPreview": "Nachricht zurückgehalten",
+    "noMessagesYet": "Sag Hallo!",
+    "unreadAria": "{count} ungelesen",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "pageOf": "Seite {current} von {total}"
+  },
+  "chatThread": {
+    "backToInbox": "Zurück zu den Nachrichten",
+    "loadErrorTitle": "Diese Unterhaltung konnte nicht geladen werden",
+    "loadErrorSubtitle": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "loadEarlier": "Frühere Nachrichten laden",
+    "composerPlaceholder": "Nachricht schreiben…",
+    "sendButton": "Senden",
+    "flaggedFallback": "Diese Nachricht wurde zurückgehalten, da sie offenbar Kontaktdaten oder Zahlungs-/Kontoinformationen enthält.",
+    "translatedFromLabel": "Übersetzt aus {locale}",
+    "seeOriginal": "Original anzeigen",
+    "seeTranslation": "Übersetzung anzeigen",
+    "reportAction": "Melden",
+    "languageNudgeTitle": "Legen Sie Ihre Chatsprache fest",
+    "languageNudgeBody": "Nachrichten werden automatisch übersetzt, sobald Sie und Ihre Braiderin eine Chatsprache festgelegt haben.",
+    "languageNudgeCta": "Sprache festlegen",
+    "languageNudgeDismiss": "Verwerfen"
+  },
+  "chatReport": {
+    "title": "Diese Unterhaltung melden",
+    "reasonLabel": "Grund",
+    "reasons": {
+      "HARASSMENT": "Belästigung",
+      "INAPPROPRIATE_CONTENT": "Unangemessener Inhalt",
+      "SPAM": "Spam",
+      "SCAM_OR_FRAUD": "Betrug",
+      "OFF_PLATFORM_SOLICITATION": "Aufforderung zu Zahlung oder Kontakt außerhalb der App",
+      "OTHER": "Sonstiges"
+    },
+    "detailsLabel": "Zusätzliche Details (optional)",
+    "detailsPlaceholder": "Erzählen Sie uns, was passiert ist…",
+    "cancel": "Abbrechen",
+    "submit": "Meldung senden",
+    "submitting": "Wird gesendet…",
+    "successMessage": "Danke — unser Team wird das prüfen.",
+    "errorMessage": "Ihre Meldung konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+  },
+  "chatButton": {
+    "label": "Mit Braiderin chatten",
+    "errorMessage": "Die Unterhaltung konnte nicht geöffnet werden. Bitte versuchen Sie es erneut."
+  },
+  "notifications": {
+    "bellAriaLabel": "Benachrichtigungen",
+    "panelTitle": "Benachrichtigungen",
+    "emptyTitle": "Sie sind auf dem neuesten Stand",
+    "emptySubtitle": "Neue Benachrichtigungen erscheinen hier.",
+    "markAllRead": "Alle als gelesen markieren",
+    "viewAll": "Alle anzeigen",
+    "deleteAria": "Benachrichtigung löschen",
+    "pageTitle": "Benachrichtigungen",
+    "pageSubtitle": "Neuigkeiten zu Ihren Buchungen und Nachrichten.",
+    "errorTitle": "Ihre Benachrichtigungen konnten nicht geladen werden",
+    "errorSubtitle": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "pageOf": "Seite {current} von {total}"
   }
 }
