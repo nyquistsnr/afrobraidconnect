@@ -241,7 +241,7 @@ export function BraiderMap({
       mapId={MAP_ID}
       defaultCenter={center ?? FALLBACK_CENTER}
       defaultZoom={center ? 12 : FALLBACK_ZOOM}
-      minZoom={4}
+      minZoom={7}
       colorScheme={effectiveColorScheme}
       gestureHandling="greedy"
       disableDefaultUI
