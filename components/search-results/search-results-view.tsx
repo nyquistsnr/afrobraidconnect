@@ -28,6 +28,7 @@ export function SearchResultsView({
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
@@ -60,7 +61,7 @@ export function SearchResultsView({
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div
         className={`min-h-0 w-full md:w-[500px] lg:w-[650px] xl:w-[750px] flex-shrink-0 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
-          mobileView === "map" ? "hidden md:block" : "block"
+          mobileView === "map" || isMapExpanded ? "hidden md:hidden" : "block"
         }`}
       >
         <BraiderList
@@ -81,9 +82,9 @@ export function SearchResultsView({
       </div>
 
       <div
-        className={`relative min-h-0 flex-1 md:m-4 md:overflow-hidden md:rounded-2xl md:shadow-md ${
-          mobileView === "list" ? "hidden md:block" : "block"
-        }`}
+        className={`relative min-h-0 flex-1 ${
+          isMapExpanded ? "" : "md:m-4 md:overflow-hidden md:rounded-2xl md:shadow-md"
+        } ${mobileView === "list" && !isMapExpanded ? "hidden md:block" : "block"}`}
       >
         <BraiderMap
           items={items}
@@ -92,6 +93,8 @@ export function SearchResultsView({
           activeId={activeId}
           onHoverPin={setHoveredId}
           onSelectPin={handleSelect}
+          isExpanded={isMapExpanded}
+          onToggleExpand={() => setIsMapExpanded(!isMapExpanded)}
         />
       </div>
 

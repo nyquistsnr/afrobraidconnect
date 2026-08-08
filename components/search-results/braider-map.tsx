@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { AdvancedMarker, Map, useMap } from "@vis.gl/react-google-maps";
+import { Plus, Minus, Maximize, Minimize } from "lucide-react";
 import type { BraiderSearchItem } from "@/lib/api/types";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 
@@ -86,6 +87,54 @@ function FocusActivePin({
   return null;
 }
 
+function CustomMapControls({
+  isExpanded,
+  onToggleExpand,
+}: {
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
+}) {
+  const map = useMap();
+
+  return (
+    <div className="absolute bottom-6 right-6 flex flex-col gap-2 z-10">
+      <div className="flex flex-col overflow-hidden rounded-xl bg-surface/90 backdrop-blur-md shadow-lg border border-border">
+        <button
+          type="button"
+          onClick={() => map?.setZoom((map.getZoom() ?? 0) + 1)}
+          className="flex h-10 w-10 items-center justify-center text-foreground hover:bg-muted transition-colors active:bg-muted/80 border-b border-border/50"
+          aria-label="Zoom in"
+        >
+          <Plus className="size-5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => map?.setZoom((map.getZoom() ?? 0) - 1)}
+          className="flex h-10 w-10 items-center justify-center text-foreground hover:bg-muted transition-colors active:bg-muted/80"
+          aria-label="Zoom out"
+        >
+          <Minus className="size-5" />
+        </button>
+      </div>
+
+      {onToggleExpand && (
+        <button
+          type="button"
+          onClick={onToggleExpand}
+          className="hidden md:flex mt-2 h-10 w-10 items-center justify-center rounded-xl bg-surface/90 backdrop-blur-md shadow-lg border border-border text-foreground hover:bg-muted transition-colors active:bg-muted/80"
+          aria-label={isExpanded ? "Collapse map" : "Expand map"}
+        >
+          {isExpanded ? (
+            <Minimize className="size-5" />
+          ) : (
+            <Maximize className="size-5" />
+          )}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function BraiderMap({
   items,
   center,
@@ -93,6 +142,8 @@ export function BraiderMap({
   activeId,
   onHoverPin,
   onSelectPin,
+  isExpanded,
+  onToggleExpand,
 }: {
   items: BraiderSearchItem[];
   center: { lat: number; lng: number } | null;
@@ -100,6 +151,8 @@ export function BraiderMap({
   activeId: string | null;
   onHoverPin: (id: string | null) => void;
   onSelectPin: (id: string) => void;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
 }) {
   const { resolvedTheme } = useTheme();
 
@@ -127,9 +180,10 @@ export function BraiderMap({
       colorScheme={resolvedTheme === "dark" ? "DARK" : "LIGHT"}
       gestureHandling="greedy"
       disableDefaultUI
-      zoomControl
+      zoomControl={false}
       className="h-full w-full"
     >
+      <CustomMapControls isExpanded={isExpanded} onToggleExpand={onToggleExpand} />
       <FitBounds pins={pins} center={center} />
       <FocusActivePin pins={pins} activeId={activeId} />
       {pins.map(({ item, lat, lng }) => {
