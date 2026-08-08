@@ -19,11 +19,13 @@ export function VerifyEmailForm({
   common,
   lang,
   defaultEmail,
+  callbackUrl,
 }: {
   dict: Dictionary["verifyEmail"];
   common: Dictionary["common"];
   lang: Locale;
   defaultEmail: string;
+  callbackUrl?: string | null;
 }) {
   const [email, setEmail] = useState(defaultEmail);
   const [code, setCode] = useState("");
@@ -33,7 +35,9 @@ export function VerifyEmailForm({
     mutationFn: authApi.verifyEmail,
     onSuccess: () => {
       toast.success(common.toasts.verifyEmailSuccess);
-      router.push(`/${lang}/login`);
+      const url = new URL(`/${lang}/login`, window.location.origin);
+      if (callbackUrl) url.searchParams.set("callbackUrl", callbackUrl);
+      router.push(url.toString().replace(window.location.origin, ""));
     },
     onError: (error) => {
       const errorCode = error instanceof ApiError ? error.code : undefined;
@@ -98,7 +102,7 @@ export function VerifyEmailForm({
 
       <p className="mt-8 text-center text-sm text-muted-foreground">
         <Link
-          href={`/${lang}/login`}
+          href={`/${lang}/login${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`}
           className="font-medium text-brand hover:text-brand-hover"
         >
           {common.backToLogin}

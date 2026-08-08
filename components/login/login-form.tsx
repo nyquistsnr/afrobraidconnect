@@ -132,7 +132,7 @@ export function LoginForm({
         <p>
           {dict.noAccount}{" "}
           <Link
-            href={`/${lang}/signup`}
+            href={`/${lang}/signup${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`}
             className="font-medium text-brand hover:text-brand-hover"
           >
             {dict.signUpProfessional}

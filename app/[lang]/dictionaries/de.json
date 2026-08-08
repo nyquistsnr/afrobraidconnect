@@ -280,6 +280,13 @@
       "modalTitle": "Sprache auswählen",
       "modalDescription": "Wähle die Sprache, in der du browsen möchtest."
     },
+    "sessionTimeout": {
+      "title": "Sitzung läuft ab",
+      "description": "Zu Ihrer Sicherheit wird Ihre Sitzung aufgrund von Inaktivität in wenigen Minuten ablaufen. Möchten Sie angemeldet bleiben?",
+      "continue": "Ja, ich möchte angemeldet bleiben",
+      "updating": "Wird aktualisiert...",
+      "logout": "Nein, mich abmelden"
+    },
     "loading": "Wird geladen…",
     "backToLogin": "Zurück zur Anmeldung",
     "backToDashboard": "Zurück zum Dashboard",

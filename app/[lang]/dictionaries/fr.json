@@ -280,6 +280,13 @@
       "modalTitle": "Choisir une langue",
       "modalDescription": "Sélectionnez la langue dans laquelle naviguer."
     },
+    "sessionTimeout": {
+      "title": "Session sur le point d'expirer",
+      "description": "Pour votre sécurité, votre session expirera dans quelques minutes en raison d'inactivité. Souhaitez-vous rester connecté(e) ?",
+      "continue": "Oui, rester connecté(e)",
+      "updating": "Actualisation...",
+      "logout": "Non, me déconnecter"
+    },
     "loading": "Chargement…",
     "backToLogin": "Retour à la connexion",
     "backToDashboard": "Retour au tableau de bord",

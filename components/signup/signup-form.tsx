@@ -20,10 +20,12 @@ export function SignupForm({
   dict,
   common,
   lang,
+  callbackUrl,
 }: {
   dict: Dictionary["signup"];
   common: Dictionary["common"];
   lang: Locale;
+  callbackUrl?: string | null;
 }) {
   const [phone, setPhone] = useState<string | undefined>();
   const router = useRouter();
@@ -32,7 +34,10 @@ export function SignupForm({
     mutationFn: authApi.signup,
     onSuccess: ({ email }) => {
       toast.success(common.toasts.signupSuccess);
-      router.push(`/${lang}/verify-email?email=${encodeURIComponent(email)}`);
+      const url = new URL(`/${lang}/verify-email`, window.location.origin);
+      url.searchParams.set("email", email);
+      if (callbackUrl) url.searchParams.set("callbackUrl", callbackUrl);
+      router.push(url.toString().replace(window.location.origin, ""));
     },
     onError: (error) => {
       const errorCode = error instanceof ApiError ? error.code : undefined;
@@ -135,12 +140,13 @@ export function SignupForm({
         label={dict.signUpWithGoogle}
         successMessage={common.toasts.loginSuccess}
         errorsDict={common.errors}
+        callbackUrl={callbackUrl}
       />
 
       <p className="mt-8 text-center text-sm text-muted-foreground">
         {dict.alreadyHaveAccount}{" "}
         <Link
-          href={`/${lang}/login`}
+          href={`/${lang}/login${callbackUrl ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ""}`}
           className="font-medium text-brand hover:text-brand-hover"
         >
           {dict.signIn}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { GB, FR, DE } from "country-flag-icons/react/3x2";
 import { locales, localeNames, localeCountry, type Locale } from "@/lib/i18n";
@@ -13,7 +13,7 @@ export interface LanguageDict {
   modalDescription?: string;
 }
 
-export function LanguageSwitcher({
+function LanguageSwitcherInner({
   lang,
   dict,
   closeLabel,
@@ -69,5 +69,29 @@ export function LanguageSwitcher({
         })}
       />
     </>
+  );
+}
+
+export function LanguageSwitcher(props: {
+  lang: Locale;
+  dict: LanguageDict;
+  closeLabel: string;
+}) {
+  const CurrentFlag = flags[props.lang];
+  return (
+    <Suspense
+      fallback={
+        <button
+          type="button"
+          disabled
+          className="flex items-center gap-1.5 rounded-full px-2 py-1 text-muted-foreground hover:bg-border/40 hover:text-foreground opacity-50"
+        >
+          <CurrentFlag title={localeCountry[props.lang]} className="h-3.5 w-5" />
+          <span className="font-medium uppercase">{props.lang}</span>
+        </button>
+      }
+    >
+      <LanguageSwitcherInner {...props} />
+    </Suspense>
   );
 }

@@ -136,8 +136,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       }
 
-      // Refresh a minute early so an in-flight request never races expiry.
-      if (Date.now() < token.accessTokenExpires - 60_000) {
+      // Refresh 2 minutes early so an in-flight request never races expiry.
+      if (Date.now() < token.accessTokenExpires - 120_000) {
         return token;
       }
 
@@ -150,6 +150,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.phoneNumber = token.phoneNumber;
       session.user.userType = token.userType;
       session.accessToken = token.accessToken;
+      session.accessTokenExpires = token.accessTokenExpires;
       session.braider = token.braider;
       session.error = token.error;
       return session;

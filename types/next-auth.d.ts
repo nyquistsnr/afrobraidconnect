@@ -23,6 +23,7 @@ declare module "next-auth" {
       userType: UserType;
     } & DefaultSession["user"];
     accessToken: string;
+    accessTokenExpires: number;
     braider: BraiderAuthProfile | null;
     error?: "RefreshAccessTokenError";
   }

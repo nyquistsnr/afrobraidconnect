@@ -280,6 +280,13 @@
       "modalTitle": "Choose a language",
       "modalDescription": "Pick the language you'd like to browse in."
     },
+    "sessionTimeout": {
+      "title": "Session expiring soon",
+      "description": "For your security, your session will expire in a couple of minutes due to inactivity. Would you like to stay signed in?",
+      "continue": "Yes, keep me signed in",
+      "updating": "Refreshing...",
+      "logout": "No, sign me out"
+    },
     "loading": "Loading…",
     "backToLogin": "Back to Sign In",
     "backToDashboard": "Back to Dashboard",
