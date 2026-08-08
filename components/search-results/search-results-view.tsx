@@ -57,7 +57,7 @@ export function SearchResultsView({
     });
   }
 
-  function handleMapIdle(lat: number, lng: number, mapRadiusKm: number) {
+  async function handleMapIdle(lat: number, lng: number, mapRadiusKm: number) {
     const params = new URLSearchParams(searchParams.toString());
     const oldLat = params.get("lat");
     const oldLng = params.get("lng");
@@ -73,6 +73,30 @@ export function SearchResultsView({
       params.set("lng", String(lng));
       params.set("radius_km", String(mapRadiusKm));
       params.set("page", "1");
+
+      try {
+        if (window.google?.maps?.Geocoder) {
+          const geocoder = new window.google.maps.Geocoder();
+          const response = await geocoder.geocode({ location: { lat, lng } });
+          if (response.results.length > 0) {
+            const result = response.results[0];
+            const locality = result.address_components.find((c) =>
+              c.types.includes("locality")
+            )?.long_name;
+            const sublocality = result.address_components.find((c) =>
+              c.types.includes("sublocality")
+            )?.long_name;
+            
+            const placeName = locality || sublocality || result.formatted_address.split(",")[0];
+            if (placeName) {
+              params.set("location", placeName);
+            }
+          }
+        }
+      } catch (err) {
+        // Ignore geocoding errors (e.g. over quota, zero results)
+      }
+
       startTransition(() => {
         router.push(`${pathname}?${params.toString()}`);
       });
