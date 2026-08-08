@@ -20,12 +20,7 @@ export default async function VerifyEmailPage({
   const defaultEmail = typeof email === "string" ? email : "";
 
   return (
-    <AuthShell
-      lang={lang}
-      supportEmail={dict.common.supportEmail}
-      heroImageAlt={dict.common.heroImageAlt}
-      themeLabels={dict.common.theme}
-    >
+    <AuthShell lang={lang} common={dict.common}>
       <VerifyEmailForm
         dict={dict.verifyEmail}
         common={dict.common}

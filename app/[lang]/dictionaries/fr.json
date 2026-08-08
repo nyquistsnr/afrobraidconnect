@@ -18,10 +18,26 @@
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Femme souriante portant des cheveux tressés",
+    "close": "Fermer",
     "theme": {
-      "light": "Clair",
-      "dark": "Sombre",
-      "system": "Système"
+      "modalTitle": "Apparence",
+      "modalDescription": "Choisissez l'apparence d'Afrobraids Connect sur cet appareil.",
+      "light": {
+        "label": "Clair",
+        "description": "Lumineux et épuré, à tout moment"
+      },
+      "dark": {
+        "label": "Sombre",
+        "description": "Plus doux pour les yeux la nuit"
+      },
+      "system": {
+        "label": "Système",
+        "description": "Suit les réglages de votre appareil"
+      }
+    },
+    "language": {
+      "modalTitle": "Choisir une langue",
+      "modalDescription": "Sélectionnez la langue dans laquelle naviguer."
     },
     "loading": "Chargement…",
     "backToLogin": "Retour à la connexion",

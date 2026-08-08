@@ -17,12 +17,7 @@ export default async function ForgotPasswordPage({
   const dict = await getDictionary(lang);
 
   return (
-    <AuthShell
-      lang={lang}
-      supportEmail={dict.common.supportEmail}
-      heroImageAlt={dict.common.heroImageAlt}
-      themeLabels={dict.common.theme}
-    >
+    <AuthShell lang={lang} common={dict.common}>
       <ForgotPasswordForm
         dict={dict.forgotPassword}
         common={dict.common}

@@ -1,22 +1,20 @@
 import Image from "next/image";
 import { Mail } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export function AuthShell({
   lang,
-  supportEmail,
-  heroImageAlt,
-  themeLabels,
+  common,
   children,
 }: {
   lang: Locale;
-  supportEmail: string;
-  heroImageAlt: string;
-  themeLabels: Record<"light" | "dark" | "system", string>;
+  common: Dictionary["common"];
   children: React.ReactNode;
 }) {
+  const { supportEmail, heroImageAlt } = common;
   return (
     <div className="flex min-h-screen flex-1 bg-background">
       <div className="flex w-full flex-col justify-between px-6 py-10 sm:px-10 lg:w-1/2 lg:px-16 xl:px-24">
@@ -33,8 +31,12 @@ export function AuthShell({
             {supportEmail}
           </a>
           <div className="flex items-center gap-3">
-            <ThemeToggle labels={themeLabels} />
-            <LanguageSwitcher lang={lang} />
+            <ThemeToggle dict={common.theme} closeLabel={common.close} />
+            <LanguageSwitcher
+              lang={lang}
+              dict={common.language}
+              closeLabel={common.close}
+            />
           </div>
         </div>
       </div>

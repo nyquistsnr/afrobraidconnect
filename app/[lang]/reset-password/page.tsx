@@ -20,12 +20,7 @@ export default async function ResetPasswordPage({
   const defaultEmail = typeof email === "string" ? email : "";
 
   return (
-    <AuthShell
-      lang={lang}
-      supportEmail={dict.common.supportEmail}
-      heroImageAlt={dict.common.heroImageAlt}
-      themeLabels={dict.common.theme}
-    >
+    <AuthShell lang={lang} common={dict.common}>
       <ResetPasswordForm
         dict={dict.resetPassword}
         common={dict.common}

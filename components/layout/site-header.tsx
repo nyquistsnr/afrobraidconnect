@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 
@@ -27,11 +28,11 @@ export interface SiteHeaderDict {
 export function SiteHeader({
   lang,
   dict,
-  themeLabels,
+  common,
 }: {
   lang: Locale;
   dict: SiteHeaderDict;
-  themeLabels: Record<"light" | "dark" | "system", string>;
+  common: Dictionary["common"];
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -141,8 +142,12 @@ export function SiteHeader({
             {dict.becomeABraider}
           </Link>
 
-          <ThemeToggle labels={themeLabels} dropDirection="down" />
-          <LanguageSwitcher lang={lang} dropDirection="down" />
+          <ThemeToggle dict={common.theme} closeLabel={common.close} />
+          <LanguageSwitcher
+            lang={lang}
+            dict={common.language}
+            closeLabel={common.close}
+          />
 
           <div ref={menuRef} className="relative">
             <button

@@ -18,10 +18,26 @@
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Lächelnde Frau mit geflochtenem Haar",
+    "close": "Schließen",
     "theme": {
-      "light": "Hell",
-      "dark": "Dunkel",
-      "system": "System"
+      "modalTitle": "Erscheinungsbild",
+      "modalDescription": "Wähle, wie Afrobraids Connect auf diesem Gerät aussieht.",
+      "light": {
+        "label": "Hell",
+        "description": "Hell und klar, jederzeit"
+      },
+      "dark": {
+        "label": "Dunkel",
+        "description": "Angenehmer für die Augen bei Nacht"
+      },
+      "system": {
+        "label": "System",
+        "description": "Folgt den Einstellungen deines Geräts"
+      }
+    },
+    "language": {
+      "modalTitle": "Sprache auswählen",
+      "modalDescription": "Wähle die Sprache, in der du browsen möchtest."
     },
     "loading": "Wird geladen…",
     "backToLogin": "Zurück zur Anmeldung",

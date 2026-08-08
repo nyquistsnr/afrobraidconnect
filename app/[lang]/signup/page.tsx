@@ -17,12 +17,7 @@ export default async function SignupPage({
   const dict = await getDictionary(lang);
 
   return (
-    <AuthShell
-      lang={lang}
-      supportEmail={dict.common.supportEmail}
-      heroImageAlt={dict.common.heroImageAlt}
-      themeLabels={dict.common.theme}
-    >
+    <AuthShell lang={lang} common={dict.common}>
       <SignupForm dict={dict.signup} common={dict.common} lang={lang} />
     </AuthShell>
   );

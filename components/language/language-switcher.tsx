@@ -1,40 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown } from "lucide-react";
 import { GB, FR, DE } from "country-flag-icons/react/3x2";
 import { locales, localeNames, localeCountry, type Locale } from "@/lib/i18n";
+import { OptionPickerModal } from "@/components/ui/option-picker-modal";
 
 const flags: Record<Locale, typeof GB> = { en: GB, fr: FR, de: DE };
 
+export interface LanguageDict {
+  modalTitle: string;
+  modalDescription?: string;
+}
+
 export function LanguageSwitcher({
   lang,
-  dropDirection = "up",
+  dict,
+  closeLabel,
 }: {
   lang: Locale;
-  dropDirection?: "up" | "down";
+  dict: LanguageDict;
+  closeLabel: string;
 }) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   function switchTo(nextLang: Locale) {
-    setOpen(false);
     const segments = pathname.split("/");
     segments[1] = nextLang;
     router.push(segments.join("/") || "/");
@@ -43,54 +35,36 @@ export function LanguageSwitcher({
   const CurrentFlag = flags[lang];
 
   return (
-    <div ref={containerRef} className="relative">
+    <>
       <button
         type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-haspopup="listbox"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
         aria-expanded={open}
         className="flex items-center gap-1.5 rounded-full px-2 py-1 text-muted-foreground hover:bg-border/40 hover:text-foreground"
       >
         <CurrentFlag title={localeCountry[lang]} className="h-3.5 w-5" />
         <span className="font-medium uppercase">{lang}</span>
-        <ChevronDown
-          className={`size-3.5 transition-transform ${open ? "rotate-180" : ""}`}
-        />
       </button>
 
-      {open && (
-        <ul
-          role="listbox"
-          className={`absolute right-0 w-40 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-lg ${
-            dropDirection === "up" ? "bottom-full mb-2" : "top-full mt-2"
-          }`}
-        >
-          {locales.map((locale) => {
-            const Flag = flags[locale];
-            return (
-              <li key={locale}>
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={locale === lang}
-                  onClick={() => switchTo(locale)}
-                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-border/40 ${
-                    locale === lang
-                      ? "font-semibold text-brand"
-                      : "text-foreground"
-                  }`}
-                >
-                  <Flag className="h-3.5 w-5 shrink-0" />
-                  {localeNames[locale]}
-                  <span className="ml-auto text-xs uppercase text-muted-foreground">
-                    {locale}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
+      <OptionPickerModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={dict.modalTitle}
+        description={dict.modalDescription}
+        closeLabel={closeLabel}
+        value={lang}
+        onChange={switchTo}
+        options={locales.map((locale) => {
+          const Flag = flags[locale];
+          return {
+            value: locale,
+            label: localeNames[locale],
+            description: locale.toUpperCase(),
+            leading: <Flag className="h-4 w-6 shrink-0" />,
+          };
+        })}
+      />
+    </>
   );
 }

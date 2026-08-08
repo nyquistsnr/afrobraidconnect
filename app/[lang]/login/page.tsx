@@ -23,12 +23,7 @@ export default async function LoginPage({
   );
 
   return (
-    <AuthShell
-      lang={lang}
-      supportEmail={dict.common.supportEmail}
-      heroImageAlt={dict.common.heroImageAlt}
-      themeLabels={dict.common.theme}
-    >
+    <AuthShell lang={lang} common={dict.common}>
       <LoginForm
         dict={dict.login}
         common={dict.common}

@@ -18,10 +18,26 @@
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Smiling woman wearing braided hair",
+    "close": "Close",
     "theme": {
-      "light": "Light",
-      "dark": "Dark",
-      "system": "System"
+      "modalTitle": "Appearance",
+      "modalDescription": "Choose how Afrobraids Connect looks on this device.",
+      "light": {
+        "label": "Light",
+        "description": "Bright and clean, all the time"
+      },
+      "dark": {
+        "label": "Dark",
+        "description": "Easier on the eyes at night"
+      },
+      "system": {
+        "label": "System",
+        "description": "Matches your device settings"
+      }
+    },
+    "language": {
+      "modalTitle": "Choose a language",
+      "modalDescription": "Pick the language you'd like to browse in."
     },
     "loading": "Loading…",
     "backToLogin": "Back to Sign In",
