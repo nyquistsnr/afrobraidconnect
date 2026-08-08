@@ -70,7 +70,7 @@ export function BraiderList({
 
   return (
     <div
-      className={`flex flex-1 flex-col px-4 pt-5 pb-24 transition-opacity duration-200 sm:px-6 md:pb-10 lg:px-8 ${
+      className={`flex flex-1 flex-col px-4 pt-5 pb-36 transition-opacity duration-200 sm:px-6 md:pb-10 lg:px-8 ${
         isPending ? "opacity-50" : ""
       }`}
     >

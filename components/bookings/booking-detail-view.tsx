@@ -20,6 +20,7 @@ import {
   formatBookingDuration,
 } from "@/components/bookings/format";
 import { BookingStatusBadge } from "@/components/bookings/status-badge";
+import { BalanceRetryBanner } from "@/components/bookings/balance-retry-banner";
 import type { BookingDetailDict, BookingStatusDict } from "@/components/bookings/types";
 
 // TRAVEL/PLATFORM_FEE/VAT_* items duplicate the response's own flat total
@@ -124,6 +125,13 @@ export function BookingDetailView({
         <ArrowLeft className="size-4" />
         {dict.backToBookings}
       </Link>
+
+      <BalanceRetryBanner
+        booking={booking}
+        lang={lang}
+        accessToken={accessToken!}
+        dict={dict.balanceRetry}
+      />
 
       <div className="rounded-2xl border border-border bg-surface p-5">
         <div className="flex items-start justify-between gap-4">

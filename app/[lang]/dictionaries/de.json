@@ -254,7 +254,18 @@
     "paymentStatusCanceled": "Storniert",
     "cancellationTitle": "Stornierungsbedingungen",
     "cancellationBeforeCutoff": "Kostenlose Stornierung bis {date}.",
-    "cancellationAfterCutoff": "Der Zeitraum für die kostenlose Stornierung dieser Buchung ist abgelaufen."
+    "cancellationAfterCutoff": "Der Zeitraum für die kostenlose Stornierung dieser Buchung ist abgelaufen.",
+    "balanceRetry": {
+      "happyPathNotice": "Der verbleibende Betrag von €{amount} wird automatisch am {date} abgebucht.",
+      "failedBannerText": "Ihre Karte konnte nicht belastet werden — wir werden es automatisch erneut versuchen, oder Sie können jetzt bezahlen.",
+      "cardDeclinedSubtitle": "Ihre Karte wurde abgelehnt — fügen Sie eine neue Karte hinzu, um die Zahlung abzuschließen.",
+      "authRequiredSubtitle": "Ihre Bank verlangt, dass Sie diese Zahlung bestätigen.",
+      "addCardButton": "Neue Karte hinzufügen",
+      "confirmPaymentButton": "Zahlung bestätigen",
+      "paymentComplete": "Zahlung abgeschlossen",
+      "abandonedNotice": "Buchung storniert, da der Restbetrag nicht eingezogen werden konnte.",
+      "errorModalTitle": "Zahlungsfehler"
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",

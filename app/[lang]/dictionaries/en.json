@@ -254,7 +254,18 @@
     "paymentStatusCanceled": "Canceled",
     "cancellationTitle": "Cancellation policy",
     "cancellationBeforeCutoff": "Free cancellation until {date}.",
-    "cancellationAfterCutoff": "The free-cancellation window for this booking has passed."
+    "cancellationAfterCutoff": "The free-cancellation window for this booking has passed.",
+    "balanceRetry": {
+      "happyPathNotice": "Remaining €{amount} will be charged automatically on {date}.",
+      "failedBannerText": "We couldn't charge your card — we'll retry automatically, or you can pay now.",
+      "cardDeclinedSubtitle": "Your card was declined — add a new card to complete payment.",
+      "authRequiredSubtitle": "Your bank requires you to confirm this payment.",
+      "addCardButton": "Add a new card",
+      "confirmPaymentButton": "Confirm payment",
+      "paymentComplete": "Payment complete",
+      "abandonedNotice": "Booking cancelled as the remaining balance could not be collected.",
+      "errorModalTitle": "Payment Error"
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",

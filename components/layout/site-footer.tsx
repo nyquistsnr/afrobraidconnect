@@ -10,7 +10,7 @@ export function SiteFooter({
   dict: Dictionary["common"]["footer"];
 }) {
   return (
-    <footer className="border-t border-border bg-background py-8 md:py-12 mt-auto">
+    <footer className="border-t border-border bg-background pt-8 pb-32 md:py-12 mt-auto">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row lg:px-12">
         <div className="flex flex-col items-center gap-2 md:items-start">
           <span className="text-xl font-bold tracking-tight text-foreground">

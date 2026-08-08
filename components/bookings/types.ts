@@ -71,4 +71,17 @@ export interface BookingDetailDict {
   cancellationTitle: string;
   cancellationBeforeCutoff: string;
   cancellationAfterCutoff: string;
+  balanceRetry: BalanceRetryDict;
+}
+
+export interface BalanceRetryDict {
+  happyPathNotice: string;
+  failedBannerText: string;
+  cardDeclinedSubtitle: string;
+  authRequiredSubtitle: string;
+  addCardButton: string;
+  confirmPaymentButton: string;
+  paymentComplete: string;
+  abandonedNotice: string;
+  errorModalTitle: string;
 }

@@ -224,7 +224,7 @@ export function BraiderDetailView({
   const isSalon = braider.location?.location_type === "SALON";
 
   return (
-    <div className="flex flex-1 flex-col pb-40 lg:pb-16">
+    <div className="flex flex-1 flex-col pb-48 lg:pb-16">
       <div className="mx-auto flex w-full max-w-[1760px] items-center justify-between px-4 pt-4 sm:px-6 lg:px-10">
         <Link
           href={`/${lang}/search`}

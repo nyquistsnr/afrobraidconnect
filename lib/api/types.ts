@@ -686,6 +686,22 @@ export type PaymentSchedule = "FULL_UPFRONT" | "DEPOSIT_THEN_BALANCE";
 export type PaymentPurpose = "FULL" | "DEPOSIT" | "BALANCE";
 export type PaymentStatus = "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELED";
 
+export type BalanceChargeState =
+  | "NOT_APPLICABLE"
+  | "SCHEDULED"
+  | "DUE"
+  | "IN_PROGRESS"
+  | "FAILED"
+  | "ABANDONED"
+  | "SUCCEEDED";
+
+export interface BookingPaymentMethod {
+  brand: string;
+  last4: string;
+  exp_month: number;
+  exp_year: number;
+}
+
 export interface BookingPaymentResponse {
   purpose: PaymentPurpose;
   status: PaymentStatus;
@@ -732,6 +748,11 @@ export interface BookingResponse {
   payment_schedule: PaymentSchedule;
   cancellation_cutoff_at: string;
   payments: BookingPaymentResponse[];
+  balance_charge_state: BalanceChargeState;
+  balance_charge_due_at: string | null;
+  balance_charge_attempts: number;
+  balance_charge_last_error: string | null;
+  payment_method: BookingPaymentMethod | null;
   created_at: string;
 }
 

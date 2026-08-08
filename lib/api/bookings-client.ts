@@ -2,6 +2,7 @@
 import type {
   ApiEnvelope,
   BookingListParams,
+  BookingPaymentResponse,
   BookingResponse,
   BookingSummary,
   CreateBookingRequest,
@@ -106,4 +107,21 @@ export const bookingsApi = {
       },
     };
   },
+
+  setupIntent: (accessToken: string, bookingId: string) =>
+    authedRequest<{ client_secret: string }>(
+      `${BOOKINGS_PATH}/${bookingId}/payment-method/setup-intent`,
+      accessToken,
+      { method: "POST" }
+    ),
+
+  pay: (accessToken: string, bookingId: string, paymentMethodId?: string) =>
+    authedRequest<BookingPaymentResponse>(
+      `${BOOKINGS_PATH}/${bookingId}/pay`,
+      accessToken,
+      {
+        method: "POST",
+        body: paymentMethodId ? { payment_method_id: paymentMethodId } : {},
+      }
+    ),
 };

@@ -254,7 +254,18 @@
     "paymentStatusCanceled": "Annulé",
     "cancellationTitle": "Politique d'annulation",
     "cancellationBeforeCutoff": "Annulation gratuite jusqu'au {date}.",
-    "cancellationAfterCutoff": "Le délai d'annulation gratuite pour cette réservation est dépassé."
+    "cancellationAfterCutoff": "Le délai d'annulation gratuite pour cette réservation est dépassé.",
+    "balanceRetry": {
+      "happyPathNotice": "Le solde de {amount} € sera débité automatiquement le {date}.",
+      "failedBannerText": "Nous n'avons pas pu débiter votre carte — nous réessayerons automatiquement, ou vous pouvez payer maintenant.",
+      "cardDeclinedSubtitle": "Votre carte a été refusée — ajoutez une nouvelle carte pour finaliser le paiement.",
+      "authRequiredSubtitle": "Votre banque exige que vous confirmiez ce paiement.",
+      "addCardButton": "Ajouter une nouvelle carte",
+      "confirmPaymentButton": "Confirmer le paiement",
+      "paymentComplete": "Paiement terminé",
+      "abandonedNotice": "Réservation annulée car le solde restant n'a pas pu être collecté.",
+      "errorModalTitle": "Erreur de paiement"
+    }
   },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
