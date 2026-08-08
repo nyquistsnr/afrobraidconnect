@@ -63,7 +63,6 @@ export function SearchBar({
   onDateRangeChange: (range: SelectedDateRange) => void;
 }) {
   const [activePanel, setActivePanel] = useState<SearchPanelKey | null>(null);
-  const [whereQuery, setWhereQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
 
   const expanded = !scrolled || activePanel !== null;
@@ -222,13 +221,13 @@ export function SearchBar({
           >
             {activePanel === "where" && (
               <WherePanel
-                query={whereQuery}
-                onQueryChange={setWhereQuery}
+                initialQuery={location?.label ?? ""}
                 onSelect={(loc) => {
                   onLocationChange(loc);
-                  setWhereQuery("");
                   setActivePanel("style");
                 }}
+                selectedLabel={location?.label}
+                selectedIsNearby={location?.isNearby}
                 dict={dict.search.where}
               />
             )}
@@ -239,6 +238,8 @@ export function SearchBar({
                   onStyleChange(s);
                   setActivePanel("when");
                 }}
+                initialQuery={style?.name ?? ""}
+                selectedId={style?.id}
                 dict={dict.search.style}
               />
             )}
@@ -249,7 +250,7 @@ export function SearchBar({
                 onClear={() => onDateRangeChange({})}
                 onClose={() => setActivePanel(null)}
                 lang={lang}
-                numberOfMonths={2}
+                layout="paged"
                 dict={dict.search.when}
               />
             )}

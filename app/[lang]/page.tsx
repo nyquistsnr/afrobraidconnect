@@ -12,7 +12,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
   return (
     <div className="flex min-h-screen flex-1 flex-col bg-background">
       <SiteHeader lang={lang} dict={dict.siteHeader} common={dict.common} />
-      <main className="flex-1" />
+      <main className="flex-1 pb-16 md:pb-0" />
     </div>
   );
 }

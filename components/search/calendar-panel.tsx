@@ -9,6 +9,11 @@ import type { SelectedDateRange, WhenPanelDict } from "@/components/search/types
 
 const localeMap = { en: enUS, fr, de };
 
+// Mobile shows a year's worth of months stacked in one scrollable column
+// (like Airbnb's mobile calendar — scroll instead of paging), while desktop
+// pages two months at a time with chevrons.
+const SCROLL_MONTHS_AHEAD = 12;
+
 function addMonths(date: Date, amount: number): Date {
   const next = new Date(date);
   next.setDate(1);
@@ -25,8 +30,7 @@ function isSameMonth(a: Date, b: Date): boolean {
 // in react-day-picker. We reach into its child `day_button` via `[&>button]`
 // so a range can render as a continuous brand-tinted band with solid circular
 // caps at the start/end, matching Airbnb's calendar.
-const dayPickerClassNames = {
-  months: "flex flex-col gap-8 sm:flex-row sm:gap-10",
+const baseClassNames = {
   month: "flex flex-1 flex-col gap-4",
   month_caption: "flex h-8 items-center justify-center",
   caption_label: "text-sm font-semibold text-foreground",
@@ -57,7 +61,7 @@ export function CalendarPanel({
   onClear,
   onClose,
   lang,
-  numberOfMonths,
+  layout,
   dict,
 }: {
   value: SelectedDateRange;
@@ -65,7 +69,7 @@ export function CalendarPanel({
   onClear: () => void;
   onClose: () => void;
   lang: Locale;
-  numberOfMonths: 1 | 2;
+  layout: "paged" | "scroll";
   dict: WhenPanelDict;
 }) {
   const today = useMemo(() => {
@@ -77,12 +81,20 @@ export function CalendarPanel({
   const [month, setMonth] = useState(() => addMonths(today, 0));
 
   const canGoPrev = !isSameMonth(month, today);
-  const rightmostMonth = addMonths(month, numberOfMonths - 1);
+  const rightmostMonth = addMonths(month, 1);
   const canGoNext = !isSameMonth(rightmostMonth, endMonth);
 
   const selected: DateRange | undefined = value.from
     ? { from: value.from, to: value.to }
     : undefined;
+
+  const classNames = {
+    ...baseClassNames,
+    months:
+      layout === "scroll"
+        ? "flex flex-col gap-8"
+        : "flex flex-col gap-8 sm:flex-row sm:gap-10",
+  };
 
   return (
     <div className="flex flex-col">
@@ -90,61 +102,91 @@ export function CalendarPanel({
         <h3 className="text-lg font-semibold text-foreground">
           {dict.heading}
         </h3>
-        <div className="flex items-center gap-1">
+        {layout === "paged" ? (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              aria-label="Previous month"
+              disabled={!canGoPrev}
+              onClick={() => setMonth((m) => addMonths(m, -1))}
+              className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next month"
+              disabled={!canGoNext}
+              onClick={() => setMonth((m) => addMonths(m, 1))}
+              className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        ) : (
           <button
             type="button"
-            aria-label="Previous month"
-            disabled={!canGoPrev}
-            onClick={() => setMonth((m) => addMonths(m, -1))}
-            className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+            onClick={onClear}
+            disabled={!value.from}
+            className="text-sm font-semibold text-foreground underline underline-offset-2 disabled:pointer-events-none disabled:opacity-40"
           >
-            <ChevronLeft className="size-4" />
+            {dict.clearDates}
+          </button>
+        )}
+      </div>
+
+      {layout === "paged" ? (
+        <DayPicker
+          mode="range"
+          month={month}
+          onMonthChange={setMonth}
+          numberOfMonths={2}
+          startMonth={today}
+          endMonth={endMonth}
+          hideNavigation
+          showOutsideDays={false}
+          disabled={{ before: today }}
+          selected={selected}
+          onSelect={(range) => onChange({ from: range?.from, to: range?.to })}
+          locale={localeMap[lang]}
+          classNames={classNames}
+        />
+      ) : (
+        <DayPicker
+          mode="range"
+          defaultMonth={today}
+          numberOfMonths={SCROLL_MONTHS_AHEAD}
+          startMonth={today}
+          endMonth={endMonth}
+          hideNavigation
+          showOutsideDays={false}
+          disabled={{ before: today }}
+          selected={selected}
+          onSelect={(range) => onChange({ from: range?.from, to: range?.to })}
+          locale={localeMap[lang]}
+          classNames={classNames}
+        />
+      )}
+
+      {layout === "paged" && (
+        <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+          <button
+            type="button"
+            onClick={onClear}
+            disabled={!value.from}
+            className="text-sm font-semibold text-foreground underline underline-offset-2 transition-opacity hover:opacity-70 disabled:pointer-events-none disabled:opacity-40"
+          >
+            {dict.clearDates}
           </button>
           <button
             type="button"
-            aria-label="Next month"
-            disabled={!canGoNext}
-            onClick={() => setMonth((m) => addMonths(m, 1))}
-            className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+            onClick={onClose}
+            className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
           >
-            <ChevronRight className="size-4" />
+            {dict.closeCalendar}
           </button>
         </div>
-      </div>
-
-      <DayPicker
-        mode="range"
-        month={month}
-        onMonthChange={setMonth}
-        numberOfMonths={numberOfMonths}
-        startMonth={today}
-        endMonth={endMonth}
-        hideNavigation
-        showOutsideDays={false}
-        disabled={{ before: today }}
-        selected={selected}
-        onSelect={(range) => onChange({ from: range?.from, to: range?.to })}
-        locale={localeMap[lang]}
-        classNames={dayPickerClassNames}
-      />
-
-      <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-        <button
-          type="button"
-          onClick={onClear}
-          disabled={!value.from}
-          className="text-sm font-semibold text-foreground underline underline-offset-2 transition-opacity hover:opacity-70 disabled:pointer-events-none disabled:opacity-40"
-        >
-          {dict.clearDates}
-        </button>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
-        >
-          {dict.closeCalendar}
-        </button>
-      </div>
+      )}
     </div>
   );
 }

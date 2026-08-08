@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { Search, ImageOff } from "lucide-react";
+import { Search, ImageOff, Check } from "lucide-react";
 import { catalogApi } from "@/lib/api/catalog-client";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
 import type { Locale } from "@/lib/i18n";
@@ -12,13 +12,17 @@ import type { SelectedStyle, StylePanelDict } from "@/components/search/types";
 export function StylePanel({
   lang,
   onSelect,
+  initialQuery = "",
+  selectedId,
   dict,
 }: {
   lang: Locale;
   onSelect: (style: SelectedStyle) => void;
+  initialQuery?: string;
+  selectedId?: string;
   dict: StylePanelDict;
 }) {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const debouncedQuery = useDebouncedValue(query, 300);
 
   const { data, isLoading, isError } = useQuery({
@@ -80,6 +84,7 @@ export function StylePanel({
           !isError &&
           items.map((style) => {
             const imageUrl = style.images[0]?.url;
+            const isSelected = selectedId === style.id;
             return (
               <li key={style.id}>
                 <button
@@ -91,7 +96,10 @@ export function StylePanel({
                       imageUrl,
                     })
                   }
-                  className="flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-border/40"
+                  aria-pressed={isSelected}
+                  className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
+                    isSelected ? "bg-brand/5" : "hover:bg-border/40"
+                  }`}
                 >
                   <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-border/50">
                     {imageUrl ? (
@@ -116,6 +124,12 @@ export function StylePanel({
                       </span>
                     )}
                   </span>
+                  {isSelected && (
+                    <Check
+                      className="size-4 shrink-0 text-brand"
+                      strokeWidth={3}
+                    />
+                  )}
                 </button>
               </li>
             );

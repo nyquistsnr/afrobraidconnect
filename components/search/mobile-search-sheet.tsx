@@ -56,7 +56,6 @@ export function MobileSearch({
 }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<SearchPanelKey>("where");
-  const [whereQuery, setWhereQuery] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -144,13 +143,13 @@ export function MobileSearch({
                 <div key={tab} className="search-panel-in">
                   {tab === "where" && (
                     <WherePanel
-                      query={whereQuery}
-                      onQueryChange={setWhereQuery}
+                      initialQuery={location?.label ?? ""}
                       onSelect={(loc) => {
                         onLocationChange(loc);
-                        setWhereQuery("");
                         setTab("style");
                       }}
+                      selectedLabel={location?.label}
+                      selectedIsNearby={location?.isNearby}
                       dict={dict.search.where}
                     />
                   )}
@@ -161,6 +160,8 @@ export function MobileSearch({
                         onStyleChange(s);
                         setTab("when");
                       }}
+                      initialQuery={style?.name ?? ""}
+                      selectedId={style?.id}
                       dict={dict.search.style}
                     />
                   )}
@@ -171,7 +172,7 @@ export function MobileSearch({
                       onClear={() => onDateRangeChange({})}
                       onClose={() => setOpen(false)}
                       lang={lang}
-                      numberOfMonths={1}
+                      layout="scroll"
                       dict={dict.search.when}
                     />
                   )}
@@ -186,7 +187,6 @@ export function MobileSearch({
                     onLocationChange(null);
                     onStyleChange(null);
                     onDateRangeChange({});
-                    setWhereQuery("");
                   }}
                   className="text-sm font-semibold text-foreground underline underline-offset-2 disabled:pointer-events-none disabled:opacity-40"
                 >

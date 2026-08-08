@@ -14,6 +14,15 @@
     "logIn": "Log in",
     "helpCenter": "Help Center",
     "menuLabel": "Open menu",
+    "mobileNav": {
+      "explore": "Explore",
+      "bookings": "Bookings",
+      "messages": "Messages",
+      "profile": "Profile",
+      "profileTitle": "Profile",
+      "appearanceLabel": "Appearance",
+      "languageLabel": "Language"
+    },
     "search": {
       "clearAll": "Clear all",
       "searchCta": "Search",

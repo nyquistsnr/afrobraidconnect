@@ -3,22 +3,25 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useQuery } from "@tanstack/react-query";
-import { LocateFixed, Search, MapPin, Loader2 } from "lucide-react";
+import { LocateFixed, Search, MapPin, Loader2, Check } from "lucide-react";
 import { searchDestinations } from "@/lib/search-destinations";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
 import type { SelectedLocation, WherePanelDict } from "@/components/search/types";
 
 export function WherePanel({
-  query,
-  onQueryChange,
+  initialQuery = "",
   onSelect,
+  selectedLabel,
+  selectedIsNearby,
   dict,
 }: {
-  query: string;
-  onQueryChange: (query: string) => void;
+  initialQuery?: string;
   onSelect: (location: SelectedLocation) => void;
+  selectedLabel?: string;
+  selectedIsNearby?: boolean;
   dict: WherePanelDict;
 }) {
+  const [query, setQuery] = useState(initialQuery);
   const [geoState, setGeoState] = useState<"idle" | "loading" | "error">(
     "idle"
   );
@@ -84,10 +87,14 @@ export function WherePanel({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return searchDestinations;
-    return searchDestinations.filter(
-      (d) =>
-        d.city.toLowerCase().includes(q) || d.country.toLowerCase().includes(q)
-    );
+    return searchDestinations.filter((d) => {
+      const combined = `${d.city}, ${d.country}`.toLowerCase();
+      return (
+        combined.includes(q) ||
+        d.city.toLowerCase().includes(q) ||
+        d.country.toLowerCase().includes(q)
+      );
+    });
   }, [query]);
 
   function handleNearby() {
@@ -154,7 +161,7 @@ export function WherePanel({
         <input
           autoFocus
           value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder={dict.searchPlaceholder}
           className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-placeholder"
         />
@@ -172,7 +179,10 @@ export function WherePanel({
           <button
             type="button"
             onClick={handleNearby}
-            className="flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-border/40"
+            aria-pressed={selectedIsNearby}
+            className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
+              selectedIsNearby ? "bg-brand/5" : "hover:bg-border/40"
+            }`}
           >
             <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-foreground">
               <LocateFixed
@@ -189,34 +199,46 @@ export function WherePanel({
                   : dict.nearbyDescription}
               </span>
             </span>
+            {selectedIsNearby && (
+              <Check className="size-4 shrink-0 text-brand" strokeWidth={3} />
+            )}
           </button>
         </li>
 
-        {filtered.map((destination) => (
-          <li key={destination.id}>
-            <button
-              type="button"
-              onClick={() =>
-                onSelect({
-                  label: `${destination.city}, ${destination.country}`,
-                })
-              }
-              className="flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-border/40"
-            >
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-xl">
-                {destination.icon}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-semibold text-foreground">
-                  {destination.city}
+        {filtered.map((destination) => {
+          const label = `${destination.city}, ${destination.country}`;
+          const isSelected = !selectedIsNearby && selectedLabel === label;
+          return (
+            <li key={destination.id}>
+              <button
+                type="button"
+                onClick={() => onSelect({ label })}
+                aria-pressed={isSelected}
+                className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
+                  isSelected ? "bg-brand/5" : "hover:bg-border/40"
+                }`}
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-xl">
+                  {destination.icon}
                 </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {destination.country}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-foreground">
+                    {destination.city}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {destination.country}
+                  </span>
                 </span>
-              </span>
-            </button>
-          </li>
-        ))}
+                {isSelected && (
+                  <Check
+                    className="size-4 shrink-0 text-brand"
+                    strokeWidth={3}
+                  />
+                )}
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       {showSearchResults && (
@@ -237,27 +259,40 @@ export function WherePanel({
               ))}
 
             {!predictionsLoading &&
-              predictions.map((prediction) => (
-                <li key={prediction.place_id}>
-                  <button
-                    type="button"
-                    onClick={() => handlePredictionSelect(prediction)}
-                    className="flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors hover:bg-border/40"
-                  >
-                    <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-foreground">
-                      <MapPin className="size-5" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-semibold text-foreground">
-                        {prediction.structured_formatting.main_text}
+              predictions.map((prediction) => {
+                const isSelected =
+                  !selectedIsNearby && selectedLabel === prediction.description;
+                return (
+                  <li key={prediction.place_id}>
+                    <button
+                      type="button"
+                      onClick={() => handlePredictionSelect(prediction)}
+                      aria-pressed={isSelected}
+                      className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
+                        isSelected ? "bg-brand/5" : "hover:bg-border/40"
+                      }`}
+                    >
+                      <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-foreground">
+                        <MapPin className="size-5" />
                       </span>
-                      <span className="block truncate text-xs text-muted-foreground">
-                        {prediction.structured_formatting.secondary_text}
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold text-foreground">
+                          {prediction.structured_formatting.main_text}
+                        </span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {prediction.structured_formatting.secondary_text}
+                        </span>
                       </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
+                      {isSelected && (
+                        <Check
+                          className="size-4 shrink-0 text-brand"
+                          strokeWidth={3}
+                        />
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
           </ul>
         </>
       )}

@@ -14,6 +14,15 @@
     "logIn": "Anmelden",
     "helpCenter": "Hilfebereich",
     "menuLabel": "Menü öffnen",
+    "mobileNav": {
+      "explore": "Entdecken",
+      "bookings": "Buchungen",
+      "messages": "Nachrichten",
+      "profile": "Profil",
+      "profileTitle": "Profil",
+      "appearanceLabel": "Erscheinungsbild",
+      "languageLabel": "Sprache"
+    },
     "search": {
       "clearAll": "Alles löschen",
       "searchCta": "Suchen",

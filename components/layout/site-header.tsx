@@ -10,12 +10,23 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
+import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
 import type {
   SelectedLocation,
   SelectedStyle,
   SelectedDateRange,
   SearchDict,
 } from "@/components/search/types";
+
+export interface MobileNavDict {
+  explore: string;
+  bookings: string;
+  messages: string;
+  profile: string;
+  profileTitle: string;
+  appearanceLabel: string;
+  languageLabel: string;
+}
 
 export interface SiteHeaderDict {
   logoAlt: string;
@@ -33,6 +44,7 @@ export interface SiteHeaderDict {
   helpCenter: string;
   menuLabel: string;
   search: SearchDict;
+  mobileNav: MobileNavDict;
 }
 
 export function SiteHeader({
@@ -72,143 +84,157 @@ export function SiteHeader({
   }, []);
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b border-border bg-surface transition-shadow ${
-        scrolled ? "shadow-sm" : ""
-      }`}
-    >
-      <div
-        className={`mx-auto flex max-w-[1760px] items-center justify-between gap-2 px-4 transition-[height] duration-200 sm:px-6 lg:px-10 ${
-          scrolled ? "h-20" : "h-24"
+    <>
+      <header
+        className={`sticky top-0 z-50 border-b border-border bg-surface transition-shadow ${
+          scrolled ? "shadow-sm" : ""
         }`}
       >
-        <Link
-          href={`/${lang}`}
-          aria-label={dict.logoAlt}
-          className="flex shrink-0 items-center"
+        <div
+          className={`mx-auto hidden max-w-[1760px] items-center justify-between gap-2 px-4 transition-[height] duration-200 sm:px-6 md:flex lg:px-10 ${
+            scrolled ? "h-20" : "h-24"
+          }`}
         >
-          <Image
-            src="/logo/logo.webp"
-            alt={dict.logoAlt}
-            width={256}
-            height={65}
-            priority
-            className="theme-invert h-7 w-auto sm:h-8"
-          />
-        </Link>
-
-        <SearchBar
-          lang={lang}
-          scrolled={scrolled}
-          dict={dict}
-          location={location}
-          onLocationChange={setLocation}
-          style={style}
-          onStyleChange={setStyle}
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-        />
-
-        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <Link
-            href="#"
-            className="hidden rounded-full px-4 py-3 text-sm font-semibold text-foreground hover:bg-border/40 lg:block"
+            href={`/${lang}`}
+            aria-label={dict.logoAlt}
+            className="flex shrink-0 items-center"
           >
-            {dict.becomeABraider}
+            <Image
+              src="/logo/logo.webp"
+              alt={dict.logoAlt}
+              width={256}
+              height={65}
+              priority
+              className="theme-invert h-7 w-auto sm:h-8"
+            />
           </Link>
 
-          <ThemeToggle dict={common.theme} closeLabel={common.close} />
-          <LanguageSwitcher
+          <SearchBar
             lang={lang}
-            dict={common.language}
-            closeLabel={common.close}
+            scrolled={scrolled}
+            dict={dict}
+            location={location}
+            onLocationChange={setLocation}
+            style={style}
+            onStyleChange={setStyle}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
           />
 
-          <div ref={menuRef} className="relative">
-            <button
-              type="button"
-              onClick={() => setMenuOpen((value) => !value)}
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              aria-label={dict.menuLabel}
-              className="flex items-center gap-2 rounded-full border border-border py-1.5 pr-2.5 pl-3 transition-shadow hover:shadow-md"
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Link
+              href="#"
+              className="hidden rounded-full px-4 py-3 text-sm font-semibold text-foreground hover:bg-border/40 lg:block"
             >
-              <Menu className="size-4 text-foreground" />
-            </button>
+              {dict.becomeABraider}
+            </Link>
 
-            {menuOpen && (
-              <ul
-                role="menu"
-                className="absolute top-full right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface py-2 shadow-lg"
+            <ThemeToggle dict={common.theme} closeLabel={common.close} />
+            <LanguageSwitcher
+              lang={lang}
+              dict={common.language}
+              closeLabel={common.close}
+            />
+
+            <div ref={menuRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setMenuOpen((value) => !value)}
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                aria-label={dict.menuLabel}
+                className="flex items-center gap-2 rounded-full border border-border py-1.5 pr-2.5 pl-3 transition-shadow hover:shadow-md"
               >
-                <li role="none">
-                  <Link
-                    role="menuitem"
-                    href={`/${lang}/signup`}
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
-                  >
-                    {dict.signUp}
-                  </Link>
-                </li>
-                <li role="none">
-                  <Link
-                    role="menuitem"
-                    href={`/${lang}/login`}
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
-                  >
-                    {dict.logIn}
-                  </Link>
-                </li>
-                <li role="none" className="my-2 border-t border-border" />
-                <li role="none">
-                  <Link
-                    role="menuitem"
-                    href="#"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
-                  >
-                    {dict.becomeABraider}
-                  </Link>
-                </li>
-                <li role="none">
-                  <Link
-                    role="menuitem"
-                    href="#"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
-                  >
-                    {dict.helpCenter}
-                  </Link>
-                </li>
-              </ul>
-            )}
+                <Menu className="size-4 text-foreground" />
+              </button>
+
+              {menuOpen && (
+                <ul
+                  role="menu"
+                  className="absolute top-full right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-border bg-surface py-2 shadow-lg"
+                >
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href={`/${lang}/signup`}
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                    >
+                      {dict.signUp}
+                    </Link>
+                  </li>
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href={`/${lang}/login`}
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
+                    >
+                      {dict.logIn}
+                    </Link>
+                  </li>
+                  <li role="none" className="my-2 border-t border-border" />
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href="#"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
+                    >
+                      {dict.becomeABraider}
+                    </Link>
+                  </li>
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href="#"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
+                    >
+                      {dict.helpCenter}
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-border px-4 py-3 md:hidden">
-        <MobileSearch
-          lang={lang}
-          dict={{
-            searchLocationLabel: dict.searchLocationLabel,
-            searchStyleLabel: dict.searchStyleLabel,
-            searchDateLabel: dict.searchDateLabel,
-            startSearch: dict.startSearch,
-            searchButtonLabel: dict.searchButtonLabel,
-            closeLabel: common.close,
-            clearAllLabel: dict.search.clearAll,
-            search: dict.search,
-          }}
-          location={location}
-          onLocationChange={setLocation}
-          style={style}
-          onStyleChange={setStyle}
-          dateRange={dateRange}
-          onDateRangeChange={setDateRange}
-        />
-      </div>
-    </header>
+        <div className="border-b border-border px-4 py-3 md:hidden">
+          <MobileSearch
+            lang={lang}
+            dict={{
+              searchLocationLabel: dict.searchLocationLabel,
+              searchStyleLabel: dict.searchStyleLabel,
+              searchDateLabel: dict.searchDateLabel,
+              startSearch: dict.startSearch,
+              searchButtonLabel: dict.searchButtonLabel,
+              closeLabel: common.close,
+              clearAllLabel: dict.search.clearAll,
+              search: dict.search,
+            }}
+            location={location}
+            onLocationChange={setLocation}
+            style={style}
+            onStyleChange={setStyle}
+            dateRange={dateRange}
+            onDateRangeChange={setDateRange}
+          />
+        </div>
+      </header>
+
+      <MobileTabBar
+        lang={lang}
+        dict={{
+          ...dict.mobileNav,
+          becomeABraider: dict.becomeABraider,
+          signUp: dict.signUp,
+          logIn: dict.logIn,
+          helpCenter: dict.helpCenter,
+        }}
+        common={common}
+      />
+    </>
   );
 }
