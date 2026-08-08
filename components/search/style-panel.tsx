@@ -68,7 +68,7 @@ export function StylePanel({
         </p>
       )}
 
-      <ul className="-mx-2 mt-1 flex max-h-[320px] flex-col overflow-y-auto">
+      <ul className="-mx-2 mt-1 flex flex-col sm:max-h-[320px] sm:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {isLoading &&
           Array.from({ length: 4 }).map((_, i) => (
             <li key={i} className="flex items-center gap-3.5 px-2 py-2.5">

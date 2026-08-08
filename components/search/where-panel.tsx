@@ -229,7 +229,7 @@ export function WherePanel({
         {dict.suggestedHeading}
       </p>
 
-      <ul className="-mx-2 flex max-h-[320px] flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <ul className="-mx-2 flex flex-col sm:max-h-[320px] sm:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <li>
           <button
             type="button"
@@ -301,7 +301,7 @@ export function WherePanel({
           <p className="mt-5 mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
             {dict.searchResultsHeading}
           </p>
-          <ul className="-mx-2 flex max-h-[220px] flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <ul className="-mx-2 flex flex-col sm:max-h-[220px] sm:overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {predictionsLoading &&
               Array.from({ length: 3 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3.5 px-2 py-2.5">

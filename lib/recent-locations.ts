@@ -1,7 +1,7 @@
 import type { SelectedLocation } from "@/components/search/types";
 
 const STORAGE_KEY = "afrobraid:recent-locations";
-const MAX_ENTRIES = 5;
+const MAX_ENTRIES = 3;
 
 export function getRecentLocations(): SelectedLocation[] {
   if (typeof window === "undefined") return [];

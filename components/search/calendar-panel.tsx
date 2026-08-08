@@ -98,18 +98,18 @@ export function CalendarPanel({
 
   return (
     <div className="flex flex-col">
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">
+      <div className="mb-4 flex items-start sm:items-center justify-between gap-4">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground leading-tight mt-0.5 sm:mt-0">
           {dict.heading}
         </h3>
         {layout === "paged" ? (
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <button
               type="button"
               aria-label="Previous month"
               disabled={!canGoPrev}
               onClick={() => setMonth((m) => addMonths(m, -1))}
-              className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
             >
               <ChevronLeft className="size-4" />
             </button>
@@ -118,7 +118,7 @@ export function CalendarPanel({
               aria-label="Next month"
               disabled={!canGoNext}
               onClick={() => setMonth((m) => addMonths(m, 1))}
-              className="flex size-8 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-border/40 disabled:pointer-events-none disabled:opacity-30"
             >
               <ChevronRight className="size-4" />
             </button>
@@ -128,7 +128,7 @@ export function CalendarPanel({
             type="button"
             onClick={onClear}
             disabled={!value.from}
-            className="text-sm font-semibold text-foreground underline underline-offset-2 disabled:pointer-events-none disabled:opacity-40"
+            className="shrink-0 whitespace-nowrap text-sm font-semibold text-foreground underline underline-offset-2 disabled:pointer-events-none disabled:opacity-40"
           >
             {dict.clearDates}
           </button>
