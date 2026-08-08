@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
+  Bell,
   Compass,
   CalendarCheck2,
   MessageCircle,
@@ -18,6 +19,8 @@ import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { Modal } from "@/components/ui/modal";
 import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
+import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
+import type { NotificationBellDict } from "@/components/notifications/types";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
@@ -50,10 +53,12 @@ export function MobileTabBar({
   lang,
   dict,
   common,
+  notificationsDict,
 }: {
   lang: Locale;
   dict: MobileTabBarDict;
   common: Dictionary["common"];
+  notificationsDict: NotificationBellDict;
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
@@ -62,6 +67,7 @@ export function MobileTabBar({
   const isAuthenticated = status === "authenticated";
   const { logout, isLoggingOut } = useLogout(lang);
   const chatUnreadTotal = useChatUnreadTotal();
+  const notificationsUnreadCount = useNotificationsUnreadCount();
 
   const homeHref = `/${lang}`;
   // "Explore" covers the whole browse/discover flow (home, search, braider
@@ -254,6 +260,36 @@ export function MobileTabBar({
           {isAuthenticated && (
             <>
               <div className="my-2 border-t border-border" />
+              <Link
+                href={`/${lang}/chat`}
+                onClick={() => setProfileOpen(false)}
+                className="flex items-center justify-between gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40"
+              >
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="size-4" />
+                  {dict.messages}
+                </span>
+                {chatUnreadTotal > 0 && (
+                  <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
+                    {chatUnreadTotal > 9 ? "9+" : chatUnreadTotal}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href={`/${lang}/notifications`}
+                onClick={() => setProfileOpen(false)}
+                className="flex items-center justify-between gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40"
+              >
+                <span className="flex items-center gap-2">
+                  <Bell className="size-4" />
+                  {notificationsDict.panelTitle}
+                </span>
+                {notificationsUnreadCount > 0 && (
+                  <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
+                    {notificationsUnreadCount > 9 ? "9+" : notificationsUnreadCount}
+                  </span>
+                )}
+              </Link>
               <Link
                 href={`/${lang}/profile`}
                 onClick={() => setProfileOpen(false)}

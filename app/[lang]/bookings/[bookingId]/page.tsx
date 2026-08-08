@@ -28,7 +28,6 @@ export default async function BookingDetailPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <BookingDetailView
         bookingId={bookingId}

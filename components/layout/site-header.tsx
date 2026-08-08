@@ -4,13 +4,20 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { CalendarCheck2, CircleUserRound, LogOut, Menu } from "lucide-react";
+import {
+  Bell,
+  CalendarCheck2,
+  CircleUserRound,
+  LogOut,
+  Menu,
+  MessageCircle,
+} from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
-import { NotificationBell } from "@/components/notifications/notification-bell";
-import { ChatNavIcon } from "@/components/chat/chat-nav-icon";
+import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
+import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
@@ -64,7 +71,6 @@ export function SiteHeader({
   dict,
   common,
   notificationsDict,
-  chatNavAriaLabel,
   initialLocation = null,
   initialStyle = null,
   initialDateRange = {},
@@ -73,7 +79,6 @@ export function SiteHeader({
   dict: SiteHeaderDict;
   common: Dictionary["common"];
   notificationsDict: NotificationBellDict;
-  chatNavAriaLabel: string;
   initialLocation?: SelectedLocation | null;
   initialStyle?: SelectedStyle | null;
   initialDateRange?: SelectedDateRange;
@@ -81,6 +86,8 @@ export function SiteHeader({
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
+  const chatUnreadTotal = useChatUnreadTotal();
+  const notificationsUnreadCount = useNotificationsUnreadCount();
   const menuRef = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
@@ -172,20 +179,7 @@ export function SiteHeader({
           />
 
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-            <Link
-              href="#"
-              className="hidden rounded-full px-4 py-3 text-sm font-semibold text-foreground hover:bg-border/40 lg:block"
-            >
-              {dict.becomeABraider}
-            </Link>
-
             <div className="hidden items-center gap-1 sm:gap-2 lg:flex">
-              {isAuthenticated && (
-                <>
-                  <ChatNavIcon lang={lang} ariaLabel={chatNavAriaLabel} />
-                  <NotificationBell lang={lang} dict={notificationsDict} />
-                </>
-              )}
               <ThemeToggle dict={common.theme} closeLabel={common.close} />
               <LanguageSwitcher
                 lang={lang}
@@ -244,6 +238,42 @@ export function SiteHeader({
                           {dict.myBookings}
                         </Link>
                       </li>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/chat`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                        >
+                          <span className="flex items-center gap-2">
+                            <MessageCircle className="size-4" />
+                            {dict.mobileNav.messages}
+                          </span>
+                          {chatUnreadTotal > 0 && (
+                            <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
+                              {chatUnreadTotal > 9 ? "9+" : chatUnreadTotal}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                      <li role="none">
+                        <Link
+                          role="menuitem"
+                          href={`/${lang}/notifications`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
+                        >
+                          <span className="flex items-center gap-2">
+                            <Bell className="size-4" />
+                            {notificationsDict.panelTitle}
+                          </span>
+                          {notificationsUnreadCount > 0 && (
+                            <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
+                              {notificationsUnreadCount > 9 ? "9+" : notificationsUnreadCount}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
                     </>
                   )}
                   {!isAuthenticated && (
@@ -291,8 +321,8 @@ export function SiteHeader({
                       />
                     </div>
                   </li>
-                  <li role="none" className="my-2 border-t border-border lg:hidden" />
-                  <li role="none" className="lg:hidden">
+                  <li role="none" className="my-2 border-t border-border" />
+                  <li role="none">
                     <Link
                       role="menuitem"
                       href="#"
@@ -334,11 +364,6 @@ export function SiteHeader({
           </div>
         </div>
 
-        {isAuthenticated && (
-          <div className="flex items-center justify-end gap-1 px-4 pt-2 md:hidden">
-            <NotificationBell lang={lang} dict={notificationsDict} />
-          </div>
-        )}
         <div className="border-b border-border px-4 py-3 md:hidden">
           <MobileSearch
             lang={lang}
@@ -374,6 +399,7 @@ export function SiteHeader({
           logoutModal: dict.logoutModal,
         }}
         common={common}
+        notificationsDict={notificationsDict}
       />
 
       <LogoutConfirmModal

@@ -30,7 +30,6 @@ export default async function BookingsPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <BookingsListView
         lang={lang}

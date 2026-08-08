@@ -25,7 +25,6 @@ export default async function NotificationsPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <NotificationsListView lang={lang} dict={dict.notifications} />
     </div>

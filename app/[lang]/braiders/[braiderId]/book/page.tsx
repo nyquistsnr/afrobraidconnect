@@ -56,7 +56,6 @@ export default async function BookingCheckoutPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <BookingCheckoutView
         lang={lang}

@@ -28,7 +28,6 @@ export default async function ChatThreadPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <ChatThreadView
         threadId={threadId}

@@ -28,7 +28,6 @@ export default async function ChatInboxPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <ChatInboxView lang={lang} dict={dict.chatInbox} />
     </div>

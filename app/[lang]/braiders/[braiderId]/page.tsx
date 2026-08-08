@@ -40,7 +40,6 @@ export default async function BraiderDetailPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
 
       {status === "ok" && braider ? (

@@ -57,7 +57,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
-        className={`relative flex max-h-full w-full flex-col overflow-y-auto bg-surface shadow-lg ${PANEL_CLASSES[size]}`}
+        className={`relative flex max-h-full w-full flex-col overflow-y-auto bg-surface shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${PANEL_CLASSES[size]}`}
       >
         {children}
       </div>

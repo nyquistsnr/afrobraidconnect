@@ -24,7 +24,6 @@ export default async function TermsPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <main className="flex-1">
         <LegalPage

@@ -9,6 +9,7 @@ import { Bell } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { notificationsApi } from "@/lib/api/notifications-client";
 import { notificationsKey } from "@/lib/notifications/query-keys";
+import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
 import { formatThreadTimestamp } from "@/lib/chat/format";
 import type { NotificationResponse } from "@/lib/api/types";
 import type { NotificationBellDict } from "@/components/notifications/types";
@@ -41,17 +42,7 @@ export function NotificationBell({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  const { data: unreadCount } = useQuery({
-    queryKey: notificationsKey.unreadCount(),
-    queryFn: async () => {
-      const result = await notificationsApi.list(accessToken!, {
-        is_read: false,
-        page_size: 1,
-      });
-      return result.pagination.total_items;
-    },
-    enabled: isAuthenticated,
-  });
+  const unreadCount = useNotificationsUnreadCount();
 
   const { data: recent } = useQuery({
     queryKey: notificationsKey.panel(),

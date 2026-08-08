@@ -17,7 +17,6 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <main className="flex-1 pb-16 md:pb-0" />
       <SiteFooter lang={lang} dict={dict.common.footer} />

@@ -31,7 +31,6 @@ export default async function ProfilePage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
       />
       <main className="flex-1 px-4 pt-8 pb-32 md:pb-8 sm:px-6 lg:px-10 max-w-3xl mx-auto w-full">
         <h1 className="mb-8 text-3xl font-bold tracking-tight text-foreground">

@@ -37,7 +37,6 @@ export default async function SearchPage({
         dict={dict.siteHeader}
         common={dict.common}
         notificationsDict={dict.notifications}
-        chatNavAriaLabel={dict.chatInbox.navAriaLabel}
         initialLocation={ui.location}
         initialStyle={ui.style}
         initialDateRange={ui.dateRange}
