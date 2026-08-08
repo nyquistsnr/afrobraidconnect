@@ -20,13 +20,7 @@ export default async function SearchPage({
   let result: PaginatedData<BraiderSearchItem> | null = null;
   let hasError = false;
   try {
-    console.log(`\n--- SEARCH REQUEST ---`);
-    console.log(`Endpoint: GET /v1/braiders`);
-    console.log(`Params:`, JSON.stringify(api, null, 2));
-    console.log(`Language:`, lang);
-    
     result = await braidersApi.search(api, lang);
-    console.log("Search API Response:", JSON.stringify(result, null, 2));
   } catch {
     hasError = true;
   }
