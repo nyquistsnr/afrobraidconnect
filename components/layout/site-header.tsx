@@ -131,12 +131,14 @@ export function SiteHeader({
               {dict.becomeABraider}
             </Link>
 
-            <ThemeToggle dict={common.theme} closeLabel={common.close} />
-            <LanguageSwitcher
-              lang={lang}
-              dict={common.language}
-              closeLabel={common.close}
-            />
+            <div className="hidden items-center gap-1 sm:gap-2 lg:flex">
+              <ThemeToggle dict={common.theme} closeLabel={common.close} />
+              <LanguageSwitcher
+                lang={lang}
+                dict={common.language}
+                closeLabel={common.close}
+              />
+            </div>
 
             <div ref={menuRef} className="relative">
               <button
@@ -176,7 +178,28 @@ export function SiteHeader({
                     </Link>
                   </li>
                   <li role="none" className="my-2 border-t border-border" />
-                  <li role="none">
+                  <li role="none" className="lg:hidden">
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <span className="text-sm text-foreground">
+                        {dict.mobileNav.appearanceLabel}
+                      </span>
+                      <ThemeToggle dict={common.theme} closeLabel={common.close} />
+                    </div>
+                  </li>
+                  <li role="none" className="lg:hidden">
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <span className="text-sm text-foreground">
+                        {dict.mobileNav.languageLabel}
+                      </span>
+                      <LanguageSwitcher
+                        lang={lang}
+                        dict={common.language}
+                        closeLabel={common.close}
+                      />
+                    </div>
+                  </li>
+                  <li role="none" className="my-2 border-t border-border lg:hidden" />
+                  <li role="none" className="lg:hidden">
                     <Link
                       role="menuitem"
                       href="#"
