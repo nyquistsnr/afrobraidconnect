@@ -22,6 +22,8 @@
         "nearbyLabel": "In der Nähe",
         "nearbyDescription": "Braider in deiner Nähe finden",
         "suggestedHeading": "Vorgeschlagene Reiseziele",
+        "searchResultsHeading": "Suchergebnisse",
+        "noResults": "Keine Orte entsprechen deiner Suche.",
         "geoDeniedMessage": "Der Standortzugriff wurde verweigert. Du kannst ihn in den Browsereinstellungen aktivieren.",
         "geoUnsupportedMessage": "Standortdienste sind in diesem Browser nicht verfügbar."
       },

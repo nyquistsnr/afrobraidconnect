@@ -22,6 +22,8 @@
         "nearbyLabel": "Nearby",
         "nearbyDescription": "Find braiders around you",
         "suggestedHeading": "Suggested destinations",
+        "searchResultsHeading": "Search results",
+        "noResults": "No places match your search.",
         "geoDeniedMessage": "Location access was denied. You can enable it in your browser settings.",
         "geoUnsupportedMessage": "Location isn't available on this browser."
       },

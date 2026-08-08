@@ -23,6 +23,8 @@ export interface WherePanelDict {
   nearbyLabel: string;
   nearbyDescription: string;
   suggestedHeading: string;
+  searchResultsHeading: string;
+  noResults: string;
   geoDeniedMessage: string;
   geoUnsupportedMessage: string;
 }

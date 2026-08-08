@@ -36,8 +36,8 @@ function formatDateRange(range: SelectedDateRange, lang: Locale): string | null 
 }
 
 const panelWidth: Record<SearchPanelKey, string> = {
-  where: "w-[400px]",
-  style: "w-[420px]",
+  where: "w-[420px]",
+  style: "w-[440px]",
   when: "w-auto",
 };
 
@@ -102,7 +102,11 @@ export function SearchBar({
       className="relative hidden flex-1 justify-center md:flex"
     >
       {activePanel && (
-        <div className="fixed inset-0 z-40 bg-black/10" aria-hidden />
+        <div
+          className="fixed inset-0 z-40 bg-black/10"
+          onClick={() => setActivePanel(null)}
+          aria-hidden
+        />
       )}
 
       <div className="relative">
@@ -125,7 +129,7 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("where")}
               aria-expanded={activePanel === "where"}
-              className={`relative flex h-full items-center rounded-full px-6 text-left transition-all duration-200 ${
+              className={`relative flex h-full min-w-[230px] items-center rounded-full px-8 text-left transition-all duration-200 ${
                 activePanel === "where"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
@@ -135,7 +139,7 @@ export function SearchBar({
                 <span className="text-xs font-semibold text-foreground">
                   {dict.searchLocationLabel}
                 </span>
-                <span className="block max-w-[140px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-[190px] truncate text-xs text-muted-foreground">
                   {location?.label ?? dict.searchLocationPlaceholder}
                 </span>
               </span>
@@ -153,7 +157,7 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("style")}
               aria-expanded={activePanel === "style"}
-              className={`relative hidden h-full items-center rounded-full px-6 text-left transition-all duration-200 lg:flex ${
+              className={`relative hidden h-full min-w-[210px] items-center rounded-full px-8 text-left transition-all duration-200 lg:flex ${
                 activePanel === "style"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
@@ -163,7 +167,7 @@ export function SearchBar({
                 <span className="text-xs font-semibold text-foreground">
                   {dict.searchStyleLabel}
                 </span>
-                <span className="block max-w-[140px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-[170px] truncate text-xs text-muted-foreground">
                   {style?.name ?? dict.searchStylePlaceholder}
                 </span>
               </span>
@@ -181,7 +185,7 @@ export function SearchBar({
               type="button"
               onClick={() => toggle("when")}
               aria-expanded={activePanel === "when"}
-              className={`relative hidden h-full items-center rounded-full py-2 pr-2 pl-6 text-left transition-all duration-200 lg:flex ${
+              className={`relative hidden h-full min-w-[260px] items-center rounded-full py-2 pr-2 pl-8 text-left transition-all duration-200 lg:flex ${
                 activePanel === "when"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
@@ -191,7 +195,7 @@ export function SearchBar({
                 <span className="text-xs font-semibold text-foreground">
                   {dict.searchDateLabel}
                 </span>
-                <span className="block max-w-[120px] truncate text-xs text-muted-foreground">
+                <span className="block max-w-[160px] truncate text-xs text-muted-foreground">
                   {dateLabel ?? dict.searchDatePlaceholder}
                 </span>
               </span>

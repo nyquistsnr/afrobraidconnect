@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fira_Sans } from "next/font/google";
 import Script from "next/script";
 import { SessionProvider } from "next-auth/react";
+import { GoogleMapsProvider } from "@/components/maps/google-maps-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { InlineScript } from "@/components/theme/inline-script";
 import { AppToastContainer } from "@/components/toast-container";
@@ -53,7 +54,11 @@ export default function RootLayout({
         <SessionProvider>
           <ThemeProvider>
             <QueryProvider>
-              {children}
+              <GoogleMapsProvider
+                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ""}
+              >
+                {children}
+              </GoogleMapsProvider>
               <AppToastContainer />
             </QueryProvider>
           </ThemeProvider>
