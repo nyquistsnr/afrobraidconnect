@@ -51,6 +51,24 @@
       }
     }
   },
+  "searchResults": {
+    "resultsCountOne": "{count} Braider",
+    "resultsCountOther": "{count} Braider",
+    "inLocation": "in {location}",
+    "noResultsTitle": "Keine Braider gefunden",
+    "noResultsSubtitle": "Passe deine Suche an — einen anderen Ort, Stil oder andere Daten.",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorSubtitle": "Braider konnten gerade nicht geladen werden. Bitte versuche es erneut.",
+    "showMap": "Karte anzeigen",
+    "showList": "Liste anzeigen",
+    "previousPage": "Zurück",
+    "nextPage": "Weiter",
+    "pageOf": "Seite {current} von {total}",
+    "fromPrice": "ab {price} €",
+    "distanceAway": "{distance} km entfernt",
+    "mobileService": "Mobiler Service verfügbar",
+    "imageAlt": "Titelbild von {name}"
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Lächelnde Frau mit geflochtenem Haar",

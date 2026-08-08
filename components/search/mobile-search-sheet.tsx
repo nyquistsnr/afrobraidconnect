@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { Search, X, MapPin, Sparkles, Calendar, Check } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import { buildSearchHref } from "@/lib/search-query";
 import { WherePanel } from "@/components/search/where-panel";
 import { StylePanel } from "@/components/search/style-panel";
 import { CalendarPanel } from "@/components/search/calendar-panel";
@@ -56,6 +58,12 @@ export function MobileSearch({
 }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<SearchPanelKey>("where");
+  const router = useRouter();
+
+  function handleSearch() {
+    setOpen(false);
+    router.push(buildSearchHref(lang, { location, style, dateRange }));
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -193,7 +201,7 @@ export function MobileSearch({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setOpen(false)}
+                  onClick={handleSearch}
                   className="flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
                 >
                   <Search className="size-4" />

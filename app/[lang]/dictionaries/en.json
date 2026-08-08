@@ -51,6 +51,24 @@
       }
     }
   },
+  "searchResults": {
+    "resultsCountOne": "{count} braider",
+    "resultsCountOther": "{count} braiders",
+    "inLocation": "in {location}",
+    "noResultsTitle": "No braiders found",
+    "noResultsSubtitle": "Try adjusting your search — a different location, style, or dates.",
+    "errorTitle": "Something went wrong",
+    "errorSubtitle": "We couldn't load braiders right now. Please try again.",
+    "showMap": "Show map",
+    "showList": "Show list",
+    "previousPage": "Previous",
+    "nextPage": "Next",
+    "pageOf": "Page {current} of {total}",
+    "fromPrice": "from €{price}",
+    "distanceAway": "{distance} km away",
+    "mobileService": "Mobile service available",
+    "imageAlt": "{name}'s cover photo"
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Smiling woman wearing braided hair",

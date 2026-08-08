@@ -52,18 +52,27 @@ export function SiteHeader({
   lang,
   dict,
   common,
+  initialLocation = null,
+  initialStyle = null,
+  initialDateRange = {},
 }: {
   lang: Locale;
   dict: SiteHeaderDict;
   common: Dictionary["common"];
+  initialLocation?: SelectedLocation | null;
+  initialStyle?: SelectedStyle | null;
+  initialDateRange?: SelectedDateRange;
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const [location, setLocation] = useState<SelectedLocation | null>(null);
-  const [style, setStyle] = useState<SelectedStyle | null>(null);
-  const [dateRange, setDateRange] = useState<SelectedDateRange>({});
+  const [location, setLocation] = useState<SelectedLocation | null>(
+    initialLocation
+  );
+  const [style, setStyle] = useState<SelectedStyle | null>(initialStyle);
+  const [dateRange, setDateRange] =
+    useState<SelectedDateRange>(initialDateRange);
 
   useEffect(() => {
     function handleScroll() {

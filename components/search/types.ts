@@ -5,6 +5,10 @@ export interface SelectedLocation {
   isNearby?: boolean;
   lat?: number;
   lng?: number;
+  // ISO 3166-1 alpha-2. Only set for curated suggested destinations, which
+  // carry no coordinates — lets search fall back to a country_code filter
+  // instead of silently filtering nothing.
+  countryCode?: string;
 }
 
 export interface SelectedStyle {

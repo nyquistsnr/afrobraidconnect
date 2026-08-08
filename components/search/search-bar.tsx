@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
+import { buildSearchHref } from "@/lib/search-query";
 import { WherePanel } from "@/components/search/where-panel";
 import { StylePanel } from "@/components/search/style-panel";
 import { CalendarPanel } from "@/components/search/calendar-panel";
@@ -64,8 +66,14 @@ export function SearchBar({
 }) {
   const [activePanel, setActivePanel] = useState<SearchPanelKey | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const expanded = !scrolled || activePanel !== null;
+
+  function handleSearch() {
+    setActivePanel(null);
+    router.push(buildSearchHref(lang, { location, style, dateRange }));
+  }
 
   useEffect(() => {
     if (!activePanel) return;
@@ -180,28 +188,38 @@ export function SearchBar({
               }`}
             />
 
-            <button
-              type="button"
-              onClick={() => toggle("when")}
-              aria-expanded={activePanel === "when"}
-              className={`relative flex h-full flex-[1.2] min-w-0 items-center rounded-full py-2 pr-2 pl-4 lg:pl-8 text-left transition-all duration-200 ${
+            <div
+              className={`relative flex h-full flex-[1.2] min-w-0 items-center rounded-full py-2 pr-2 pl-4 lg:pl-8 transition-all duration-200 ${
                 activePanel === "when"
                   ? "z-10 bg-surface shadow-[0_3px_12px_rgba(0,0,0,0.15)] ring-1 ring-border"
                   : "hover:bg-border/40"
               }`}
             >
-              <span className="flex min-w-0 flex-1 flex-col">
+              <button
+                type="button"
+                onClick={() => toggle("when")}
+                aria-expanded={activePanel === "when"}
+                className="flex min-w-0 flex-1 flex-col text-left"
+              >
                 <span className="truncate text-xs font-semibold text-foreground">
                   {dict.searchDateLabel}
                 </span>
                 <span className="block max-w-full truncate text-xs text-muted-foreground lg:max-w-[160px]">
                   {dateLabel ?? dict.searchDatePlaceholder}
                 </span>
-              </span>
-              <span className="ml-2 lg:ml-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground">
+              </button>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSearch();
+                }}
+                aria-label={dict.search.searchCta}
+                className="ml-2 lg:ml-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground transition-transform hover:scale-105"
+              >
                 <Search className="size-4" />
-              </span>
-            </button>
+              </button>
+            </div>
           </div>
         )}
 

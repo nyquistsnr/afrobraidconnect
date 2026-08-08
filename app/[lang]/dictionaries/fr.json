@@ -51,6 +51,24 @@
       }
     }
   },
+  "searchResults": {
+    "resultsCountOne": "{count} tresseuse",
+    "resultsCountOther": "{count} tresseuses",
+    "inLocation": "à {location}",
+    "noResultsTitle": "Aucune tresseuse trouvée",
+    "noResultsSubtitle": "Essayez d'ajuster votre recherche — un autre lieu, style ou d'autres dates.",
+    "errorTitle": "Une erreur s'est produite",
+    "errorSubtitle": "Impossible de charger les tresseuses pour le moment. Veuillez réessayer.",
+    "showMap": "Afficher la carte",
+    "showList": "Afficher la liste",
+    "previousPage": "Précédent",
+    "nextPage": "Suivant",
+    "pageOf": "Page {current} sur {total}",
+    "fromPrice": "à partir de {price} €",
+    "distanceAway": "à {distance} km",
+    "mobileService": "Service à domicile disponible",
+    "imageAlt": "Photo de couverture de {name}"
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Femme souriante portant des cheveux tressés",

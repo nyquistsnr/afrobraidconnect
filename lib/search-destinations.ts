@@ -8,18 +8,21 @@ export interface SearchDestination {
   id: string;
   city: string;
   country: string;
+  // ISO 3166-1 alpha-2 — used as the /braiders search's country_code filter
+  // since these curated destinations carry no lat/lng of their own.
+  countryCode: string;
   icon: string;
 }
 
 export const searchDestinations: SearchDestination[] = [
-  { id: "lagos", city: "Lagos", country: "Nigeria", icon: "🌴" },
-  { id: "accra", city: "Accra", country: "Ghana", icon: "🥁" },
-  { id: "paris", city: "Paris", country: "France", icon: "🗼" },
-  { id: "berlin", city: "Berlin", country: "Germany", icon: "🐻" },
-  { id: "london", city: "London", country: "United Kingdom", icon: "🎡" },
-  { id: "amsterdam", city: "Amsterdam", country: "Netherlands", icon: "🌷" },
-  { id: "atlanta", city: "Atlanta", country: "United States", icon: "🍑" },
-  { id: "new-york", city: "New York", country: "United States", icon: "🗽" },
-  { id: "toronto", city: "Toronto", country: "Canada", icon: "🍁" },
-  { id: "johannesburg", city: "Johannesburg", country: "South Africa", icon: "🦁" },
+  { id: "lagos", city: "Lagos", country: "Nigeria", countryCode: "NG", icon: "🌴" },
+  { id: "accra", city: "Accra", country: "Ghana", countryCode: "GH", icon: "🥁" },
+  { id: "paris", city: "Paris", country: "France", countryCode: "FR", icon: "🗼" },
+  { id: "berlin", city: "Berlin", country: "Germany", countryCode: "DE", icon: "🐻" },
+  { id: "london", city: "London", country: "United Kingdom", countryCode: "GB", icon: "🎡" },
+  { id: "amsterdam", city: "Amsterdam", country: "Netherlands", countryCode: "NL", icon: "🌷" },
+  { id: "atlanta", city: "Atlanta", country: "United States", countryCode: "US", icon: "🍑" },
+  { id: "new-york", city: "New York", country: "United States", countryCode: "US", icon: "🗽" },
+  { id: "toronto", city: "Toronto", country: "Canada", countryCode: "CA", icon: "🍁" },
+  { id: "johannesburg", city: "Johannesburg", country: "South Africa", countryCode: "ZA", icon: "🦁" },
 ];

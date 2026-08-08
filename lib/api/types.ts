@@ -497,3 +497,60 @@ export interface BraiderStyleResponse {
   variations: BraiderStyleVariationResponse[];
   addons: BraiderStyleAddonResponse[];
 }
+
+// ---------------------------------------------------------------------------
+// Braider discovery (public search + map results)
+// ---------------------------------------------------------------------------
+
+export interface MatchedStyleResponse {
+  style_id: string;
+  name: string;
+  base_price: string;
+  duration_minutes: number | null;
+}
+
+export interface BraiderLocationResponse {
+  location_type: LocationType | null;
+  salon_name: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  postal_code: string | null;
+  city: string | null;
+  country: string | null;
+  offers_mobile: boolean;
+  travel_radius_km: number | null;
+  travel_fee: string | null;
+  // Not part of the documented /braiders search response yet — the API only
+  // returns city/country for search results. Read defensively until the
+  // backend adds per-braider coordinates for map pins.
+  latitude?: number | null;
+  longitude?: number | null;
+}
+
+export interface BraiderSearchItem {
+  id: string;
+  business_name: string | null;
+  logo_url: string | null;
+  location: BraiderLocationResponse | null;
+  distance_km: number | null;
+  cover_photo_url: string | null;
+  matched_style: MatchedStyleResponse | null;
+  styles: MatchedStyleResponse[];
+}
+
+export interface BraiderSearchParams {
+  lat?: number;
+  lng?: number;
+  radius_km?: number;
+  style_id?: string;
+  style_slug?: string;
+  search?: string;
+  date_from?: string;
+  date_to?: string;
+  min_amount?: number;
+  max_amount?: number;
+  country_code?: string;
+  is_mobile?: boolean;
+  page?: number;
+  page_size?: number;
+}
