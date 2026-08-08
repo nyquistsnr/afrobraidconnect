@@ -358,6 +358,12 @@
       "forgotPasswordSuccess": "Falls dieses Konto existiert, ist ein Code zum Zurücksetzen unterwegs.",
       "resetPasswordSuccess": "Passwort zurückgesetzt! Bitte melden Sie sich mit Ihrem neuen Passwort an.",
       "logoutSuccess": "Sie wurden abgemeldet."
+    },
+    "footer": {
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "termsOfService": "Nutzungsbedingungen",
+      "rightsReserved": "Alle Rechte vorbehalten.",
+      "about": "Über uns"
     }
   },
   "login": {
@@ -703,5 +709,125 @@
       "title": "Demnächst verfügbar",
       "subtitle": "Dieser Schritt ist noch nicht bereit — schauen Sie bald wieder vorbei."
     }
+  },
+  "privacy": {
+    "title": "Datenschutzrichtlinie",
+    "lastUpdated": "Zuletzt aktualisiert: August 2026",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "1. Einleitung",
+        "paragraphs": [
+          "Willkommen bei Afrobraids Connect. Wir respektieren Ihre Privatsphäre und verpflichten uns zum Schutz Ihrer personenbezogenen Daten.",
+          "Diese Datenschutzrichtlinie informiert Sie darüber, wie wir mit Ihren personenbezogenen Daten umgehen, wenn Sie unsere Website besuchen, und klärt Sie über Ihre Datenschutzrechte und den gesetzlichen Schutz auf. Diese Richtlinie entspricht der Datenschutz-Grundverordnung (DSGVO)."
+        ]
+      },
+      {
+        "id": "data-we-collect",
+        "title": "2. Die Daten, die wir über Sie erheben",
+        "paragraphs": [
+          "Personenbezogene Daten sind alle Informationen über eine Person, durch die diese Person identifiziert werden kann.",
+          "Wir können verschiedene Arten von personenbezogenen Daten über Sie erheben, verwenden, speichern und übertragen, die wir wie folgt zusammengefasst haben:",
+          "Identitätsdaten: umfassen Vorname, Nachname, Benutzername oder ähnliche Identifikatoren.",
+          "Kontaktdaten: umfassen Rechnungsadresse, E-Mail-Adresse und Telefonnummern.",
+          "Finanzdaten: umfassen Bankkonto- und Zahlungskartendetails (sicher über Stripe verarbeitet).",
+          "Transaktionsdaten: umfassen Details zu Zahlungen von und an Sie sowie andere Details zu Dienstleistungen, die Sie bei uns erworben haben."
+        ]
+      },
+      {
+        "id": "how-we-use-data",
+        "title": "3. Wie wir Ihre personenbezogenen Daten verwenden",
+        "paragraphs": [
+          "Wir werden Ihre personenbezogenen Daten nur verwenden, wenn das Gesetz dies erlaubt. Am häufigsten werden wir Ihre personenbezogenen Daten in folgenden Fällen verwenden:",
+          "Wenn wir den Vertrag erfüllen müssen, den wir mit Ihnen abschließen oder abgeschlossen haben (wie z. B. die Bearbeitung Ihrer Buchungen).",
+          "Wenn es für unsere berechtigten Interessen (oder die eines Dritten) erforderlich ist und Ihre Interessen und Grundrechte diese Interessen nicht überwiegen.",
+          "Wenn wir einer gesetzlichen Verpflichtung nachkommen müssen."
+        ]
+      },
+      {
+        "id": "data-sharing",
+        "title": "4. Weitergabe Ihrer personenbezogenen Daten",
+        "paragraphs": [
+          "Wir können Ihre personenbezogenen Daten an interne Dritte und externe Dritte weitergeben, wie z. B. Zahlungsdienstleister (z. B. Stripe), um Transaktionen zu erleichtern.",
+          "Wenn Sie eine Dienstleistung buchen, werden die erforderlichen Kontakt- und Identitätsdaten an die jeweilige Braiderin weitergegeben, um den Dienstleistungsvertrag zu erfüllen.",
+          "Wir verlangen von allen Dritten, die Sicherheit Ihrer personenbezogenen Daten zu respektieren und sie im Einklang mit dem Gesetz zu behandeln."
+        ]
+      },
+      {
+        "id": "data-security",
+        "title": "5. Datensicherheit",
+        "paragraphs": [
+          "Wir haben angemessene Sicherheitsmaßnahmen getroffen, um zu verhindern, dass Ihre personenbezogenen Daten versehentlich verloren gehen, auf unbefugte Weise verwendet oder abgerufen, verändert oder offengelegt werden.",
+          "Darüber hinaus beschränken wir den Zugriff auf Ihre personenbezogenen Daten auf diejenigen Mitarbeiter, Vertreter, Auftragnehmer und andere Dritte, die dies aus geschäftlichen Gründen wissen müssen."
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "6. Ihre gesetzlichen Rechte",
+        "paragraphs": [
+          "Unter bestimmten Umständen haben Sie gemäß den Datenschutzgesetzen Rechte in Bezug auf Ihre personenbezogenen Daten. Dazu gehören das Recht auf:",
+          "Zugang zu Ihren personenbezogenen Daten verlangen.",
+          "Berichtigung Ihrer personenbezogenen Daten verlangen.",
+          "Löschung Ihrer personenbezogenen Daten verlangen.",
+          "Widerspruch gegen die Verarbeitung Ihrer personenbezogenen Daten.",
+          "Einschränkung der Verarbeitung Ihrer personenbezogenen Daten verlangen.",
+          "Übertragung Ihrer personenbezogenen Daten verlangen."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "lastUpdated": "Zuletzt aktualisiert: August 2026",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "1. Annahme der Bedingungen",
+        "paragraphs": [
+          "Durch den Zugriff auf und die Nutzung der Plattform Afrobraids Connect stimmen Sie diesen Nutzungsbedingungen zu.",
+          "Wenn Sie diesen Bedingungen nicht zustimmen, dürfen Sie unsere Plattform nicht nutzen. Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu aktualisieren."
+        ]
+      },
+      {
+        "id": "platform-role",
+        "title": "2. Rolle von Afrobraids Connect",
+        "paragraphs": [
+          "Afrobraids Connect fungiert als Vermittlungsplattform, die unabhängige Braiderinnen mit Kunden verbindet.",
+          "Wir bieten keine direkten Flechtdienste an. Verträge über Dienstleistungen kommen direkt zwischen der Braiderin und dem Kunden zustande. Wir haften nicht für die Qualität, Sicherheit oder Legalität der angebotenen Dienstleistungen."
+        ]
+      },
+      {
+        "id": "user-accounts",
+        "title": "3. Benutzerkonten",
+        "paragraphs": [
+          "Um bestimmte Funktionen der Plattform nutzen zu können, müssen Sie sich für ein Konto registrieren.",
+          "Sie stimmen zu, während des Registrierungsprozesses genaue, aktuelle und vollständige Informationen anzugeben und diese Informationen zu aktualisieren, um sie genau, aktuell und vollständig zu halten.",
+          "Sie sind für den Schutz Ihres Passworts und für alle Aktivitäten verantwortlich, die unter Ihrem Konto stattfinden."
+        ]
+      },
+      {
+        "id": "bookings-payments",
+        "title": "4. Buchungen und Zahlungen",
+        "paragraphs": [
+          "Wenn Sie eine Buchung vornehmen, stimmen Sie zu, den an der Kasse angegebenen Gesamtbetrag zu zahlen, einschließlich der Servicegebühr und eventuell anfallender Plattformgebühren.",
+          "Zahlungen werden sicher über unseren Drittanbieter für Zahlungen, Stripe, abgewickelt. Wir speichern nicht Ihre vollständigen Kreditkartendaten."
+        ]
+      },
+      {
+        "id": "cancellations",
+        "title": "5. Stornierungen und Rückerstattungen",
+        "paragraphs": [
+          "Stornierungsbedingungen werden von den einzelnen Braiderinnen festgelegt und während des Buchungsprozesses angezeigt.",
+          "Plattformgebühren sind im Allgemeinen nicht erstattungsfähig, es sei denn, die Stornierung wird von der Braiderin initiiert oder es liegen bestimmte außergewöhnliche Umstände vor."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "6. Haftungsbeschränkung",
+        "paragraphs": [
+          "Soweit gesetzlich zulässig, haftet Afrobraids Connect nicht für indirekte, zufällige, besondere, Folge- oder Strafschäden oder für entgangenen Gewinn oder Umsatz."
+        ]
+      }
+    ]
   }
 }

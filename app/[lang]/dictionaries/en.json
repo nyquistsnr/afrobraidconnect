@@ -358,6 +358,12 @@
       "forgotPasswordSuccess": "If that email exists, a reset code is on its way.",
       "resetPasswordSuccess": "Password reset! Please sign in with your new password.",
       "logoutSuccess": "You've been signed out."
+    },
+    "footer": {
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service",
+      "rightsReserved": "All rights reserved.",
+      "about": "About"
     }
   },
   "login": {
@@ -703,5 +709,125 @@
       "title": "Coming soon",
       "subtitle": "This step isn't ready yet — check back shortly."
     }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: August 2026",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "1. Introduction",
+        "paragraphs": [
+          "Welcome to Afrobraids Connect. We respect your privacy and are committed to protecting your personal data.",
+          "This privacy policy informs you about how we look after your personal data when you visit our website and tells you about your privacy rights and how the law protects you. This policy complies with the General Data Protection Regulation (GDPR)."
+        ]
+      },
+      {
+        "id": "data-we-collect",
+        "title": "2. The Data We Collect About You",
+        "paragraphs": [
+          "Personal data, or personal information, means any information about an individual from which that person can be identified.",
+          "We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:",
+          "Identity Data: includes first name, last name, username or similar identifier.",
+          "Contact Data: includes billing address, email address and telephone numbers.",
+          "Financial Data: includes bank account and payment card details (processed securely via Stripe).",
+          "Transaction Data: includes details about payments to and from you and other details of services you have purchased from us."
+        ]
+      },
+      {
+        "id": "how-we-use-data",
+        "title": "3. How We Use Your Personal Data",
+        "paragraphs": [
+          "We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:",
+          "Where we need to perform the contract we are about to enter into or have entered into with you (such as processing your bookings).",
+          "Where it is necessary for our legitimate interests and your interests and fundamental rights do not override those interests.",
+          "Where we need to comply with a legal obligation."
+        ]
+      },
+      {
+        "id": "data-sharing",
+        "title": "4. Disclosures of Your Personal Data",
+        "paragraphs": [
+          "We may share your personal data with internal third parties and external third parties, such as payment service providers (e.g., Stripe) to facilitate transactions.",
+          "When you book a service, necessary contact and identity data will be shared with the respective braider to fulfill the service contract.",
+          "We require all third parties to respect the security of your personal data and to treat it in accordance with the law."
+        ]
+      },
+      {
+        "id": "data-security",
+        "title": "5. Data Security",
+        "paragraphs": [
+          "We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorised way, altered or disclosed.",
+          "In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know."
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "6. Your Legal Rights",
+        "paragraphs": [
+          "Under certain circumstances, you have rights under data protection laws in relation to your personal data. These include the right to:",
+          "Request access to your personal data.",
+          "Request correction of your personal data.",
+          "Request erasure of your personal data.",
+          "Object to processing of your personal data.",
+          "Request restriction of processing your personal data.",
+          "Request transfer of your personal data."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated: August 2026",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "1. Acceptance of Terms",
+        "paragraphs": [
+          "By accessing and using the Afrobraids Connect platform, you agree to be bound by these Terms of Service.",
+          "If you do not agree to these terms, you must not use our platform. We reserve the right to update these terms at any time."
+        ]
+      },
+      {
+        "id": "platform-role",
+        "title": "2. Role of Afrobraids Connect",
+        "paragraphs": [
+          "Afrobraids Connect acts as an intermediary platform connecting independent braiders with clients.",
+          "We do not provide braiding services directly. Contracts for services are made directly between the braider and the client. We are not liable for the quality, safety, or legality of the services provided."
+        ]
+      },
+      {
+        "id": "user-accounts",
+        "title": "3. User Accounts",
+        "paragraphs": [
+          "To use certain features of the platform, you must register for an account.",
+          "You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.",
+          "You are responsible for safeguarding your password and for all activities that occur under your account."
+        ]
+      },
+      {
+        "id": "bookings-payments",
+        "title": "4. Bookings and Payments",
+        "paragraphs": [
+          "When you make a booking, you agree to pay the total amount presented at checkout, including the service fee and any applicable platform fees.",
+          "Payments are processed securely via our third-party payment provider, Stripe. We do not store your full credit card information."
+        ]
+      },
+      {
+        "id": "cancellations",
+        "title": "5. Cancellations and Refunds",
+        "paragraphs": [
+          "Cancellation policies are set by the individual braiders and are displayed during the booking process.",
+          "Platform fees are generally non-refundable unless the cancellation is initiated by the braider or under specific exceptional circumstances."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "6. Limitation of Liability",
+        "paragraphs": [
+          "To the maximum extent permitted by law, Afrobraids Connect shall not be liable for any indirect, incidental, special, consequential or punitive damages, or any loss of profits or revenues."
+        ]
+      }
+    ]
   }
 }

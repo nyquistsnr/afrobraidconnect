@@ -358,6 +358,12 @@
       "forgotPasswordSuccess": "Si ce compte existe, un code de réinitialisation est en route.",
       "resetPasswordSuccess": "Mot de passe réinitialisé ! Veuillez vous connecter avec votre nouveau mot de passe.",
       "logoutSuccess": "Vous avez été déconnecté."
+    },
+    "footer": {
+      "privacyPolicy": "Politique de confidentialité",
+      "termsOfService": "Conditions d'utilisation",
+      "rightsReserved": "Tous droits réservés.",
+      "about": "À propos"
     }
   },
   "login": {
@@ -703,5 +709,125 @@
       "title": "Bientôt disponible",
       "subtitle": "Cette étape n'est pas encore prête — revenez bientôt."
     }
+  },
+  "privacy": {
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour : Août 2026",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "1. Introduction",
+        "paragraphs": [
+          "Bienvenue sur Afrobraids Connect. Nous respectons votre vie privée et nous nous engageons à protéger vos données personnelles.",
+          "Cette politique de confidentialité vous informe de la manière dont nous traitons vos données personnelles lorsque vous visitez notre site Web et vous renseigne sur vos droits en matière de confidentialité et sur la manière dont la loi vous protège. Cette politique est conforme au Règlement Général sur la Protection des Données (RGPD)."
+        ]
+      },
+      {
+        "id": "data-we-collect",
+        "title": "2. Les données que nous collectons à votre sujet",
+        "paragraphs": [
+          "Les données personnelles, ou informations personnelles, désignent toute information concernant un individu à partir de laquelle cette personne peut être identifiée.",
+          "Nous pouvons collecter, utiliser, stocker et transférer différents types de données personnelles vous concernant, que nous avons regroupées comme suit :",
+          "Données d'identité : comprennent le prénom, le nom de famille, le nom d'utilisateur ou un identifiant similaire.",
+          "Données de contact : comprennent l'adresse de facturation, l'adresse e-mail et les numéros de téléphone.",
+          "Données financières : comprennent les détails du compte bancaire et de la carte de paiement (traités en toute sécurité via Stripe).",
+          "Données de transaction : comprennent des détails sur les paiements à destination et en provenance de vous et d'autres détails sur les services que vous avez achetés chez nous."
+        ]
+      },
+      {
+        "id": "how-we-use-data",
+        "title": "3. Comment nous utilisons vos données personnelles",
+        "paragraphs": [
+          "Nous n'utiliserons vos données personnelles que lorsque la loi nous y autorise. Le plus souvent, nous utiliserons vos données personnelles dans les circonstances suivantes :",
+          "Lorsque nous devons exécuter le contrat que nous sommes sur le point de conclure ou que nous avons conclu avec vous (comme le traitement de vos réservations).",
+          "Lorsque cela est nécessaire pour nos intérêts légitimes et que vos intérêts et droits fondamentaux ne prévalent pas sur ces intérêts.",
+          "Lorsque nous devons nous conformer à une obligation légale."
+        ]
+      },
+      {
+        "id": "data-sharing",
+        "title": "4. Divulgation de vos données personnelles",
+        "paragraphs": [
+          "Nous pouvons partager vos données personnelles avec des tiers internes et des tiers externes, tels que des prestataires de services de paiement (par exemple, Stripe) pour faciliter les transactions.",
+          "Lorsque vous réservez un service, les données de contact et d'identité nécessaires seront partagées avec la tresseuse concernée pour remplir le contrat de service.",
+          "Nous exigeons de tous les tiers qu'ils respectent la sécurité de vos données personnelles et qu'ils les traitent conformément à la loi."
+        ]
+      },
+      {
+        "id": "data-security",
+        "title": "5. Sécurité des données",
+        "paragraphs": [
+          "Nous avons mis en place des mesures de sécurité appropriées pour éviter que vos données personnelles ne soient accidentellement perdues, utilisées ou consultées de manière non autorisée, modifiées ou divulguées.",
+          "De plus, nous limitons l'accès à vos données personnelles aux employés, agents, sous-traitants et autres tiers qui ont un besoin professionnel de les connaître."
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "6. Vos droits légaux",
+        "paragraphs": [
+          "Dans certaines circonstances, vous avez des droits en vertu des lois sur la protection des données concernant vos données personnelles. Ceux-ci incluent le droit de :",
+          "Demander l'accès à vos données personnelles.",
+          "Demander la correction de vos données personnelles.",
+          "Demander l'effacement de vos données personnelles.",
+          "Vous opposer au traitement de vos données personnelles.",
+          "Demander la restriction du traitement de vos données personnelles.",
+          "Demander le transfert de vos données personnelles."
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Conditions d'utilisation",
+    "lastUpdated": "Dernière mise à jour : Août 2026",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "1. Acceptation des conditions",
+        "paragraphs": [
+          "En accédant et en utilisant la plateforme Afrobraids Connect, vous acceptez d'être lié par ces Conditions d'utilisation.",
+          "Si vous n'acceptez pas ces conditions, vous ne devez pas utiliser notre plateforme. Nous nous réservons le droit de mettre à jour ces conditions à tout moment."
+        ]
+      },
+      {
+        "id": "platform-role",
+        "title": "2. Rôle d'Afrobraids Connect",
+        "paragraphs": [
+          "Afrobraids Connect agit en tant que plateforme intermédiaire mettant en relation des tresseuses indépendantes avec des clients.",
+          "Nous ne fournissons pas directement de services de tressage. Les contrats de services sont conclus directement entre la tresseuse et le client. Nous ne sommes pas responsables de la qualité, de la sécurité ou de la légalité des services fournis."
+        ]
+      },
+      {
+        "id": "user-accounts",
+        "title": "3. Comptes d'utilisateurs",
+        "paragraphs": [
+          "Pour utiliser certaines fonctionnalités de la plateforme, vous devez vous inscrire pour créer un compte.",
+          "Vous acceptez de fournir des informations précises, actuelles et complètes lors du processus d'inscription et de mettre à jour ces informations pour qu'elles restent précises, actuelles et complètes.",
+          "Vous êtes responsable de la protection de votre mot de passe et de toutes les activités qui se produisent sous votre compte."
+        ]
+      },
+      {
+        "id": "bookings-payments",
+        "title": "4. Réservations et paiements",
+        "paragraphs": [
+          "Lorsque vous effectuez une réservation, vous acceptez de payer le montant total présenté lors de la validation, y compris les frais de service et les frais de plateforme applicables.",
+          "Les paiements sont traités en toute sécurité via notre fournisseur de paiement tiers, Stripe. Nous ne stockons pas les informations complètes de votre carte de crédit."
+        ]
+      },
+      {
+        "id": "cancellations",
+        "title": "5. Annulations et remboursements",
+        "paragraphs": [
+          "Les politiques d'annulation sont définies par les tresseuses individuelles et sont affichées lors du processus de réservation.",
+          "Les frais de plateforme ne sont généralement pas remboursables, sauf si l'annulation est initiée par la tresseuse ou dans des circonstances exceptionnelles spécifiques."
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "6. Limitation de responsabilité",
+        "paragraphs": [
+          "Dans toute la mesure permise par la loi, Afrobraids Connect ne sera pas responsable des dommages indirects, accessoires, spéciaux, consécutifs ou punitifs, ou de toute perte de profits ou de revenus."
+        ]
+      }
+    ]
   }
 }
