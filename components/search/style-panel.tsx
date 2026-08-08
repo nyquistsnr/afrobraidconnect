@@ -38,12 +38,13 @@ export function StylePanel({
 
   // If there's a selected style and no search query, ensure it appears at the top
   if (selectedStyle && !debouncedQuery) {
-    if (!items.find((item) => item.id === selectedStyle.id)) {
+    const existingItem = items.find((item) => item.id === selectedStyle.id);
+    if (!existingItem) {
       items = [selectedStyle, ...items];
     } else {
-      // Move to top if already in the list
+      // Move to top if already in the list, keeping the existing item which has the image
       items = [
-        selectedStyle,
+        existingItem,
         ...items.filter((item) => item.id !== selectedStyle.id),
       ];
     }
