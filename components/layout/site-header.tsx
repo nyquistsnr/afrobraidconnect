@@ -41,6 +41,7 @@ export interface SiteHeaderDict {
   becomeABraider: string;
   signUp: string;
   logIn: string;
+  logOut: string;
   helpCenter: string;
   menuLabel: string;
   search: SearchDict;
@@ -231,6 +232,7 @@ export function SiteHeader({
           becomeABraider: dict.becomeABraider,
           signUp: dict.signUp,
           logIn: dict.logIn,
+          logOut: dict.logOut,
           helpCenter: dict.helpCenter,
         }}
         common={common}

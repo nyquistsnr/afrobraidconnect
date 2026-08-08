@@ -12,6 +12,7 @@
     "becomeABraider": "Devenir tresseuse",
     "signUp": "S'inscrire",
     "logIn": "Se connecter",
+    "logOut": "Se déconnecter",
     "helpCenter": "Centre d'aide",
     "menuLabel": "Ouvrir le menu",
     "mobileNav": {
@@ -30,6 +31,7 @@
         "searchPlaceholder": "Rechercher une destination",
         "nearbyLabel": "À proximité",
         "nearbyDescription": "Trouvez des tresseuses près de vous",
+        "recentHeading": "Recherches récentes",
         "suggestedHeading": "Destinations suggérées",
         "searchResultsHeading": "Résultats de recherche",
         "noResults": "Aucun lieu ne correspond à votre recherche.",

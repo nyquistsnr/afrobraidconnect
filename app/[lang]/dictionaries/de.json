@@ -12,6 +12,7 @@
     "becomeABraider": "Braider werden",
     "signUp": "Registrieren",
     "logIn": "Anmelden",
+    "logOut": "Abmelden",
     "helpCenter": "Hilfebereich",
     "menuLabel": "Menü öffnen",
     "mobileNav": {
@@ -30,6 +31,7 @@
         "searchPlaceholder": "Reiseziel suchen",
         "nearbyLabel": "In der Nähe",
         "nearbyDescription": "Braider in deiner Nähe finden",
+        "recentHeading": "Letzte Suchen",
         "suggestedHeading": "Vorgeschlagene Reiseziele",
         "searchResultsHeading": "Suchergebnisse",
         "noResults": "Keine Orte entsprechen deiner Suche.",

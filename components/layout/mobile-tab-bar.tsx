@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   Compass,
   CalendarCheck2,
   MessageCircle,
   CircleUserRound,
+  LogIn,
+  LogOut,
+  Loader2,
   X,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
@@ -26,6 +31,7 @@ export interface MobileTabBarDict {
   becomeABraider: string;
   signUp: string;
   logIn: string;
+  logOut: string;
   helpCenter: string;
 }
 
@@ -43,6 +49,10 @@ export function MobileTabBar({
   common: Dictionary["common"];
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
 
   const tabs = [
     {
@@ -52,21 +62,34 @@ export function MobileTabBar({
       href: `/${lang}`,
       active: true,
     },
-    {
-      key: "bookings",
-      label: dict.bookings,
-      icon: CalendarCheck2,
-      href: "#",
-      active: false,
-    },
-    {
-      key: "messages",
-      label: dict.messages,
-      icon: MessageCircle,
-      href: "#",
-      active: false,
-    },
-  ] as const;
+    ...(isAuthenticated
+      ? ([
+          {
+            key: "bookings",
+            label: dict.bookings,
+            icon: CalendarCheck2,
+            href: "#",
+            active: false,
+          },
+          {
+            key: "messages",
+            label: dict.messages,
+            icon: MessageCircle,
+            href: "#",
+            active: false,
+          },
+        ] as const)
+      : []),
+  ];
+
+  async function handleLogout() {
+    setLoggingOut(true);
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    setLoggingOut(false);
+    setProfileOpen(false);
+    router.push(`/${lang}`);
+    router.refresh();
+  }
 
   return (
     <>
@@ -92,8 +115,12 @@ export function MobileTabBar({
           aria-expanded={profileOpen}
           className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
-          <CircleUserRound className="size-5" />
-          {dict.profile}
+          {isAuthenticated ? (
+            <CircleUserRound className="size-5" />
+          ) : (
+            <LogIn className="size-5" />
+          )}
+          {isAuthenticated ? dict.profile : dict.logIn}
         </button>
       </nav>
 
@@ -108,7 +135,9 @@ export function MobileTabBar({
             id="mobile-profile-title"
             className="text-lg font-semibold text-foreground"
           >
-            {dict.profileTitle}
+            {isAuthenticated
+              ? (session?.user?.firstName ?? dict.profileTitle)
+              : dict.profileTitle}
           </h2>
           <button
             type="button"
@@ -121,22 +150,26 @@ export function MobileTabBar({
         </div>
 
         <div className="mt-5 flex flex-col gap-1">
-          <Link
-            href={`/${lang}/signup`}
-            onClick={() => setProfileOpen(false)}
-            className="rounded-xl px-3 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
-          >
-            {dict.signUp}
-          </Link>
-          <Link
-            href={`/${lang}/login`}
-            onClick={() => setProfileOpen(false)}
-            className="rounded-xl px-3 py-3 text-sm text-foreground transition-colors hover:bg-border/40"
-          >
-            {dict.logIn}
-          </Link>
+          {!isAuthenticated && (
+            <>
+              <Link
+                href={`/${lang}/signup`}
+                onClick={() => setProfileOpen(false)}
+                className="rounded-xl px-3 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
+              >
+                {dict.signUp}
+              </Link>
+              <Link
+                href={`/${lang}/login`}
+                onClick={() => setProfileOpen(false)}
+                className="rounded-xl px-3 py-3 text-sm text-foreground transition-colors hover:bg-border/40"
+              >
+                {dict.logIn}
+              </Link>
 
-          <div className="my-2 border-t border-border" />
+              <div className="my-2 border-t border-border" />
+            </>
+          )}
 
           <div className="flex items-center justify-between rounded-xl px-3 py-1">
             <span className="text-sm text-foreground">
@@ -171,6 +204,25 @@ export function MobileTabBar({
           >
             {dict.helpCenter}
           </Link>
+
+          {isAuthenticated && (
+            <>
+              <div className="my-2 border-t border-border" />
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm text-foreground transition-colors hover:bg-border/40 disabled:opacity-60"
+              >
+                {loggingOut ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <LogOut className="size-4" />
+                )}
+                {dict.logOut}
+              </button>
+            </>
+          )}
         </div>
       </Modal>
     </>

@@ -12,6 +12,7 @@
     "becomeABraider": "Become a braider",
     "signUp": "Sign up",
     "logIn": "Log in",
+    "logOut": "Log out",
     "helpCenter": "Help Center",
     "menuLabel": "Open menu",
     "mobileNav": {
@@ -30,6 +31,7 @@
         "searchPlaceholder": "Search destinations",
         "nearbyLabel": "Nearby",
         "nearbyDescription": "Find braiders around you",
+        "recentHeading": "Recent searches",
         "suggestedHeading": "Suggested destinations",
         "searchResultsHeading": "Search results",
         "noResults": "No places match your search.",

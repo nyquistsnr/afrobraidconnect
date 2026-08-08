@@ -22,6 +22,7 @@ export interface WherePanelDict {
   searchPlaceholder: string;
   nearbyLabel: string;
   nearbyDescription: string;
+  recentHeading: string;
   suggestedHeading: string;
   searchResultsHeading: string;
   noResults: string;

@@ -3,9 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useQuery } from "@tanstack/react-query";
-import { LocateFixed, Search, MapPin, Loader2, Check } from "lucide-react";
+import { LocateFixed, Search, MapPin, Loader2, Check, History } from "lucide-react";
 import { searchDestinations } from "@/lib/search-destinations";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { addRecentLocation, getRecentLocations } from "@/lib/recent-locations";
 import type { SelectedLocation, WherePanelDict } from "@/components/search/types";
 
 export function WherePanel({
@@ -25,6 +26,16 @@ export function WherePanel({
   const [geoState, setGeoState] = useState<"idle" | "loading" | "error">(
     "idle"
   );
+  const [recentLocations, setRecentLocations] = useState<SelectedLocation[]>([]);
+
+  useEffect(() => {
+    setRecentLocations(getRecentLocations());
+  }, []);
+
+  function selectLocation(location: SelectedLocation) {
+    setRecentLocations(addRecentLocation(location));
+    onSelect(location);
+  }
 
   // Real-world place search (any city worldwide), layered on top of the
   // curated suggestions below — mirrors Airbnb letting you type any
@@ -106,7 +117,7 @@ export function WherePanel({
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setGeoState("idle");
-        onSelect({
+        selectLocation({
           label: dict.nearbyLabel,
           isNearby: true,
           lat: position.coords.latitude,
@@ -122,7 +133,7 @@ export function WherePanel({
     prediction: google.maps.places.AutocompletePrediction
   ) {
     if (!placesService) {
-      onSelect({ label: prediction.description });
+      selectLocation({ label: prediction.description });
       return;
     }
     placesService.getDetails(
@@ -136,13 +147,13 @@ export function WherePanel({
           status === google.maps.places.PlacesServiceStatus.OK &&
           place?.geometry?.location
         ) {
-          onSelect({
+          selectLocation({
             label: prediction.description,
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng(),
           });
         } else {
-          onSelect({ label: prediction.description });
+          selectLocation({ label: prediction.description });
         }
         sessionTokenRef.current = placesLibrary
           ? new placesLibrary.AutocompleteSessionToken()
@@ -169,6 +180,50 @@ export function WherePanel({
           <Loader2 className="size-4 shrink-0 animate-spin text-icon-muted" />
         )}
       </div>
+
+      {!query.trim() && recentLocations.length > 0 && (
+        <>
+          <p className="mt-5 mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            {dict.recentHeading}
+          </p>
+          <ul className="-mx-2 flex flex-col">
+            {recentLocations.map((recent) => {
+              const isSelected =
+                selectedIsNearby === recent.isNearby &&
+                selectedLabel === recent.label;
+              return (
+                <li key={recent.label}>
+                  <button
+                    type="button"
+                    onClick={() => selectLocation(recent)}
+                    aria-pressed={isSelected}
+                    className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
+                      isSelected ? "bg-brand/5" : "hover:bg-border/40"
+                    }`}
+                  >
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-border/50 text-foreground">
+                      {recent.isNearby ? (
+                        <LocateFixed className="size-5" />
+                      ) : (
+                        <History className="size-5" />
+                      )}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-semibold text-foreground">
+                      {recent.label}
+                    </span>
+                    {isSelected && (
+                      <Check
+                        className="size-4 shrink-0 text-brand"
+                        strokeWidth={3}
+                      />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
 
       <p className="mt-5 mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         {dict.suggestedHeading}
@@ -212,7 +267,7 @@ export function WherePanel({
             <li key={destination.id}>
               <button
                 type="button"
-                onClick={() => onSelect({ label })}
+                onClick={() => selectLocation({ label })}
                 aria-pressed={isSelected}
                 className={`flex w-full items-center gap-3.5 rounded-xl px-2 py-2.5 text-left transition-colors ${
                   isSelected ? "bg-brand/5" : "hover:bg-border/40"
