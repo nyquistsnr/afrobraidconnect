@@ -32,7 +32,7 @@ function LanguageSwitcherInner({
     segments[1] = nextLang;
     const nextPath = segments.join("/") || "/";
     const query = searchParams.toString();
-    router.push(query ? `${nextPath}?${query}` : nextPath);
+    router.replace(query ? `${nextPath}?${query}` : nextPath);
   }
 
   const CurrentFlag = flags[lang];
