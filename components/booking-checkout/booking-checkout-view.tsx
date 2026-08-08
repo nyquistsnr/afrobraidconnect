@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -66,6 +66,7 @@ export function BookingCheckoutView({
   errorsDict: ErrorsDict;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const resumeBookingId = searchParams.get("booking_id");
   const { data: session, status: sessionStatus } = useSession();
 
@@ -213,6 +214,12 @@ export function BookingCheckoutView({
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
       <Link
         href={profileHref}
+        onClick={(e) => {
+          if (window.history.length > 1) {
+            e.preventDefault();
+            router.back();
+          }
+        }}
         className="w-fit text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       >
         ← {dict.backToProfile}
@@ -244,6 +251,12 @@ export function BookingCheckoutView({
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Link
               href={profileHref}
+              onClick={(e) => {
+                if (window.history.length > 1) {
+                  e.preventDefault();
+                  router.back();
+                }
+              }}
               className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
             >
               {dict.backToProfileCta}
