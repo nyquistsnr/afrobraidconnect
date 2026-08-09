@@ -379,10 +379,25 @@
       "logoutSuccess": "Sie wurden abgemeldet."
     },
     "footer": {
-      "privacyPolicy": "Datenschutzrichtlinie",
+      "legal": "Rechtliches",
+      "privacyPolicy": "Datenschutz",
       "termsOfService": "Nutzungsbedingungen",
-      "rightsReserved": "Alle Rechte vorbehalten.",
-      "about": "Über uns"
+      "termsOfUse": "Nutzungsbedingungen",
+      "forBusiness": "Für Unternehmen",
+      "forPartners": "Für Partner",
+      "pricing": "Preise",
+      "company": "Unternehmen",
+      "about": "Über uns",
+      "contact": "Kontakt",
+      "blog": "Blog",
+      "sitemap": "Sitemap",
+      "howItWorks": "So funktioniert's",
+      "connectWithUs": "Folgen Sie uns",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "rightsReserved": "Alle Rechte vorbehalten."
     }
   },
   "login": {
@@ -1121,6 +1136,12 @@
           "answer": "Ja! Wir bieten Support per E-Mail und Live-Chat für Kundinnen und Braiderinnen."
         }
       ]
+    },
+    "finalCta": {
+      "imageAlt": "Eine lächelnde Frau mit geflochtenen Haaren",
+      "title": "Dein nächster großartiger Look oder deine nächste Geschäftschance wartet.",
+      "findBraiderCta": "Braiderin finden",
+      "joinBraiderCta": "Als Braiderin beitreten"
     }
   }
 }

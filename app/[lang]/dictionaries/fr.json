@@ -379,10 +379,25 @@
       "logoutSuccess": "Vous avez été déconnecté."
     },
     "footer": {
+      "legal": "Légal",
       "privacyPolicy": "Politique de confidentialité",
-      "termsOfService": "Conditions d'utilisation",
-      "rightsReserved": "Tous droits réservés.",
-      "about": "À propos"
+      "termsOfService": "Conditions de service",
+      "termsOfUse": "Conditions d'utilisation",
+      "forBusiness": "Pour les entreprises",
+      "forPartners": "Pour les partenaires",
+      "pricing": "Tarifs",
+      "company": "Entreprise",
+      "about": "À propos",
+      "contact": "Contact",
+      "blog": "Blog",
+      "sitemap": "Plan du site",
+      "howItWorks": "Comment ça marche",
+      "connectWithUs": "Rejoignez-nous",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "rightsReserved": "Tous droits réservés."
     }
   },
   "login": {
@@ -1121,6 +1136,12 @@
           "answer": "Oui ! Nous offrons un support par e-mail et chat en direct pour les clientes et les tresseuses."
         }
       ]
+    },
+    "finalCta": {
+      "imageAlt": "Une femme souriante aux cheveux tressés",
+      "title": "Votre prochain look ou votre prochaine opportunité d'affaires vous attend.",
+      "findBraiderCta": "Trouver une tresseuse",
+      "joinBraiderCta": "Rejoindre en tant que tresseuse"
     }
   }
 }

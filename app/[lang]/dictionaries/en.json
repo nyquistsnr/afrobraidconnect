@@ -379,10 +379,25 @@
       "logoutSuccess": "You've been signed out."
     },
     "footer": {
+      "legal": "Legal",
       "privacyPolicy": "Privacy Policy",
       "termsOfService": "Terms of Service",
-      "rightsReserved": "All rights reserved.",
-      "about": "About"
+      "termsOfUse": "Terms of Use",
+      "forBusiness": "For Business",
+      "forPartners": "For Partners",
+      "pricing": "Pricing",
+      "company": "Company",
+      "about": "About",
+      "contact": "Contact",
+      "blog": "Blog",
+      "sitemap": "Sitemap",
+      "howItWorks": "How it Works",
+      "connectWithUs": "Connect With Us",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "rightsReserved": "All rights reserved."
     }
   },
   "login": {
@@ -1121,6 +1136,12 @@
           "answer": "Yes! We provide support via email and live chat to assist both customers and braiders."
         }
       ]
+    },
+    "finalCta": {
+      "imageAlt": "A woman with braided hair smiling",
+      "title": "Your next great look or business opportunity is waiting.",
+      "findBraiderCta": "Find a Braider",
+      "joinBraiderCta": "Join as a Braider"
     }
   }
 }
