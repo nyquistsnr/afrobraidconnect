@@ -990,6 +990,47 @@
       "dashboardImageAlt": "Un aperçu du tableau de bord de réservation pour tresseuses",
       "dashboardCalloutTitle": "Votre agenda, toujours à jour.",
       "dashboardCalloutSubtitle": "Nouvelles réservations, reports et paiements se synchronisent automatiquement — plus de doubles réservations, plus de suppositions."
+    },
+    "testimonials": {
+      "badge": "Avis",
+      "titleBeforeStars": "Noté",
+      "titleAfterStars": "par nos clientes",
+      "subtitle": "Adopté par des milliers de tresseuses.",
+      "previousLabel": "Avis précédent",
+      "nextLabel": "Avis suivant",
+      "avatarAlt": "Photo de {name}",
+      "reviews": [
+        {
+          "name": "James Kein",
+          "roleLabel": "Tresseuse",
+          "rating": 3,
+          "quote": "AfroBraid rend la réservation si simple et rapide pour mes clientes !"
+        },
+        {
+          "name": "Teni O.",
+          "roleLabel": "Cliente",
+          "rating": 5,
+          "quote": "AfroBraid m'a aidée à développer ma clientèle. Avant je comptais uniquement sur les DM Instagram, maintenant j'obtiens plus de réservations avec moins de stress."
+        },
+        {
+          "name": "Amina K.",
+          "roleLabel": "Tresseuse",
+          "rating": 4,
+          "quote": "Trouver une bonne tresseuse était autrefois si stressant. Avec AfroBraid, j'ai réservé Amina à Neukölln et j'adore mes nouvelles torsades ! Un processus fluide du début à la fin."
+        },
+        {
+          "name": "Sarah M.",
+          "roleLabel": "Cliente",
+          "rating": 5,
+          "quote": "Réserver mes tresses n'a jamais été aussi simple. J'ai trouvé ma tresseuse en quelques minutes et tout le processus s'est déroulé sans accroc."
+        },
+        {
+          "name": "David O.",
+          "roleLabel": "Tresseur",
+          "rating": 4,
+          "quote": "Mon planning a enfin du sens. Les clientes réservent directement et je passe moins de temps à échanger des messages."
+        }
+      ]
     }
   }
 }

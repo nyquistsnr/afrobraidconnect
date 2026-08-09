@@ -9,6 +9,10 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { HomeHero, type HomeHeroDict } from "@/components/home/home-hero";
 import { HowItWorks, type HowItWorksDict } from "@/components/home/how-it-works";
 import { GrowBusiness, type GrowBusinessDict } from "@/components/home/grow-business";
+import {
+  TestimonialsCarousel,
+  type TestimonialsDict,
+} from "@/components/home/testimonials-carousel";
 import type { NotificationBellDict } from "@/components/notifications/types";
 
 // Owns the hero<->header search "docked" signal so the header (rendered
@@ -23,6 +27,7 @@ export function HomePageShell({
   heroDict,
   howItWorksDict,
   growBusinessDict,
+  testimonialsDict,
   footerDict,
 }: {
   lang: Locale;
@@ -32,6 +37,7 @@ export function HomePageShell({
   heroDict: HomeHeroDict;
   howItWorksDict: HowItWorksDict;
   growBusinessDict: GrowBusinessDict;
+  testimonialsDict: TestimonialsDict;
   footerDict: Dictionary["common"]["footer"];
 }) {
   const scrolled = useScrolled();
@@ -59,6 +65,7 @@ export function HomePageShell({
         />
         <HowItWorks dict={howItWorksDict} lang={lang} />
         <GrowBusiness dict={growBusinessDict} />
+        <TestimonialsCarousel dict={testimonialsDict} />
       </main>
       <SiteFooter lang={lang} dict={footerDict} />
     </div>

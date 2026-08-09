@@ -24,6 +24,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       }}
       howItWorksDict={dict.home.howItWorks}
       growBusinessDict={dict.home.growBusiness}
+      testimonialsDict={dict.home.testimonials}
       footerDict={dict.common.footer}
     />
   );

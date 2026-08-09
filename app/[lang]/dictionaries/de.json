@@ -990,6 +990,47 @@
       "dashboardImageAlt": "Eine Vorschau des Buchungs-Dashboards für Braiderinnen",
       "dashboardCalloutTitle": "Ihr Kalender, immer aktuell.",
       "dashboardCalloutSubtitle": "Neue Buchungen, Terminverschiebungen und Zahlungen werden automatisch synchronisiert — keine Doppelbuchungen, kein Rätselraten."
+    },
+    "testimonials": {
+      "badge": "Bewertungen",
+      "titleBeforeStars": "Mit",
+      "titleAfterStars": "von Kundinnen bewertet",
+      "subtitle": "Geliebt von tausenden Braiderinnen.",
+      "previousLabel": "Vorherige Bewertung",
+      "nextLabel": "Nächste Bewertung",
+      "avatarAlt": "Foto von {name}",
+      "reviews": [
+        {
+          "name": "James Kein",
+          "roleLabel": "Braiderin",
+          "rating": 3,
+          "quote": "AfroBraid macht das Buchen für meine Kundinnen so einfach und schnell!"
+        },
+        {
+          "name": "Teni O.",
+          "roleLabel": "Kundin",
+          "rating": 5,
+          "quote": "AfroBraid hat mir geholfen, meinen Kundenstamm auszubauen. Früher habe ich mich nur auf Instagram-DMs verlassen, jetzt bekomme ich mehr Buchungen mit weniger Stress."
+        },
+        {
+          "name": "Amina K.",
+          "roleLabel": "Braiderin",
+          "rating": 4,
+          "quote": "Eine gute Braiderin zu finden war früher so stressig. Mit AfroBraid habe ich Amina in Neukölln gebucht und liebe meine neuen Twists! Alles lief reibungslos von Anfang bis Ende."
+        },
+        {
+          "name": "Sarah M.",
+          "roleLabel": "Kundin",
+          "rating": 5,
+          "quote": "Meine Braids zu buchen war noch nie so einfach. Ich habe meine Braiderin in wenigen Minuten gefunden und der ganze Ablauf fühlte sich so unkompliziert an."
+        },
+        {
+          "name": "David O.",
+          "roleLabel": "Braider",
+          "rating": 4,
+          "quote": "Mein Terminplan macht endlich Sinn. Kundinnen buchen direkt und ich verbringe weniger Zeit mit Hin-und-her-Nachrichten."
+        }
+      ]
     }
   }
 }

@@ -19,6 +19,7 @@
   --how-it-works-background: #1a1310;
   --how-it-works-foreground: #f5f1ee;
   --how-it-works-muted-foreground: #b9afa7;
+  --testimonial-muted-background: #dba989;
 }
 
 @theme inline {
@@ -37,6 +38,7 @@
   --color-how-it-works: var(--how-it-works-background);
   --color-how-it-works-foreground: var(--how-it-works-foreground);
   --color-how-it-works-muted-foreground: var(--how-it-works-muted-foreground);
+  --color-testimonial-muted: var(--testimonial-muted-background);
   --font-sans: var(--font-fira-sans), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
@@ -57,6 +59,7 @@
     --brand-hover: #e39c74;
     --brand-foreground: #171717;
     --hero-background: oklch(21% 0.012 56.314);
+    --testimonial-muted-background: #6b4632;
   }
 }
 
@@ -73,6 +76,7 @@
   --brand-hover: #e39c74;
   --brand-foreground: #171717;
   --hero-background: oklch(21% 0.012 56.314);
+  --testimonial-muted-background: #6b4632;
 }
 
 body {

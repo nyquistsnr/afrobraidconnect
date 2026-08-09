@@ -990,6 +990,47 @@
       "dashboardImageAlt": "A preview of the braider booking dashboard",
       "dashboardCalloutTitle": "Your calendar, always up to date.",
       "dashboardCalloutSubtitle": "New bookings, reschedules, and payments sync automatically — no double-booking, no guesswork."
+    },
+    "testimonials": {
+      "badge": "Reviews",
+      "titleBeforeStars": "Rated",
+      "titleAfterStars": "by Customers",
+      "subtitle": "Loved by thousands of braiders.",
+      "previousLabel": "Previous review",
+      "nextLabel": "Next review",
+      "avatarAlt": "{name}'s photo",
+      "reviews": [
+        {
+          "name": "James Kein",
+          "roleLabel": "Braider",
+          "rating": 3,
+          "quote": "AfroBraid makes booking so simple and fast for my clients!"
+        },
+        {
+          "name": "Teni O.",
+          "roleLabel": "Customer",
+          "rating": 5,
+          "quote": "AfroBraid has helped me grow my client base. I used to rely only on Instagram DMs, now I get more bookings with less stress."
+        },
+        {
+          "name": "Amina K.",
+          "roleLabel": "Braider",
+          "rating": 4,
+          "quote": "Finding a good braider used to be so stressful. With AfroBraid, I booked Amina in Neukölln and I'm in love with my new twists! Smooth process from start to finish."
+        },
+        {
+          "name": "Sarah M.",
+          "roleLabel": "Customer",
+          "rating": 5,
+          "quote": "Booking my braids has never been this easy. I found my braider in minutes and the whole process felt so smooth."
+        },
+        {
+          "name": "David O.",
+          "roleLabel": "Braider",
+          "rating": 4,
+          "quote": "My schedule finally makes sense. Clients book directly and I spend less time messaging back and forth."
+        }
+      ]
     }
   }
 }
