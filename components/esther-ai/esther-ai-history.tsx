@@ -75,16 +75,20 @@ export function EstherAiHistory({
     return (
       <div className="flex w-full flex-col items-center justify-center py-20 text-center">
         <div className="rounded-full bg-muted p-6 mb-6">
-          <Image 
-            src="/images/empty-history.svg" 
-            alt="Empty" 
-            width={120} 
-            height={120} 
+          <Image
+            src="/images/esther-ai/trash-bin.png"
+            alt="Empty"
+            width={120}
+            height={120}
             className="opacity-50"
           />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">{dict.noHistoryTitle}</h3>
-        <p className="text-muted-foreground max-w-sm">{dict.noHistorySubtitle}</p>
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          {dict.noHistoryTitle}
+        </h3>
+        <p className="text-muted-foreground max-w-sm">
+          {dict.noHistorySubtitle}
+        </p>
       </div>
     );
   }
@@ -92,20 +96,22 @@ export function EstherAiHistory({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full pb-10">
       {history.map((item) => (
-        <div 
-          key={item.id} 
+        <div
+          key={item.id}
           className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-sm transition-all hover:shadow-md"
         >
           {/* Image Split View (if completed) or Original (if not) */}
           <div className="relative aspect-[4/5] w-full bg-black overflow-hidden">
-            {item.status === "COMPLETED" && item.original_url && item.result_url ? (
+            {item.status === "COMPLETED" &&
+            item.original_url &&
+            item.result_url ? (
               <div className="absolute inset-0 flex">
                 <div className="relative w-1/2 h-full">
-                  <Image 
-                    src={item.original_url} 
-                    alt="Original" 
-                    fill 
-                    className="object-cover" 
+                  <Image
+                    src={item.original_url}
+                    alt="Original"
+                    fill
+                    className="object-cover"
                     sizes="(max-width: 640px) 50vw, 300px"
                   />
                   <div className="absolute top-3 left-3 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-wider">
@@ -113,11 +119,11 @@ export function EstherAiHistory({
                   </div>
                 </div>
                 <div className="relative w-1/2 h-full border-l border-white/20">
-                  <Image 
-                    src={item.result_url} 
-                    alt="Result" 
-                    fill 
-                    className="object-cover" 
+                  <Image
+                    src={item.result_url}
+                    alt="Result"
+                    fill
+                    className="object-cover"
                     sizes="(max-width: 640px) 50vw, 300px"
                   />
                   <div className="absolute top-3 right-3 rounded-full bg-brand/90 px-2 py-0.5 text-[10px] font-bold text-brand-foreground backdrop-blur-md uppercase tracking-wider">
@@ -128,11 +134,11 @@ export function EstherAiHistory({
             ) : (
               <div className="absolute inset-0">
                 {item.original_url && (
-                  <Image 
-                    src={item.original_url} 
-                    alt="Original" 
-                    fill 
-                    className="object-cover opacity-80" 
+                  <Image
+                    src={item.original_url}
+                    alt="Original"
+                    fill
+                    className="object-cover opacity-80"
                     sizes="(max-width: 640px) 100vw, 400px"
                   />
                 )}
@@ -140,7 +146,9 @@ export function EstherAiHistory({
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="flex flex-col items-center gap-2 text-white">
                       <Loader2 className="size-6 animate-spin" />
-                      <span className="text-xs font-semibold">{dict.processing}</span>
+                      <span className="text-xs font-semibold">
+                        {dict.processing}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -148,13 +156,15 @@ export function EstherAiHistory({
                   <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
                     <div className="flex flex-col items-center gap-2 text-destructive">
                       <AlertCircle className="size-8" />
-                      <span className="text-xs font-semibold">{dict.failed}</span>
+                      <span className="text-xs font-semibold">
+                        {dict.failed}
+                      </span>
                     </div>
                   </div>
                 )}
               </div>
             )}
-            
+
             {/* Delete button overlay on hover */}
             <button
               onClick={() => handleDelete(item.id)}
@@ -175,7 +185,9 @@ export function EstherAiHistory({
               {item.style?.name || item.description || "Custom Look"}
             </h4>
             <p className="text-xs text-muted-foreground">
-              {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
+              {formatDistanceToNow(new Date(item.created_at), {
+                addSuffix: true,
+              })}
             </p>
           </div>
         </div>
