@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Mail } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -18,7 +19,18 @@ export function AuthShell({
   return (
     <div className="flex min-h-screen flex-1 bg-background">
       <div className="flex w-full flex-col justify-between px-6 py-10 sm:px-10 lg:w-1/2 lg:px-16 xl:px-24">
-        <div />
+        <div className="mx-auto w-full max-w-sm pb-8 pt-4">
+          <Link href={`/${lang}`} className="inline-block">
+            <Image
+              src="/logo/logo.webp"
+              alt="Afrobraids Connect"
+              width={256}
+              height={65}
+              priority
+              className="theme-invert h-8 w-auto sm:h-10"
+            />
+          </Link>
+        </div>
 
         <div className="mx-auto w-full max-w-sm">{children}</div>
 

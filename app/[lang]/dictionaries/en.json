@@ -1143,5 +1143,12 @@
       "findBraiderCta": "Find a Braider",
       "joinBraiderCta": "Join as a Braider"
     }
+  },
+  "notFoundPage": {
+    "eyebrow": "Lost & Braided",
+    "title": "This page got tangled up.",
+    "subtitle": "The link you followed may be broken, or the page may have moved. Let's untangle this and get you back on track.",
+    "homeCta": "Back to Home",
+    "searchCta": "Find a Braider"
   }
 }

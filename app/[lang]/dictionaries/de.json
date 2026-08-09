@@ -1143,5 +1143,12 @@
       "findBraiderCta": "Braiderin finden",
       "joinBraiderCta": "Als Braiderin beitreten"
     }
+  },
+  "notFoundPage": {
+    "eyebrow": "Verloren & Verflochten",
+    "title": "Diese Seite hat sich verheddert.",
+    "subtitle": "Der Link, dem du gefolgt bist, könnte defekt sein, oder die Seite wurde verschoben. Wir bringen dich wieder auf Kurs.",
+    "homeCta": "Zurück zur Startseite",
+    "searchCta": "Braiderin finden"
   }
 }

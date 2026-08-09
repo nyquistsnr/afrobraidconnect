@@ -1143,5 +1143,12 @@
       "findBraiderCta": "Trouver une tresseuse",
       "joinBraiderCta": "Rejoindre en tant que tresseuse"
     }
+  },
+  "notFoundPage": {
+    "eyebrow": "Perdu & Emmêlé",
+    "title": "Cette page s'est emmêlée.",
+    "subtitle": "Le lien que vous avez suivi est peut-être rompu, ou la page a été déplacée. Remettons les choses en ordre.",
+    "homeCta": "Retour à l'accueil",
+    "searchCta": "Trouver une tresseuse"
   }
 }

@@ -13,7 +13,7 @@ const BACKGROUND_IMAGE = "/images/hero.png";
 
 export function FinalCta({ dict, lang }: { dict: FinalCtaDict; lang: Locale }) {
   return (
-    <section className="relative isolate flex min-h-[24rem] sm:min-h-[28rem] md:min-h-[32rem] lg:min-h-[40rem] xl:min-h-[48rem] 2xl:min-h-[56rem] items-center justify-center overflow-hidden py-14 md:py-20 px-6">
+    <section className="relative isolate flex min-h-[32rem] sm:min-h-[36rem] md:min-h-[40rem] lg:min-h-[44rem] xl:min-h-[52rem] 2xl:min-h-[60rem] items-center justify-center overflow-hidden py-14 md:py-20 px-6">
       <Image
         src={BACKGROUND_IMAGE}
         alt={dict.imageAlt}

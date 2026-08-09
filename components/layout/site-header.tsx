@@ -194,7 +194,7 @@ export function SiteHeader({
               width={256}
               height={65}
               priority
-              className="theme-invert h-7 w-auto sm:h-8"
+              className="theme-invert h-9 w-auto sm:h-11"
             />
           </Link>
 

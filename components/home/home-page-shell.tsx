@@ -62,7 +62,7 @@ export function HomePageShell({
         onSearchActiveChange={setPanelOpen}
         searchActivateSignal={activateSignal}
       />
-      <main className="flex-1 pb-16 md:pb-0">
+      <main className="flex-1">
         <HomeHero
           dict={heroDict}
           docked={docked}
