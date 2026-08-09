@@ -253,12 +253,6 @@ export function BraiderDetailView({
         />
       </div>
 
-      <PhotoGallery
-        images={braider.portfolio}
-        businessName={businessName}
-        dict={dict}
-      />
-
       <div className="mx-auto grid w-full max-w-[1760px] grid-cols-1 gap-10 px-4 pt-8 sm:px-6 lg:grid-cols-[1fr_380px] lg:px-10">
         <div className="flex flex-col gap-8">
           <div className="flex items-start gap-4">
@@ -323,6 +317,12 @@ export function BraiderDetailView({
               {braider.bio || dict.noBio}
             </p>
           </section>
+
+          <PhotoGallery
+            images={braider.portfolio}
+            businessName={businessName}
+            dict={dict}
+          />
 
           <section className="flex flex-col gap-4 border-t border-border pt-8">
             <h2 className="text-lg font-semibold text-foreground">

@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle, ArrowLeft, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowLeft } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type {
   BookingLineItemType,
   PaymentPurpose,
@@ -113,7 +114,7 @@ export function BookingDetailView({
   if (isLoading || !booking) {
     return (
       <div className="flex flex-1 items-center justify-center py-24">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
   }

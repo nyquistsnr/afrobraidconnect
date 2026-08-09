@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Upload, X, Loader2, Wand2, ImageIcon } from "lucide-react";
+import { Upload, X, Wand2, ImageIcon } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { StylePublicResponse } from "@/lib/api/types";
 import { tryonApi } from "@/lib/api/tryon-client";
@@ -224,7 +225,7 @@ export function EstherAiForm({
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="size-5 animate-spin" />
+                <Loader className="size-5 animate-spin" />
                 {dict.generating}
               </>
             ) : (

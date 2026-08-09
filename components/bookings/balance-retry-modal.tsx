@@ -8,7 +8,8 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
-import { Loader2, X } from "lucide-react";
+import { X } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { bookingsApi } from "@/lib/api/bookings-client";
@@ -112,7 +113,7 @@ function RetryForm({
           Cancel
         </Button>
         <Button type="submit" disabled={!stripe || !elements || submitting}>
-          {submitting && <Loader2 className="size-4 animate-spin" />}
+          {submitting && <Loader className="size-4 animate-spin" />}
           {submitting ? "Processing..." : dict.confirmPaymentButton}
         </Button>
       </div>

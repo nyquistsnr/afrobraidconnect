@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CreditCard, Info, Loader2 } from "lucide-react";
+import { AlertCircle, CreditCard, Info } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { useQueryClient } from "@tanstack/react-query";
 import type { BookingResponse } from "@/lib/api/types";
 import { formatTemplate } from "@/lib/format-template";
@@ -130,7 +131,7 @@ export function BalanceRetryBanner({
                 disabled={isStartingFlow}
                 className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
               >
-                {isStartingFlow ? <Loader2 className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
+                {isStartingFlow ? <Loader className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
                 {dict.addCardButton}
               </button>
             )}
@@ -143,7 +144,7 @@ export function BalanceRetryBanner({
                   : "bg-red-100 text-red-800 hover:bg-red-200"
               }`}
             >
-              {isStartingFlow && isAuthRequired && <Loader2 className="size-4 animate-spin" />}
+              {isStartingFlow && isAuthRequired && <Loader className="size-4 animate-spin" />}
               {dict.confirmPaymentButton}
             </button>
           </div>

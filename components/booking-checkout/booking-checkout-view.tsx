@@ -7,7 +7,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import Image from "next/image";
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { BookingResponse, BraiderDetailResponse } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -193,7 +194,7 @@ export function BookingCheckoutView({
   if (!resumeBookingId && calculationQuery.isPending) {
     return (
       <div className="flex flex-1 items-center justify-center py-24">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+        <Loader className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -271,7 +272,7 @@ export function BookingCheckoutView({
         </div>
       ) : phase === "confirming" || phase === "stillProcessing" ? (
         <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-8 text-center">
-          <Loader2 className="size-8 animate-spin text-brand" />
+          <Loader className="size-8 animate-spin text-brand" />
           <h1 className="text-lg font-semibold text-foreground">
             {dict.confirmingPaymentTitle}
           </h1>
@@ -369,7 +370,7 @@ export function BookingCheckoutView({
                 onClick={() => createBookingMutation.mutate()}
               >
                 {createBookingMutation.isPending && (
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader className="size-4 animate-spin" />
                 )}
                 {createBookingMutation.isPending
                   ? dict.confirmButtonLoading

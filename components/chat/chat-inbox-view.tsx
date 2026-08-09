@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { AlertCircle, Loader2, MessageCircle } from "lucide-react";
+import { AlertCircle, MessageCircle } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Locale } from "@/lib/i18n";
 import { chatApi } from "@/lib/api/chat-client";
 import { chatThreadsKey } from "@/lib/chat/query-keys";
@@ -42,7 +43,7 @@ export function ChatInboxView({
 
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center py-24">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          <Loader className="size-6 animate-spin text-muted-foreground" />
         </div>
       ) : isError ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 py-24 text-center">

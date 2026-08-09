@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useQuery } from "@tanstack/react-query";
-import { LocateFixed, Search, MapPin, Loader2, Check, History } from "lucide-react";
+import { LocateFixed, Search, MapPin, Check, History } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { searchDestinations } from "@/lib/search-destinations";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
 import { addRecentLocation, getRecentLocations } from "@/lib/recent-locations";
@@ -152,7 +153,7 @@ export function WherePanel({
           className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-placeholder"
         />
         {predictionsLoading && (
-          <Loader2 className="size-4 shrink-0 animate-spin text-icon-muted" />
+          <Loader className="size-4 shrink-0 animate-spin text-icon-muted" />
         )}
       </div>
 

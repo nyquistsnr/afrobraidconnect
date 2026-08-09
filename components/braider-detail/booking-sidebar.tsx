@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type {
   AvailableSlotResponse,
   BookingCalculationPreviewResponse,
@@ -139,7 +139,7 @@ export function BookingSidebar({
         disabled={!selectedStyle || isContinuing}
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {isContinuing && <Loader2 className="size-4 animate-spin" />}
+        {isContinuing && <Loader className="size-4 animate-spin" />}
         {isContinuing
           ? dict.sidebar.ctaLoading
           : ctaLabel(dict, !!selectedStyle, !!selectedSlot)}

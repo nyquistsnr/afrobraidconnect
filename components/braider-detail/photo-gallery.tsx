@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ImageOff, LayoutGrid, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageOff, X } from "lucide-react";
 import type { BraiderPortfolioImage } from "@/lib/api/types";
 import { formatTemplate } from "@/lib/format-template";
 import type { BraiderDetailDict } from "@/components/braider-detail/types";
@@ -19,13 +19,29 @@ export function PhotoGallery({
 }) {
   const sorted = [...images].sort((a, b) => a.position - b.position);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const showNext = useCallback(() => {
     setLightboxIndex((i) => (i === null ? i : Math.min(i + 1, sorted.length - 1)));
   }, [sorted.length]);
+  
   const showPrev = useCallback(() => {
     setLightboxIndex((i) => (i === null ? i : Math.max(i - 1, 0)));
   }, []);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth * 0.8;
+      scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth * 0.8;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   const alt = useCallback(
     (img: BraiderPortfolioImage) =>
@@ -35,31 +51,64 @@ export function PhotoGallery({
 
   if (sorted.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
-        <div className="flex h-64 items-center justify-center rounded-2xl bg-border/30 sm:h-96">
-          <div className="flex flex-col items-center gap-2 text-icon-muted">
-            <ImageOff className="size-10" />
-            <span className="text-sm font-medium">{dict.noPhotos}</span>
-          </div>
+      <div className="flex h-40 w-full items-center justify-center rounded-2xl bg-border/30">
+        <div className="flex flex-col items-center gap-2 text-icon-muted">
+          <ImageOff className="size-8" />
+          <span className="text-sm font-medium">{dict.noPhotos}</span>
         </div>
       </div>
     );
   }
 
+  // Uses dict.showAllPhotos for title if possible, or falls back to "Portfolio"
+  const title = dict.showAllPhotos ? dict.showAllPhotos.split(" ")[0] + " Portfolio" : "Portfolio";
+
   return (
-    <div className="mx-auto w-full max-w-[1760px] px-4 pt-4 sm:px-6 lg:px-10">
-      <div className="relative overflow-hidden rounded-2xl">
-        <GalleryGrid images={sorted} alt={alt} onOpen={setLightboxIndex} />
-        {sorted.length > 1 && (
-          <button
-            type="button"
-            onClick={() => setLightboxIndex(0)}
-            className="absolute right-4 bottom-4 flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground shadow-md transition-colors hover:bg-border/40"
-          >
-            <LayoutGrid className="size-4" />
-            {formatTemplate(dict.showAllPhotos, { count: sorted.length })}
-          </button>
+    <div className="flex flex-col gap-4 border-t border-border pt-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-foreground">
+          Portfolio
+        </h2>
+        {sorted.length > 2 && (
+          <div className="hidden sm:flex items-center gap-2">
+            <button
+              onClick={scrollLeft}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         )}
+      </div>
+
+      <div 
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 pt-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      >
+        {sorted.map((img, i) => (
+          <button
+            key={img.id}
+            type="button"
+            onClick={() => setLightboxIndex(i)}
+            className="group relative h-48 w-48 sm:h-56 sm:w-56 shrink-0 snap-start overflow-hidden rounded-2xl bg-border/50 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+          >
+            <Image
+              src={img.url}
+              alt={alt(img)}
+              fill
+              sizes="(min-width: 640px) 224px, 192px"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </button>
+        ))}
       </div>
 
       {lightboxIndex !== null && (
@@ -74,100 +123,6 @@ export function PhotoGallery({
         />
       )}
     </div>
-  );
-}
-
-function GalleryGrid({
-  images,
-  alt,
-  onOpen,
-}: {
-  images: BraiderPortfolioImage[];
-  alt: (img: BraiderPortfolioImage) => string;
-  onOpen: (index: number) => void;
-}) {
-  const count = images.length;
-
-  if (count === 1) {
-    return (
-      <Tile
-        image={images[0]}
-        alt={alt(images[0])}
-        onClick={() => onOpen(0)}
-        className="aspect-[16/9] w-full"
-      />
-    );
-  }
-
-  if (count === 2) {
-    return (
-      <div className="grid grid-cols-2 gap-2">
-        {images.map((img, i) => (
-          <Tile
-            key={img.id}
-            image={img}
-            alt={alt(img)}
-            onClick={() => onOpen(i)}
-            className="aspect-[4/3] w-full"
-          />
-        ))}
-      </div>
-    );
-  }
-
-  const rest = images.slice(1, 5);
-  return (
-    <div className="grid grid-cols-1 gap-2 sm:grid-cols-4 sm:grid-rows-2 sm:h-[480px]">
-      <Tile
-        image={images[0]}
-        alt={alt(images[0])}
-        onClick={() => onOpen(0)}
-        className="aspect-[4/3] w-full sm:col-span-2 sm:row-span-2 sm:aspect-auto sm:h-full"
-      />
-      <div
-        className={`hidden gap-2 sm:col-span-2 sm:grid sm:grid-rows-2 ${
-          rest.length > 2 ? "sm:grid-cols-2" : "sm:grid-cols-1"
-        }`}
-      >
-        {rest.map((img, i) => (
-          <Tile
-            key={img.id}
-            image={img}
-            alt={alt(img)}
-            onClick={() => onOpen(i + 1)}
-            className="h-full w-full"
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Tile({
-  image,
-  alt,
-  onClick,
-  className,
-}: {
-  image: BraiderPortfolioImage;
-  alt: string;
-  onClick: () => void;
-  className: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`group relative overflow-hidden bg-border/50 ${className}`}
-    >
-      <Image
-        src={image.url}
-        alt={alt}
-        fill
-        sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover transition-[filter] duration-200 group-hover:brightness-90"
-      />
-    </button>
   );
 }
 

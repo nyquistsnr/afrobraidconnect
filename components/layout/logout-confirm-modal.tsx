@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { Modal } from "@/components/ui/modal";
 
 export interface LogoutModalDict {
@@ -44,7 +44,7 @@ export function LogoutConfirmModal({
           disabled={isLoggingOut}
           className="flex items-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-semibold text-background transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isLoggingOut && <Loader2 className="size-4 animate-spin" />}
+          {isLoggingOut && <Loader className="size-4 animate-spin" />}
           {dict.confirm}
         </button>
       </div>

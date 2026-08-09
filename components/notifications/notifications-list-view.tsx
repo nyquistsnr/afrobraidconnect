@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, Bell, Loader2, X } from "lucide-react";
+import { AlertCircle, Bell, X } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Locale } from "@/lib/i18n";
 import { notificationsApi } from "@/lib/api/notifications-client";
 import { notificationsKey } from "@/lib/notifications/query-keys";
@@ -82,7 +83,7 @@ export function NotificationsListView({
 
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center py-24">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          <Loader className="size-6 animate-spin text-muted-foreground" />
         </div>
       ) : isError ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 py-24 text-center">

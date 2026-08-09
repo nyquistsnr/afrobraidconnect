@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, ArrowLeft, RefreshCw, AlertTriangle } from "lucide-react";
+import { ArrowLeft, RefreshCw, AlertTriangle } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { TryOnResponse } from "@/lib/api/types";
 import { tryonApi } from "@/lib/api/tryon-client";
@@ -71,7 +72,7 @@ export function EstherAiResult({
   if (!tryon) {
     return (
       <div className="w-full max-w-2xl mx-auto rounded-3xl border border-border bg-surface p-16 shadow-sm flex flex-col items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-brand mb-4" />
+        <Loader className="size-8 animate-spin text-brand mb-4" />
         <p className="text-muted-foreground">{dict.processing}</p>
       </div>
     );
@@ -110,7 +111,7 @@ export function EstherAiResult({
         
         {tryon.status === "PROCESSING" && (
           <div className="inline-flex items-center gap-2 rounded-full bg-brand/10 px-4 py-1.5 text-sm font-semibold text-brand">
-            <Loader2 className="size-4 animate-spin" />
+            <Loader className="size-4 animate-spin" />
             <span>{dict.processing}</span>
           </div>
         )}
@@ -201,7 +202,7 @@ export function EstherAiResult({
             </div>
             
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <Loader2 className="size-10 animate-spin text-white mb-4 drop-shadow-md" />
+              <Loader className="size-10 animate-spin text-white mb-4 drop-shadow-md" />
               <div className="rounded-full bg-black/50 px-4 py-2 text-sm font-semibold text-white backdrop-blur-md">
                 {dict.generatingNotice}
               </div>

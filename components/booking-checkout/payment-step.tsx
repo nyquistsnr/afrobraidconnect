@@ -8,7 +8,7 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
-import { Loader2 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { formatTemplate } from "@/lib/format-template";
 import { Button } from "@/components/ui/button";
 import type { BookingCheckoutDict } from "@/components/booking-checkout/types";
@@ -70,7 +70,7 @@ function PayForm({
       <PaymentElement />
       {error && <p className="text-sm text-red-500">{error}</p>}
       <Button type="submit" disabled={!stripe || !elements || submitting}>
-        {submitting && <Loader2 className="size-4 animate-spin" />}
+        {submitting && <Loader className="size-4 animate-spin" />}
         {submitting
           ? dict.payButtonLoading
           : formatTemplate(dict.payButton, { amount: amountLabel })}

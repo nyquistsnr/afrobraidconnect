@@ -9,12 +9,12 @@ import {
   ExternalLink,
   EyeOff,
   Flag,
-  Loader2,
   MailWarning,
   MoreHorizontal,
   ShieldAlert,
   X,
 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { LucideIcon } from "lucide-react";
 import { chatApi } from "@/lib/api/chat-client";
 import { ApiError } from "@/lib/api/auth-client";
@@ -212,7 +212,7 @@ export function ReportModal({
             disabled={!reason || mutation.isPending}
             className="w-auto"
           >
-            {mutation.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+            {mutation.isPending && <Loader className="mr-2 size-4 animate-spin" />}
             {mutation.isPending ? dict.submitting : dict.submit}
           </Button>
         </div>

@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Loader2, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { chatApi } from "@/lib/api/chat-client";
 import { ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
@@ -50,7 +51,7 @@ export function ChatButton({
       className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-input px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-border/40 disabled:opacity-60"
     >
       {mutation.isPending ? (
-        <Loader2 className="size-4 animate-spin" />
+        <Loader className="size-4 animate-spin" />
       ) : (
         <MessageCircle className="size-4" />
       )}

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, Trash2, AlertTriangle, AlertCircle, Download } from "lucide-react";
+import { Trash2, AlertTriangle, AlertCircle, Download } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { TryOnResponse } from "@/lib/api/types";
 import { tryonApi } from "@/lib/api/tryon-client";
@@ -57,7 +58,7 @@ export function EstherAiHistory({
   if (isLoading) {
     return (
       <div className="flex w-full flex-col items-center justify-center py-20">
-        <Loader2 className="size-8 animate-spin text-brand" />
+        <Loader className="size-8 animate-spin text-brand" />
       </div>
     );
   }
@@ -145,7 +146,7 @@ export function EstherAiHistory({
                 {item.status === "PROCESSING" && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="flex flex-col items-center gap-2 text-white">
-                      <Loader2 className="size-6 animate-spin" />
+                      <Loader className="size-6 animate-spin" />
                       <span className="text-xs font-semibold">
                         {dict.processing}
                       </span>
@@ -173,7 +174,7 @@ export function EstherAiHistory({
               title={dict.delete}
             >
               {deletingId === item.id ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader className="size-4 animate-spin" />
               ) : (
                 <Trash2 className="size-4" />
               )}

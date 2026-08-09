@@ -10,7 +10,8 @@ import {
   useQueryClient,
   type InfiniteData,
 } from "@tanstack/react-query";
-import { AlertCircle, ArrowLeft, ChevronUp, Flag, Loader2, X } from "lucide-react";
+import { AlertCircle, ArrowLeft, ChevronUp, Flag, X } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { Locale } from "@/lib/i18n";
 import { chatApi } from "@/lib/api/chat-client";
 import { usersApi } from "@/lib/api/users-client";
@@ -218,7 +219,7 @@ export function ChatThreadView({
         </div>
       ) : messagesQuery.isLoading ? (
         <div className="flex flex-1 items-center justify-center py-24">
-          <Loader2 className="size-6 animate-spin text-muted-foreground" />
+          <Loader className="size-6 animate-spin text-muted-foreground" />
         </div>
       ) : messagesQuery.isError ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-4 py-24 text-center">
@@ -236,7 +237,7 @@ export function ChatThreadView({
               className="mx-auto flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-border/40 disabled:opacity-50"
             >
               {messagesQuery.isFetchingNextPage ? (
-                <Loader2 className="size-3.5 animate-spin" />
+                <Loader className="size-3.5 animate-spin" />
               ) : (
                 <ChevronUp className="size-3.5" />
               )}

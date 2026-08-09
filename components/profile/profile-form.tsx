@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import { Loader2 } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import { usersApi } from "@/lib/api/users-client";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
@@ -81,7 +81,7 @@ export function ProfileForm({
   if (isLoading || !profile) {
     return (
       <div className="flex h-40 items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+        <Loader className="size-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export function ProfileForm({
               chatLocale === (profile.chat_locale ?? ""))
           }
         >
-          {mutation.isPending && <Loader2 className="mr-2 size-4 animate-spin" />}
+          {mutation.isPending && <Loader className="mr-2 size-4 animate-spin" />}
           {mutation.isPending ? dict.savingButton : dict.saveButton}
         </Button>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { BraiderCard } from "@/components/search-results/braider-card";
@@ -8,7 +8,8 @@ import { braidersApi } from "@/lib/api/braiders-client";
 import { getRecentLocations } from "@/lib/recent-locations";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 
 type TabKey = "trending" | "topRated" | "new" | "recommended";
 
@@ -32,6 +33,21 @@ export function CuratedBraiders({
 }) {
   const [activeTab, setActiveTab] = useState<TabKey>("trending");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth * 0.8;
+      scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth * 0.8;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   const queries = useQueries({
     queries: TABS.map((tab) => ({
@@ -39,7 +55,7 @@ export function CuratedBraiders({
       queryFn: async () => {
         const recent = getRecentLocations()[0];
         const params: Parameters<typeof braidersApi.getCuratedList>[1] = {
-          page_size: 5,
+          page_size: 10,
         };
 
         if (recent?.lat != null && recent?.lng != null) {
@@ -78,9 +94,30 @@ export function CuratedBraiders({
 
   return (
     <section className="py-12 md:py-20 max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10">
-      <h2 className="text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl">
-        {dict.title}
-      </h2>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h2 className="text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl">
+          {dict.title}
+        </h2>
+
+        {activeBraiders.length > 0 && (
+          <div className="hidden sm:flex items-center gap-2">
+            <button
+              onClick={scrollLeft}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {availableTabs.map((tab) => {
@@ -106,14 +143,17 @@ export function CuratedBraiders({
       <div className="mt-6 min-h-[300px]">
         {isLoading ? (
           <div className="flex h-[300px] items-center justify-center">
-            <Loader2 className="size-8 animate-spin text-brand" />
+            <Loader className="size-8 animate-spin text-brand" />
           </div>
         ) : isError ? (
           <div className="flex h-[300px] flex-col items-center justify-center text-center">
             <p className="text-sm font-semibold text-foreground">{dict.error}</p>
           </div>
         ) : (
-          <div className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div 
+            ref={scrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
             <AnimatePresence mode="popLayout">
               {activeBraiders.map((braider, index) => (
                 <motion.div

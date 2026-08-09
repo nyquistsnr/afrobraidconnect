@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
-import { Loader2, Send } from "lucide-react";
+import { Send } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
 import type { ChatThreadDict } from "@/components/chat/types";
 
 const MAX_LENGTH = 2000;
@@ -51,7 +52,7 @@ export function ChatComposer({
           className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground transition-colors hover:bg-brand-hover disabled:pointer-events-none disabled:opacity-40"
         >
           {isSending ? (
-            <Loader2 className="size-4 animate-spin" />
+            <Loader className="size-4 animate-spin" />
           ) : (
             <Send className="size-4" />
           )}
