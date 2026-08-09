@@ -957,6 +957,28 @@
     "title": "Réservez votre prochaine coiffure en tresses en toute simplicité.",
     "subtitle": "AfroBraid Connect est le moyen le plus simple de trouver, réserver et évaluer les meilleures coiffeuses de votre ville. Explorez les styles que vous aimez et réservez votre prochain look en quelques clics.",
     "styleGalleryAlt": "Inspiration de styles de tresses",
-    "appointmentsBooked": "{count} rendez-vous réservés aujourd'hui"
+    "appointmentsBooked": "{count} rendez-vous réservés aujourd'hui",
+    "howItWorks": {
+      "badge": "Comment ça marche",
+      "title": "3 étapes pour entrer en contact avec une tresseuse sur AfroBraids",
+      "cta": "Trouver une tresseuse",
+      "steps": [
+        {
+          "imageAlt": "Une cliente parcourant les tresseuses sur AfroBraids",
+          "title": "Parcourir les tresseuses",
+          "description": "Recherchez des tresseuses dans votre ville. Utilisez nos filtres pour trouver le style, la fourchette de prix ou la note idéale."
+        },
+        {
+          "imageAlt": "Une cliente réservant un rendez-vous sur AfroBraids",
+          "title": "Réserver un rendez-vous",
+          "description": "Choisissez une date et une heure, puis confirmez votre rendez-vous avec la tresseuse de votre choix."
+        },
+        {
+          "imageAlt": "Une coiffure en tresses terminée",
+          "title": "Échanger",
+          "description": "Communiquez directement avec la tresseuse pour discuter du style, poser vos questions et finaliser les détails."
+        }
+      ]
+    }
   }
 }

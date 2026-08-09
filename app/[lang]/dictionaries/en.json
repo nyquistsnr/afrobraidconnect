@@ -957,6 +957,28 @@
     "title": "Book your next braid style with ease.",
     "subtitle": "AfroBraid Connect is the easiest way to find, book and review top-rated braiders in your city. Explore styles you love, and book your next look in just a few clicks.",
     "styleGalleryAlt": "Braid style inspiration",
-    "appointmentsBooked": "{count} appointments booked today"
+    "appointmentsBooked": "{count} appointments booked today",
+    "howItWorks": {
+      "badge": "How it works",
+      "title": "3 steps on how to get connected with a braider on AfroBraids",
+      "cta": "Find a Braider",
+      "steps": [
+        {
+          "imageAlt": "A client browsing braiders on AfroBraids",
+          "title": "Browse Braiders",
+          "description": "Search for braiders in your city. Use our filters to find the perfect style, price range, or star rating."
+        },
+        {
+          "imageAlt": "A client booking an appointment on AfroBraids",
+          "title": "Book Appointment",
+          "description": "Select a date and time, and confirm your appointment with the braider you like."
+        },
+        {
+          "imageAlt": "A finished braided hairstyle",
+          "title": "Connect",
+          "description": "Communicate directly with the braider to discuss your style, ask questions, and finalize details."
+        }
+      ]
+    }
   }
 }

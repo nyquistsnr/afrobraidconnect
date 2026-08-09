@@ -957,6 +957,28 @@
     "title": "Buchen Sie ganz einfach Ihren nächsten Braiding-Look.",
     "subtitle": "AfroBraid Connect ist der einfachste Weg, um erstklassige Braiderinnen in Ihrer Stadt zu finden, zu buchen und zu bewerten. Entdecken Sie Styles, die Sie lieben, und buchen Sie Ihren nächsten Look in nur wenigen Klicks.",
     "styleGalleryAlt": "Inspiration für Braiding-Styles",
-    "appointmentsBooked": "{count} Termine heute gebucht"
+    "appointmentsBooked": "{count} Termine heute gebucht",
+    "howItWorks": {
+      "badge": "So funktioniert's",
+      "title": "In 3 Schritten mit einer Braiderin auf AfroBraids in Kontakt kommen",
+      "cta": "Braiderin finden",
+      "steps": [
+        {
+          "imageAlt": "Eine Kundin stöbert nach Braiderinnen auf AfroBraids",
+          "title": "Braiderinnen durchsuchen",
+          "description": "Suchen Sie nach Braiderinnen in Ihrer Stadt. Nutzen Sie unsere Filter, um den perfekten Style, Preisrahmen oder die beste Bewertung zu finden."
+        },
+        {
+          "imageAlt": "Eine Kundin bucht einen Termin auf AfroBraids",
+          "title": "Termin buchen",
+          "description": "Wählen Sie ein Datum und eine Uhrzeit und bestätigen Sie Ihren Termin bei der Braiderin, die Ihnen gefällt."
+        },
+        {
+          "imageAlt": "Eine fertige Braiding-Frisur",
+          "title": "Verbinden",
+          "description": "Kommunizieren Sie direkt mit der Braiderin, um Ihren Style zu besprechen, Fragen zu stellen und Details zu klären."
+        }
+      ]
+    }
   }
 }

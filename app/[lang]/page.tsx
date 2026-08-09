@@ -22,6 +22,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         styleGalleryAlt: dict.home.styleGalleryAlt,
         appointmentsBooked: dict.home.appointmentsBooked,
       }}
+      howItWorksDict={dict.home.howItWorks}
       footerDict={dict.common.footer}
     />
   );

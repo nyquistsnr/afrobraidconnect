@@ -7,6 +7,7 @@ import { useScrolled } from "@/lib/use-scrolled";
 import { SiteHeader, type SiteHeaderDict } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { HomeHero, type HomeHeroDict } from "@/components/home/home-hero";
+import { HowItWorks, type HowItWorksDict } from "@/components/home/how-it-works";
 import type { NotificationBellDict } from "@/components/notifications/types";
 
 // Owns the hero<->header search "docked" signal so the header (rendered
@@ -19,6 +20,7 @@ export function HomePageShell({
   common,
   notificationsDict,
   heroDict,
+  howItWorksDict,
   footerDict,
 }: {
   lang: Locale;
@@ -26,6 +28,7 @@ export function HomePageShell({
   common: Dictionary["common"];
   notificationsDict: NotificationBellDict;
   heroDict: HomeHeroDict;
+  howItWorksDict: HowItWorksDict;
   footerDict: Dictionary["common"]["footer"];
 }) {
   const scrolled = useScrolled();
@@ -51,6 +54,7 @@ export function HomePageShell({
           onActivate={() => setActivateSignal((n) => n + 1)}
           lang={lang}
         />
+        <HowItWorks dict={howItWorksDict} lang={lang} />
       </main>
       <SiteFooter lang={lang} dict={footerDict} />
     </div>

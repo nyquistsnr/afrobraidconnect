@@ -13,6 +13,12 @@
   --brand-hover: #9c5d33;
   --brand-foreground: #ffffff;
   --hero-background: #faf4f0;
+  /* Fixed dark contrast band — intentionally the same in light and dark
+     mode (a design accent, not a themed surface), so it isn't duplicated
+     in the dark-mode blocks below. */
+  --how-it-works-background: #1a1310;
+  --how-it-works-foreground: #f5f1ee;
+  --how-it-works-muted-foreground: #b9afa7;
 }
 
 @theme inline {
@@ -28,6 +34,9 @@
   --color-brand-hover: var(--brand-hover);
   --color-brand-foreground: var(--brand-foreground);
   --color-hero: var(--hero-background);
+  --color-how-it-works: var(--how-it-works-background);
+  --color-how-it-works-foreground: var(--how-it-works-foreground);
+  --color-how-it-works-muted-foreground: var(--how-it-works-muted-foreground);
   --font-sans: var(--font-fira-sans), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
