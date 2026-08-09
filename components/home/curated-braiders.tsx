@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useQueries } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
 import { BraiderCard } from "@/components/search-results/braider-card";
 import { braidersApi } from "@/lib/api/braiders-client";
 import { getRecentLocations } from "@/lib/recent-locations";
@@ -32,27 +33,48 @@ export function CuratedBraiders({
   const [activeTab, setActiveTab] = useState<TabKey>("trending");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["curated-braiders", activeTab, lang],
-    queryFn: async () => {
-      const recent = getRecentLocations()[0];
-      const params: Parameters<typeof braidersApi.getCuratedList>[1] = {
-        page_size: 10,
-      };
+  const queries = useQueries({
+    queries: TABS.map((tab) => ({
+      queryKey: ["curated-braiders", tab, lang],
+      queryFn: async () => {
+        const recent = getRecentLocations()[0];
+        const params: Parameters<typeof braidersApi.getCuratedList>[1] = {
+          page_size: 5,
+        };
 
-      if (recent?.lat != null && recent?.lng != null) {
-        params.lat = recent.lat;
-        params.lng = recent.lng;
-      } else {
-        params.country_code = lang === "en" ? "DE" : lang.toUpperCase();
-      }
+        if (recent?.lat != null && recent?.lng != null) {
+          params.lat = recent.lat;
+          params.lng = recent.lng;
+        } else {
+          params.country_code = lang === "en" ? "DE" : lang.toUpperCase();
+        }
 
-      return braidersApi.getCuratedList(API_KEYS[activeTab], params, lang);
-    },
-    staleTime: 5 * 60 * 1000,
+        return braidersApi.getCuratedList(API_KEYS[tab], params, lang);
+      },
+      staleTime: 5 * 60 * 1000,
+    })),
   });
 
-  const braiders = data?.items ?? [];
+  const isLoading = queries.some((q) => q.isLoading);
+  const isError = queries.some((q) => q.isError);
+
+  const availableTabs = TABS.filter((_, index) => {
+    const data = queries[index].data;
+    return data && data.items.length > 0;
+  });
+
+  useEffect(() => {
+    if (!isLoading && availableTabs.length > 0 && !availableTabs.includes(activeTab)) {
+      setActiveTab(availableTabs[0]);
+    }
+  }, [isLoading, availableTabs, activeTab]);
+
+  if (!isLoading && availableTabs.length === 0 && !isError) {
+    return null;
+  }
+
+  const activeQueryIndex = TABS.indexOf(activeTab);
+  const activeBraiders = queries[activeQueryIndex]?.data?.items ?? [];
 
   return (
     <section className="py-12 md:py-20 max-w-[1760px] mx-auto px-4 sm:px-6 lg:px-10">
@@ -61,7 +83,7 @@ export function CuratedBraiders({
       </h2>
 
       <div className="mt-8 flex items-center gap-2 overflow-x-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {TABS.map((tab) => {
+        {availableTabs.map((tab) => {
           const isActive = activeTab === tab;
           return (
             <button
@@ -90,31 +112,41 @@ export function CuratedBraiders({
           <div className="flex h-[300px] flex-col items-center justify-center text-center">
             <p className="text-sm font-semibold text-foreground">{dict.error}</p>
           </div>
-        ) : braiders.length === 0 ? (
-          <div className="flex h-[300px] flex-col items-center justify-center text-center">
-            <p className="text-sm font-semibold text-foreground">{dict.empty}</p>
-          </div>
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-            {braiders.map((braider) => (
-              <BraiderCard
-                key={braider.id}
-                item={braider}
-                isHighlighted={hoveredId === braider.id}
-                onHover={setHoveredId}
-                lang={lang}
-                dict={searchResultsDict}
-                searchLinkContext={{
-                  location: null,
-                  lat: null,
-                  lng: null,
-                  country_code: null,
-                  date_from: null,
-                  date_to: null,
-                  radius_km: null,
-                }}
-              />
-            ))}
+          <div className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <AnimatePresence mode="popLayout">
+              {activeBraiders.map((braider, index) => (
+                <motion.div
+                  key={`${activeTab}-${braider.id}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.1,
+                    ease: "easeOut",
+                  }}
+                  className="min-w-[280px] sm:min-w-[320px] max-w-[320px] shrink-0 snap-start"
+                >
+                  <BraiderCard
+                    item={braider}
+                    isHighlighted={hoveredId === braider.id}
+                    onHover={setHoveredId}
+                    lang={lang}
+                    dict={searchResultsDict}
+                    searchLinkContext={{
+                      location: null,
+                      lat: null,
+                      lng: null,
+                      country_code: null,
+                      date_from: null,
+                      date_to: null,
+                      radius_km: null,
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </div>
