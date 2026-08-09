@@ -58,7 +58,7 @@
     --brand: #d98b5f;
     --brand-hover: #e39c74;
     --brand-foreground: #171717;
-    --hero-background: oklch(21% 0.012 56.314);
+    --hero-background: #1a1310;
     --testimonial-muted-background: #6b4632;
   }
 }
@@ -75,7 +75,7 @@
   --brand: #d98b5f;
   --brand-hover: #e39c74;
   --brand-foreground: #171717;
-  --hero-background: oklch(21% 0.012 56.314);
+  --hero-background: #1a1310;
   --testimonial-muted-background: #6b4632;
 }
 
