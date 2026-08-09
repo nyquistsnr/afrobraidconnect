@@ -1031,6 +1031,96 @@
           "quote": "My schedule finally makes sense. Clients book directly and I spend less time messaging back and forth."
         }
       ]
+    },
+    "faqs": {
+      "badge": "FAQs",
+      "title": "Frequently asked questions",
+      "subtitle": "Everything you need to know about booking, hosting, and getting paid on AfroBraid Connect.",
+      "tabAll": "All",
+      "tabCustomer": "Customer",
+      "tabBraider": "Braider",
+      "items": [
+        {
+          "audience": "all",
+          "question": "What is AfroBraid Connect?",
+          "answer": "A platform that connects customers with professional braiders, making it easy to browse styles, read reviews, and book appointments."
+        },
+        {
+          "audience": "customer",
+          "question": "How do I book a braider?",
+          "answer": "Simply browse braiders in your city, choose your style, and book directly through our platform."
+        },
+        {
+          "audience": "braider",
+          "question": "How do I become a listed braider?",
+          "answer": "Sign up as a braider and complete your profile to start receiving bookings from clients."
+        },
+        {
+          "audience": "all",
+          "question": "Is there a fee to join AfroBraid?",
+          "answer": "Joining is free! We only take a small service fee per completed booking."
+        },
+        {
+          "audience": "braider",
+          "question": "How do I manage my bookings?",
+          "answer": "Use our dashboard to view, accept, or reschedule bookings, and track your earnings."
+        },
+        {
+          "audience": "all",
+          "question": "Can I cancel a booking?",
+          "answer": "Yes, but it's best to communicate with the client as early as possible to avoid penalties."
+        },
+        {
+          "audience": "customer",
+          "question": "What styles can I book?",
+          "answer": "You can search for a variety of braid styles including box braids, cornrows, twists, and more."
+        },
+        {
+          "audience": "braider",
+          "question": "How do I get paid as a braider?",
+          "answer": "Payments are processed automatically through the platform after a completed booking."
+        },
+        {
+          "audience": "braider",
+          "question": "Can I manage multiple clients at once?",
+          "answer": "Yes! Our dashboard allows braiders to efficiently manage multiple appointments and schedules."
+        },
+        {
+          "audience": "customer",
+          "question": "Are there customer reviews?",
+          "answer": "Absolutely! You can read reviews and ratings for each braider before booking."
+        },
+        {
+          "audience": "all",
+          "question": "Is my information secure?",
+          "answer": "Yes, we use encryption and secure protocols to protect your personal and payment information."
+        },
+        {
+          "audience": "braider",
+          "question": "How do I update my profile as a braider?",
+          "answer": "Go to your profile settings and update your availability, pricing, and portfolio images."
+        },
+        {
+          "audience": "customer",
+          "question": "Can I book more than one braider for the same day?",
+          "answer": "Yes, you can schedule multiple bookings as long as the time slots do not overlap."
+        },
+        {
+          "audience": "all",
+          "question": "How are disputes handled between customers and braiders?",
+          "answer": "We mediate disputes through our support team to ensure fair resolution for both parties."
+        },
+        {
+          "audience": "braider",
+          "question": "Can I offer discounts as a braider?",
+          "answer": "Yes, you can create special promotions or discount codes within your braider dashboard."
+        },
+        {
+          "audience": "all",
+          "question": "Do you have customer support?",
+          "answer": "Yes! We provide support via email and live chat to assist both customers and braiders."
+        }
+      ]
     }
   }
 }

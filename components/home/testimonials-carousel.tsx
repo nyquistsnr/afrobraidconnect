@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, Star } from "lucide-react";
 import { formatTemplate } from "@/lib/format-template";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface TestimonialDict {
   name: string;
@@ -43,7 +44,7 @@ function StarRating({
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}
-          className={`size-3.5 ${
+          className={`size-3.5 transition-colors duration-500 ${
             i < rating
               ? variant === "active"
                 ? "fill-brand text-brand"
@@ -75,8 +76,7 @@ function TestimonialCard({
 
   return (
     <div
-      key={review.name}
-      className={`search-panel-in flex flex-col justify-between rounded-3xl p-6 ${
+      className={`flex h-full flex-col justify-between rounded-3xl p-6 transition-all duration-500 ease-in-out ${
         isActive
           ? "min-h-[22rem] bg-hero shadow-lg md:min-h-[26rem] md:p-7"
           : "min-h-[19rem] bg-testimonial-muted"
@@ -84,7 +84,7 @@ function TestimonialCard({
     >
       <div className="flex flex-col gap-3">
         <span
-          className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`w-fit rounded-full px-3 py-1 text-xs font-semibold transition-colors duration-500 ${
             isActive
               ? "bg-brand text-brand-foreground"
               : "bg-white/25 text-white"
@@ -94,7 +94,7 @@ function TestimonialCard({
         </span>
         <StarRating rating={review.rating} variant={variant} />
         <p
-          className={`line-clamp-5 text-sm leading-relaxed ${
+          className={`line-clamp-5 text-sm leading-relaxed transition-colors duration-500 ${
             isActive ? "text-foreground" : "text-white"
           }`}
         >
@@ -113,7 +113,7 @@ function TestimonialCard({
           />
         </div>
         <span
-          className={`text-sm font-semibold ${isActive ? "text-foreground" : "text-white"}`}
+          className={`text-sm font-semibold transition-colors duration-500 ${isActive ? "text-foreground" : "text-white"}`}
         >
           {review.name}
         </span>
@@ -125,15 +125,18 @@ function TestimonialCard({
 export function TestimonialsCarousel({ dict }: { dict: TestimonialsDict }) {
   const { reviews } = dict;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   const prevIndex = (currentIndex - 1 + reviews.length) % reviews.length;
   const nextIndex = (currentIndex + 1) % reviews.length;
 
   function goPrev() {
+    setDirection(-1);
     setCurrentIndex((i) => (i - 1 + reviews.length) % reviews.length);
   }
 
   function goNext() {
+    setDirection(1);
     setCurrentIndex((i) => (i + 1) % reviews.length);
   }
 
@@ -141,8 +144,10 @@ export function TestimonialsCarousel({ dict }: { dict: TestimonialsDict }) {
     return formatTemplate(dict.avatarAlt, { name: review.name });
   }
 
+  const visibleIndices = [prevIndex, currentIndex, nextIndex];
+
   return (
-    <section className="bg-background px-6 py-14 md:py-20">
+    <section className="bg-background px-6 py-14 md:py-20 overflow-hidden">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-col gap-3">
           <span className="inline-flex w-fit items-center rounded-full border border-brand px-4 py-1.5 text-sm font-semibold text-brand">
@@ -174,28 +179,54 @@ export function TestimonialsCarousel({ dict }: { dict: TestimonialsDict }) {
               <ArrowLeft className="size-4" />
             </button>
 
-            <div className="grid flex-1 grid-cols-1 items-center gap-5 md:grid-cols-3 md:gap-6">
-              <TestimonialCard
-                review={reviews[prevIndex]}
-                avatarSrc={AVATAR_IMAGES[prevIndex % AVATAR_IMAGES.length]}
-                avatarAlt={avatarAltFor(reviews[prevIndex])}
-                variant="muted"
-                className="hidden md:flex"
-              />
-              <TestimonialCard
-                review={reviews[currentIndex]}
-                avatarSrc={AVATAR_IMAGES[currentIndex % AVATAR_IMAGES.length]}
-                avatarAlt={avatarAltFor(reviews[currentIndex])}
-                variant="active"
-                className="md:-mt-6"
-              />
-              <TestimonialCard
-                review={reviews[nextIndex]}
-                avatarSrc={AVATAR_IMAGES[nextIndex % AVATAR_IMAGES.length]}
-                avatarAlt={avatarAltFor(reviews[nextIndex])}
-                variant="muted"
-                className="hidden md:flex"
-              />
+            <div className="relative flex w-full flex-1 items-center justify-center gap-5 md:gap-6 min-h-[28rem]">
+              <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                {visibleIndices.map((index, i) => {
+                  const isCenter = i === 1;
+                  return (
+                    <motion.div
+                      key={reviews[index].name}
+                      layout
+                      custom={direction}
+                      initial={{ 
+                        opacity: 0, 
+                        x: direction > 0 ? 100 : -100,
+                        scale: 0.9 
+                      }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0,
+                        scale: 1 
+                      }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: direction > 0 ? -100 : 100,
+                        scale: 0.9 
+                      }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 300, 
+                        damping: 30,
+                        opacity: { duration: 0.2 }
+                      }}
+                      className={`w-full max-w-sm shrink-0 md:max-w-none md:flex-1 ${
+                        isCenter
+                          ? "z-10 relative md:-mt-6"
+                          : i === 0
+                            ? "max-md:absolute max-md:right-[100%] max-md:mr-5 md:relative md:right-auto md:mr-0 z-0"
+                            : "max-md:absolute max-md:left-[100%] max-md:ml-5 md:relative md:left-auto md:ml-0 z-0"
+                      }`}
+                    >
+                      <TestimonialCard
+                        review={reviews[index]}
+                        avatarSrc={AVATAR_IMAGES[index % AVATAR_IMAGES.length]}
+                        avatarAlt={avatarAltFor(reviews[index])}
+                        variant={isCenter ? "active" : "muted"}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
             </div>
 
             <button

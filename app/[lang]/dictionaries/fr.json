@@ -1031,6 +1031,96 @@
           "quote": "Mon planning a enfin du sens. Les clientes réservent directement et je passe moins de temps à échanger des messages."
         }
       ]
+    },
+    "faqs": {
+      "badge": "FAQ",
+      "title": "Questions fréquentes",
+      "subtitle": "Tout ce qu'il faut savoir sur la réservation, l'accueil et les paiements sur AfroBraid Connect.",
+      "tabAll": "Tout",
+      "tabCustomer": "Client",
+      "tabBraider": "Tresseur",
+      "items": [
+        {
+          "audience": "all",
+          "question": "Qu'est-ce qu'AfroBraid Connect ?",
+          "answer": "Une plateforme qui met en relation les clientes avec des tresseuses professionnelles, pour parcourir facilement les styles, lire les avis et réserver un rendez-vous."
+        },
+        {
+          "audience": "customer",
+          "question": "Comment réserver une tresseuse ?",
+          "answer": "Parcourez simplement les tresseuses de votre ville, choisissez votre style et réservez directement sur notre plateforme."
+        },
+        {
+          "audience": "braider",
+          "question": "Comment devenir tresseuse référencée ?",
+          "answer": "Inscrivez-vous en tant que tresseuse et complétez votre profil pour commencer à recevoir des réservations."
+        },
+        {
+          "audience": "all",
+          "question": "Y a-t-il des frais pour rejoindre AfroBraid ?",
+          "answer": "L'inscription est gratuite ! Nous prélevons seulement de petits frais de service par réservation terminée."
+        },
+        {
+          "audience": "braider",
+          "question": "Comment gérer mes réservations ?",
+          "answer": "Utilisez notre tableau de bord pour consulter, accepter ou reprogrammer vos réservations et suivre vos revenus."
+        },
+        {
+          "audience": "all",
+          "question": "Puis-je annuler une réservation ?",
+          "answer": "Oui, mais il est préférable de communiquer avec la cliente le plus tôt possible pour éviter des pénalités."
+        },
+        {
+          "audience": "customer",
+          "question": "Quels styles puis-je réserver ?",
+          "answer": "Vous pouvez rechercher une variété de styles de tresses, y compris box braids, cornrows, twists et plus encore."
+        },
+        {
+          "audience": "braider",
+          "question": "Comment suis-je payée en tant que tresseuse ?",
+          "answer": "Les paiements sont traités automatiquement sur la plateforme après une réservation terminée."
+        },
+        {
+          "audience": "braider",
+          "question": "Puis-je gérer plusieurs clientes à la fois ?",
+          "answer": "Oui ! Notre tableau de bord permet aux tresseuses de gérer efficacement plusieurs rendez-vous et plannings."
+        },
+        {
+          "audience": "customer",
+          "question": "Y a-t-il des avis clients ?",
+          "answer": "Absolument ! Vous pouvez lire les avis et notes de chaque tresseuse avant de réserver."
+        },
+        {
+          "audience": "all",
+          "question": "Mes informations sont-elles sécurisées ?",
+          "answer": "Oui, nous utilisons le chiffrement et des protocoles sécurisés pour protéger vos informations personnelles et de paiement."
+        },
+        {
+          "audience": "braider",
+          "question": "Comment mettre à jour mon profil de tresseuse ?",
+          "answer": "Rendez-vous dans les paramètres de votre profil pour mettre à jour vos disponibilités, tarifs et photos de portfolio."
+        },
+        {
+          "audience": "customer",
+          "question": "Puis-je réserver plusieurs tresseuses le même jour ?",
+          "answer": "Oui, vous pouvez planifier plusieurs réservations tant que les créneaux ne se chevauchent pas."
+        },
+        {
+          "audience": "all",
+          "question": "Comment les litiges entre clientes et tresseuses sont-ils gérés ?",
+          "answer": "Nous arbitrons les litiges via notre équipe support pour garantir une résolution équitable pour les deux parties."
+        },
+        {
+          "audience": "braider",
+          "question": "Puis-je proposer des réductions en tant que tresseuse ?",
+          "answer": "Oui, vous pouvez créer des promotions spéciales ou des codes de réduction depuis votre tableau de bord."
+        },
+        {
+          "audience": "all",
+          "question": "Proposez-vous un support client ?",
+          "answer": "Oui ! Nous offrons un support par e-mail et chat en direct pour les clientes et les tresseuses."
+        }
+      ]
     }
   }
 }

@@ -13,6 +13,7 @@ import {
   TestimonialsCarousel,
   type TestimonialsDict,
 } from "@/components/home/testimonials-carousel";
+import { Faqs, type FaqsDict } from "@/components/home/faqs";
 import type { NotificationBellDict } from "@/components/notifications/types";
 
 // Owns the hero<->header search "docked" signal so the header (rendered
@@ -28,6 +29,7 @@ export function HomePageShell({
   howItWorksDict,
   growBusinessDict,
   testimonialsDict,
+  faqsDict,
   footerDict,
 }: {
   lang: Locale;
@@ -38,6 +40,7 @@ export function HomePageShell({
   howItWorksDict: HowItWorksDict;
   growBusinessDict: GrowBusinessDict;
   testimonialsDict: TestimonialsDict;
+  faqsDict: FaqsDict;
   footerDict: Dictionary["common"]["footer"];
 }) {
   const scrolled = useScrolled();
@@ -66,6 +69,7 @@ export function HomePageShell({
         <HowItWorks dict={howItWorksDict} lang={lang} />
         <GrowBusiness dict={growBusinessDict} />
         <TestimonialsCarousel dict={testimonialsDict} />
+        <Faqs dict={faqsDict} />
       </main>
       <SiteFooter lang={lang} dict={footerDict} />
     </div>

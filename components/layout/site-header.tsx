@@ -168,9 +168,15 @@ export function SiteHeader({
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-shadow ${
-          isLandingSearch ? "bg-hero" : "border-b border-border bg-surface"
-        } ${scrolled ? "shadow-sm" : ""}`}
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isLandingSearch 
+            ? scrolled 
+              ? "bg-surface/80 backdrop-blur-md border-b border-border/50 shadow-sm" 
+              : "bg-hero border-b border-transparent"
+            : scrolled 
+              ? "bg-surface/80 backdrop-blur-md border-b border-border/50 shadow-sm" 
+              : "bg-surface border-b border-border"
+        }`}
       >
         <div
           className={`mx-auto hidden max-w-[1760px] items-center justify-between gap-2 px-4 transition-[height] duration-200 sm:px-6 md:flex lg:px-10 ${

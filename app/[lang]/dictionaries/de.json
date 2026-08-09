@@ -1031,6 +1031,96 @@
           "quote": "Mein Terminplan macht endlich Sinn. Kundinnen buchen direkt und ich verbringe weniger Zeit mit Hin-und-her-Nachrichten."
         }
       ]
+    },
+    "faqs": {
+      "badge": "FAQ",
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Alles, was du über Buchen, Anbieten und Bezahlen bei AfroBraid Connect wissen musst.",
+      "tabAll": "Alle",
+      "tabCustomer": "Kunde",
+      "tabBraider": "Braider",
+      "items": [
+        {
+          "audience": "all",
+          "question": "Was ist AfroBraid Connect?",
+          "answer": "Eine Plattform, die Kundinnen mit professionellen Braidern verbindet und es einfach macht, Stile zu durchsuchen, Bewertungen zu lesen und Termine zu buchen."
+        },
+        {
+          "audience": "customer",
+          "question": "Wie buche ich eine Braiderin?",
+          "answer": "Durchsuche einfach die Braider in deiner Stadt, wähle deinen Stil und buche direkt über unsere Plattform."
+        },
+        {
+          "audience": "braider",
+          "question": "Wie werde ich als Braiderin gelistet?",
+          "answer": "Registriere dich als Braiderin und vervollständige dein Profil, um Buchungen von Kundinnen zu erhalten."
+        },
+        {
+          "audience": "all",
+          "question": "Fällt eine Gebühr für den Beitritt zu AfroBraid an?",
+          "answer": "Die Anmeldung ist kostenlos! Wir erheben nur eine kleine Servicegebühr pro abgeschlossener Buchung."
+        },
+        {
+          "audience": "braider",
+          "question": "Wie verwalte ich meine Buchungen?",
+          "answer": "Nutze unser Dashboard, um Buchungen anzusehen, anzunehmen oder zu verschieben und deine Einnahmen zu verfolgen."
+        },
+        {
+          "audience": "all",
+          "question": "Kann ich eine Buchung stornieren?",
+          "answer": "Ja, aber du solltest möglichst frühzeitig mit der Kundin kommunizieren, um Strafen zu vermeiden."
+        },
+        {
+          "audience": "customer",
+          "question": "Welche Stile kann ich buchen?",
+          "answer": "Du kannst nach einer Vielzahl von Flechtstilen suchen, darunter Box Braids, Cornrows, Twists und mehr."
+        },
+        {
+          "audience": "braider",
+          "question": "Wie werde ich als Braiderin bezahlt?",
+          "answer": "Zahlungen werden nach einer abgeschlossenen Buchung automatisch über die Plattform verarbeitet."
+        },
+        {
+          "audience": "braider",
+          "question": "Kann ich mehrere Kundinnen gleichzeitig verwalten?",
+          "answer": "Ja! Mit unserem Dashboard können Braiderinnen mehrere Termine und Zeitpläne effizient verwalten."
+        },
+        {
+          "audience": "customer",
+          "question": "Gibt es Kundenbewertungen?",
+          "answer": "Auf jeden Fall! Du kannst Bewertungen für jede Braiderin lesen, bevor du buchst."
+        },
+        {
+          "audience": "all",
+          "question": "Sind meine Daten sicher?",
+          "answer": "Ja, wir verwenden Verschlüsselung und sichere Protokolle, um deine persönlichen Daten und Zahlungsinformationen zu schützen."
+        },
+        {
+          "audience": "braider",
+          "question": "Wie aktualisiere ich mein Profil als Braiderin?",
+          "answer": "Gehe zu deinen Profileinstellungen und aktualisiere deine Verfügbarkeit, Preise und Portfoliobilder."
+        },
+        {
+          "audience": "customer",
+          "question": "Kann ich mehr als eine Braiderin am selben Tag buchen?",
+          "answer": "Ja, du kannst mehrere Buchungen planen, solange sich die Zeitfenster nicht überschneiden."
+        },
+        {
+          "audience": "all",
+          "question": "Wie werden Streitigkeiten zwischen Kundinnen und Braiderinnen gehandhabt?",
+          "answer": "Wir vermitteln Streitigkeiten über unser Support-Team, um eine faire Lösung für beide Seiten sicherzustellen."
+        },
+        {
+          "audience": "braider",
+          "question": "Kann ich als Braiderin Rabatte anbieten?",
+          "answer": "Ja, du kannst spezielle Aktionen oder Rabattcodes direkt in deinem Braider-Dashboard erstellen."
+        },
+        {
+          "audience": "all",
+          "question": "Gibt es Kundensupport?",
+          "answer": "Ja! Wir bieten Support per E-Mail und Live-Chat für Kundinnen und Braiderinnen."
+        }
+      ]
     }
   }
 }
