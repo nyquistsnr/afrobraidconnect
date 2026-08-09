@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Loader2, Trash2, AlertTriangle, AlertCircle } from "lucide-react";
+import { Loader2, Trash2, AlertTriangle, AlertCircle, Download } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { TryOnResponse } from "@/lib/api/types";
 import { tryonApi } from "@/lib/api/tryon-client";
@@ -189,6 +189,31 @@ export function EstherAiHistory({
                 addSuffix: true,
               })}
             </p>
+            
+            {item.status === "COMPLETED" && item.original_url && item.result_url && (
+              <div className="mt-3 flex items-center gap-2 pt-2 border-t border-border/50">
+                <a
+                  href={item.original_url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-background py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors"
+                >
+                  <Download className="size-3.5" />
+                  Original
+                </a>
+                <a
+                  href={item.result_url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand py-1.5 text-xs font-semibold text-brand-foreground hover:bg-brand/90 transition-colors"
+                >
+                  <Download className="size-3.5" />
+                  Result
+                </a>
+              </div>
+            )}
           </div>
         </div>
       ))}
