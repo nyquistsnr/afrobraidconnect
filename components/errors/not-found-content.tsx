@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { Home, Search } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 
@@ -16,35 +16,7 @@ export interface NotFoundDict {
 
 const DIGITS = ["4", "0", "4"];
 
-const containerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.2, 0, 0, 1] },
-  },
-};
-
-const digitVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.85, rotate: -6 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    rotate: 0,
-    transition: { duration: 0.6, ease: [0.2, 0, 0, 1] },
-  },
-};
+const EASE = [0.2, 0, 0, 1] as const;
 
 export function NotFoundContent({
   dict,
@@ -88,25 +60,22 @@ export function NotFoundContent({
       </header>
 
       <main className="relative flex flex-1 flex-col items-center justify-center px-6 py-16 text-center">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col items-center gap-6"
-        >
-          <motion.div
-            variants={itemVariants}
-            className="flex items-center gap-2 text-6xl font-black tracking-tight sm:text-8xl"
-          >
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex items-center gap-2 text-6xl font-black tracking-tight sm:text-8xl">
             {DIGITS.map((digit, index) => (
-              <motion.span key={`${digit}-${index}`} variants={digitVariants}>
+              <motion.span
+                key={`${digit}-${index}`}
+                initial={{ opacity: 0, y: 40, scale: 0.85, rotate: -6 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: EASE }}
+              >
                 <motion.span
                   animate={{ y: [0, -10, 0] }}
                   transition={{
                     duration: 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.2,
+                    delay: 0.6 + index * 0.2,
                   }}
                   className="inline-block bg-gradient-to-b from-brand to-brand-hover bg-clip-text text-transparent"
                 >
@@ -114,31 +83,39 @@ export function NotFoundContent({
                 </motion.span>
               </motion.span>
             ))}
-          </motion.div>
+          </div>
 
           <motion.span
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4, ease: EASE }}
             className="w-fit rounded-full border border-brand px-4 py-1.5 text-sm font-semibold text-brand"
           >
             {dict.eyebrow}
           </motion.span>
 
           <motion.h1
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: EASE }}
             className="max-w-xl text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
           >
             {dict.title}
           </motion.h1>
 
           <motion.p
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6, ease: EASE }}
             className="max-w-md text-base text-muted-foreground"
           >
             {dict.subtitle}
           </motion.p>
 
           <motion.div
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7, ease: EASE }}
             className="mt-2 flex flex-wrap items-center justify-center gap-3"
           >
             <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
@@ -160,7 +137,7 @@ export function NotFoundContent({
               </Link>
             </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
       </main>
     </div>
   );
