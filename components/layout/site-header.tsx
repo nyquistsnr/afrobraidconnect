@@ -168,8 +168,8 @@ export function SiteHeader({
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b border-border transition-shadow ${
-          isLandingSearch ? "bg-hero" : "bg-surface"
+        className={`sticky top-0 z-50 transition-shadow ${
+          isLandingSearch ? "bg-hero" : "border-b border-border bg-surface"
         } ${scrolled ? "shadow-sm" : ""}`}
       >
         <div
