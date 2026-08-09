@@ -51,10 +51,10 @@ export function SiteFooter({
               Esther AI
             </Link>
             <Link href={`/${lang}/about`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.about}</Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.contact}</Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.blog}</Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.sitemap}</Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.howItWorks}</Link>
+            <Link href={`/${lang}/contact`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.contact}</Link>
+            <Link href={`/${lang}/blog`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.blog}</Link>
+            <Link href={`/${lang}/sitemap`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.sitemap}</Link>
+            <Link href={`/${lang}/#how-it-works`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.howItWorks}</Link>
           </div>
           
           <div className="flex flex-col gap-4">

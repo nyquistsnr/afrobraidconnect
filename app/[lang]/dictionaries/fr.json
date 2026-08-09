@@ -1218,5 +1218,56 @@
     "ctaTitle": "Prêt pour votre prochain look ?",
     "ctaButton": "Commencer la recherche",
     "ctaPartner": "Devenir partenaire"
+  },
+  "contactUs": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous serions ravis de vous entendre. Remplissez le formulaire ci-dessous et notre équipe vous répondra sous peu.",
+    "firstNameLabel": "Prénom",
+    "firstNamePlaceholder": "ex: Amara",
+    "lastNameLabel": "Nom de famille",
+    "lastNamePlaceholder": "ex: Nwosu",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "bonjour@exemple.fr",
+    "phoneLabel": "Numéro de téléphone",
+    "subjectLabel": "Sujet (Facultatif)",
+    "subjectPlaceholder": "De quoi s'agit-il ?",
+    "purposeLabel": "Motif du contact",
+    "purposePlaceholder": "Sélectionnez un motif...",
+    "purposes": {
+      "GENERAL": "Demande générale",
+      "PARTNER": "Devenir partenaire",
+      "PRICING": "Tarification et facturation",
+      "FAQS": "Aide et support"
+    },
+    "messageLabel": "Message",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+    "submit": "Envoyer le message",
+    "submitting": "Envoi en cours...",
+    "successTitle": "Message envoyé !",
+    "rateLimited": "Vous avez envoyé trop de messages. Veuillez réessayer plus tard.",
+    "retryAfter": "Réessayez dans {seconds}s"
+  },
+  "sitemap": {
+    "title": "Plan du site",
+    "subtitle": "Trouvez votre chemin sur Afrobraids Connect.",
+    "explore": "Explorer",
+    "exploreDesc": "Trouvez des coiffeurs, vérifiez la disponibilité et réservez votre prochain style.",
+    "company": "Entreprise",
+    "companyDesc": "En savoir plus sur nous et notre mission.",
+    "legal": "Légal",
+    "legalDesc": "Conditions, confidentialité et politiques.",
+    "support": "Support",
+    "supportDesc": "Obtenez de l'aide pour vos réservations ou votre compte.",
+    "links": {
+      "home": "Accueil",
+      "search": "Rechercher des coiffeurs",
+      "about": "À propos de nous",
+      "partners": "Pour les partenaires",
+      "pricing": "Tarifs",
+      "contact": "Contact",
+      "blog": "Blog",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions de service"
+    }
   }
 }

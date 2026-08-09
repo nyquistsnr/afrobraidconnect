@@ -1218,5 +1218,56 @@
     "ctaTitle": "Bereit für Ihren nächsten Look?",
     "ctaButton": "Suche starten",
     "ctaPartner": "Partner werden"
+  },
+  "contactUs": {
+    "title": "Kontaktiere uns",
+    "subtitle": "Wir würden uns freuen, von dir zu hören. Fülle das Formular unten aus und unser Team wird sich in Kürze bei dir melden.",
+    "firstNameLabel": "Vorname",
+    "firstNamePlaceholder": "z.B. Amara",
+    "lastNameLabel": "Nachname",
+    "lastNamePlaceholder": "z.B. Nwosu",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "hallo@beispiel.de",
+    "phoneLabel": "Telefonnummer",
+    "subjectLabel": "Betreff (Optional)",
+    "subjectPlaceholder": "Worum geht es?",
+    "purposeLabel": "Grund der Kontaktaufnahme",
+    "purposePlaceholder": "Wähle einen Grund...",
+    "purposes": {
+      "GENERAL": "Allgemeine Anfrage",
+      "PARTNER": "Partner werden",
+      "PRICING": "Preise & Abrechnung",
+      "FAQS": "Hilfe & Support"
+    },
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Wie können wir dir helfen?",
+    "submit": "Nachricht senden",
+    "submitting": "Wird gesendet...",
+    "successTitle": "Nachricht gesendet!",
+    "rateLimited": "Du hast zu viele Nachrichten gesendet. Bitte versuche es später noch einmal.",
+    "retryAfter": "Versuche es in {seconds}s erneut"
+  },
+  "sitemap": {
+    "title": "Sitemap",
+    "subtitle": "Finde dich auf Afrobraids Connect zurecht.",
+    "explore": "Entdecken",
+    "exploreDesc": "Finde Braider, prüfe Verfügbarkeiten und buche deinen nächsten Style.",
+    "company": "Unternehmen",
+    "companyDesc": "Erfahre mehr über uns und unsere Mission.",
+    "legal": "Rechtliches",
+    "legalDesc": "Bedingungen, Datenschutz und Richtlinien.",
+    "support": "Support",
+    "supportDesc": "Hol dir Hilfe bei deinen Buchungen oder deinem Konto.",
+    "links": {
+      "home": "Startseite",
+      "search": "Braider suchen",
+      "about": "Über uns",
+      "partners": "Für Partner",
+      "pricing": "Preise",
+      "contact": "Kontakt",
+      "blog": "Blog",
+      "privacy": "Datenschutzerklärung",
+      "terms": "Nutzungsbedingungen"
+    }
   }
 }

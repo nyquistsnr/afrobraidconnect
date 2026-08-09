@@ -1218,5 +1218,56 @@
     "ctaTitle": "Ready for your next look?",
     "ctaButton": "Start searching",
     "ctaPartner": "Become a partner"
+  },
+  "contactUs": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you. Fill out the form below and our team will get back to you shortly.",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "e.g. Amara",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "e.g. Nwosu",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "hello@example.com",
+    "phoneLabel": "Phone Number",
+    "subjectLabel": "Subject (Optional)",
+    "subjectPlaceholder": "What is this regarding?",
+    "purposeLabel": "Reason for Contact",
+    "purposePlaceholder": "Select a reason...",
+    "purposes": {
+      "GENERAL": "General Inquiry",
+      "PARTNER": "Become a Partner",
+      "PRICING": "Pricing & Billing",
+      "FAQS": "Help & Support"
+    },
+    "messageLabel": "Message",
+    "messagePlaceholder": "How can we help you?",
+    "submit": "Send Message",
+    "submitting": "Sending...",
+    "successTitle": "Message Sent!",
+    "rateLimited": "You've sent too many messages. Please try again later.",
+    "retryAfter": "Try again in {seconds}s"
+  },
+  "sitemap": {
+    "title": "Sitemap",
+    "subtitle": "Find your way around Afrobraids Connect.",
+    "explore": "Explore",
+    "exploreDesc": "Find braiders, check availability, and book your next style.",
+    "company": "Company",
+    "companyDesc": "Learn more about us and our mission.",
+    "legal": "Legal",
+    "legalDesc": "Terms, privacy, and policies.",
+    "support": "Support",
+    "supportDesc": "Get help with your bookings or account.",
+    "links": {
+      "home": "Home",
+      "search": "Search Braiders",
+      "about": "About Us",
+      "partners": "For Partners",
+      "pricing": "Pricing",
+      "contact": "Contact Us",
+      "blog": "Blog",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
   }
 }

@@ -29,7 +29,7 @@ export function HowItWorks({
   lang: Locale;
 }) {
   return (
-    <section className="bg-how-it-works px-6 py-14 text-center md:py-20">
+    <section id="how-it-works" className="bg-how-it-works px-6 py-14 text-center md:py-20">
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 md:gap-10">
         <span className="rounded-full bg-how-it-works-foreground px-5 py-2 text-sm font-semibold text-how-it-works">
           {dict.badge}
