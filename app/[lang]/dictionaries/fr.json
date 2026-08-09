@@ -1146,16 +1146,16 @@
       "joinBraiderCta": "Rejoindre en tant que tresseuse"
     },
     "curated": {
-      "title": "Discover Braiders",
+      "title": "Découvrir des Braiders",
       "tabs": {
-        "trending": "Trending",
-        "topRated": "Top Rated",
-        "new": "New",
-        "recommended": "Recommended"
+        "trending": "Tendances",
+        "topRated": "Mieux Notés",
+        "new": "Nouveaux",
+        "recommended": "Recommandés"
       },
-      "loading": "Finding the best braiders...",
-      "error": "Could not load braiders.",
-      "empty": "No braiders found in your area."
+      "loading": "Recherche des meilleurs braiders...",
+      "error": "Impossible de charger les braiders.",
+      "empty": "Aucun braider trouvé dans votre région."
     }
   },
   "notFoundPage": {

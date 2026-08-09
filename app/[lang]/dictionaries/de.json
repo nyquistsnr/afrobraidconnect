@@ -1146,16 +1146,16 @@
       "joinBraiderCta": "Als Braiderin beitreten"
     },
     "curated": {
-      "title": "Discover Braiders",
+      "title": "Braider entdecken",
       "tabs": {
-        "trending": "Trending",
-        "topRated": "Top Rated",
-        "new": "New",
-        "recommended": "Recommended"
+        "trending": "Im Trend",
+        "topRated": "Bestbewertet",
+        "new": "Neu",
+        "recommended": "Empfohlen"
       },
-      "loading": "Finding the best braiders...",
-      "error": "Could not load braiders.",
-      "empty": "No braiders found in your area."
+      "loading": "Suche nach den besten Braidern...",
+      "error": "Braider konnten nicht geladen werden.",
+      "empty": "Keine Braider in deiner Nähe gefunden."
     }
   },
   "notFoundPage": {
