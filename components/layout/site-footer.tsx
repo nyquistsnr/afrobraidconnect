@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
@@ -46,6 +46,10 @@ export function SiteFooter({
           
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold text-white">{dict.company}</h3>
+            <Link href={`/${lang}/esther-ai`} className="text-sm text-brand font-semibold hover:text-brand/80 transition-colors flex items-center gap-1.5">
+              <Sparkles className="size-4 shrink-0" />
+              Esther AI
+            </Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.about}</Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.contact}</Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.blog}</Link>
