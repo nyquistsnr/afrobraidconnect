@@ -19,6 +19,8 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         title: dict.home.title,
         subtitle: dict.home.subtitle,
         startSearch: dict.siteHeader.startSearch,
+        styleGalleryAlt: dict.home.styleGalleryAlt,
+        appointmentsBooked: dict.home.appointmentsBooked,
       }}
       footerDict={dict.common.footer}
     />

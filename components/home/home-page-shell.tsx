@@ -49,6 +49,7 @@ export function HomePageShell({
           dict={heroDict}
           docked={docked}
           onActivate={() => setActivateSignal((n) => n + 1)}
+          lang={lang}
         />
       </main>
       <SiteFooter lang={lang} dict={footerDict} />

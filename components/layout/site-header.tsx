@@ -89,7 +89,10 @@ export function SiteHeader({
   // Home-page-only: when provided, the header's search bar is hidden
   // (crossfaded away) whenever searchDocked is explicitly false, instead of
   // always showing — every other page leaves these undefined and renders
-  // exactly as before.
+  // exactly as before. Presence of this prop (isLandingSearch below) also
+  // switches the header to the hero's bg-hero color instead of bg-surface,
+  // constantly (not just pre-scroll), so it reads as one continuous band
+  // with the hero section beneath it.
   searchDocked?: boolean;
   onSearchActiveChange?: (open: boolean) => void;
   searchActivateSignal?: number;
@@ -165,9 +168,9 @@ export function SiteHeader({
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b border-border bg-surface transition-shadow ${
-          scrolled ? "shadow-sm" : ""
-        }`}
+        className={`sticky top-0 z-50 border-b border-border transition-shadow ${
+          isLandingSearch ? "bg-hero" : "bg-surface"
+        } ${scrolled ? "shadow-sm" : ""}`}
       >
         <div
           className={`mx-auto hidden max-w-[1760px] items-center justify-between gap-2 px-4 transition-[height] duration-200 sm:px-6 md:flex lg:px-10 ${

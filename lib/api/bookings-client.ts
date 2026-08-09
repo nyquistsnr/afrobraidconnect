@@ -53,6 +53,38 @@ async function authedRequest<TRes>(
   return json.data;
 }
 
+// Public (no auth) — used for the homepage's live "appointments booked
+// today" counter. `data` is a plain number, so unlike authedRequest above
+// this must not treat a falsy-but-valid 0 count as an error.
+async function publicRequest<TRes>(path: string): Promise<TRes> {
+  if (!API_BASE) {
+    throw new ApiError(
+      "API_BASE_NOT_CONFIGURED",
+      "NEXT_PUBLIC_API_BASE_URL is not set.",
+      500
+    );
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`);
+  } catch {
+    throw new ApiError("NETWORK_ERROR", "Could not reach the server.", 0);
+  }
+
+  const json: ApiEnvelope<TRes> = await res.json();
+
+  if (json.status === "error" || json.data === null || json.data === undefined) {
+    const error = json.error ?? {
+      code: "UNKNOWN_ERROR",
+      message: "Something went wrong.",
+    };
+    throw new ApiError(error.code, error.message, res.status, error.details);
+  }
+
+  return json.data;
+}
+
 // The raw wire shape is flat (page/page_size/total_items alongside items),
 // unlike the braider-search endpoint's nested `pagination` object — reshaped
 // below into the same PaginatedData<T> shape the rest of the app expects.
@@ -124,4 +156,6 @@ export const bookingsApi = {
         body: paymentMethodId ? { payment_method_id: paymentMethodId } : {},
       }
     ),
+
+  getTodayCount: () => publicRequest<number>(`${BOOKINGS_PATH}/today-count`),
 };

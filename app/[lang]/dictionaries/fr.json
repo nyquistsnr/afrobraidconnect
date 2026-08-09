@@ -955,6 +955,8 @@
   },
   "home": {
     "title": "Réservez votre prochaine coiffure en tresses en toute simplicité.",
-    "subtitle": "AfroBraid Connect est le moyen le plus simple de trouver, réserver et évaluer les meilleures coiffeuses de votre ville. Explorez les styles que vous aimez et réservez votre prochain look en quelques clics."
+    "subtitle": "AfroBraid Connect est le moyen le plus simple de trouver, réserver et évaluer les meilleures coiffeuses de votre ville. Explorez les styles que vous aimez et réservez votre prochain look en quelques clics.",
+    "styleGalleryAlt": "Inspiration de styles de tresses",
+    "appointmentsBooked": "{count} rendez-vous réservés aujourd'hui"
   }
 }

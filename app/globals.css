@@ -12,6 +12,7 @@
   --brand: #b9713f;
   --brand-hover: #9c5d33;
   --brand-foreground: #ffffff;
+  --hero-background: #faf4f0;
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-foreground: var(--brand-foreground);
+  --color-hero: var(--hero-background);
   --font-sans: var(--font-fira-sans), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
@@ -45,6 +47,7 @@
     --brand: #d98b5f;
     --brand-hover: #e39c74;
     --brand-foreground: #171717;
+    --hero-background: oklch(21% 0.012 56.314);
   }
 }
 
@@ -60,6 +63,7 @@
   --brand: #d98b5f;
   --brand-hover: #e39c74;
   --brand-foreground: #171717;
+  --hero-background: oklch(21% 0.012 56.314);
 }
 
 body {
