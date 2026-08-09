@@ -13,6 +13,7 @@
     "signUp": "Sign up",
     "logIn": "Log in",
     "logOut": "Log out",
+    "downloadApp": "Download App",
     "myBookings": "My bookings",
     "helpCenter": "Help Center",
     "menuLabel": "Open menu",
@@ -1269,5 +1270,16 @@
       "privacy": "Privacy Policy",
       "terms": "Terms of Service"
     }
+  },
+  "downloadApp": {
+    "title": "Download the App",
+    "subtitle": "Coming Soon",
+    "description": "We are bringing the best braiding experience to your pocket. Join the waitlist to be the first to know when we launch.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "Enter your email",
+    "notifyMe": "Notify Me",
+    "successMessage": "You've been added to the waitlist!",
+    "downloadOnAppStore": "Download on the App Store",
+    "getItOnGooglePlay": "GET IT ON Google Play"
   }
 }

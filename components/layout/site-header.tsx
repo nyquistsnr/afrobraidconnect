@@ -12,6 +12,7 @@ import {
   Menu,
   MessageCircle,
   Sparkles,
+  Smartphone,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -60,6 +61,7 @@ export interface SiteHeaderDict {
   signUp: string;
   logIn: string;
   logOut: string;
+  downloadApp: string;
   myBookings: string;
   helpCenter: string;
   menuLabel: string;
@@ -374,6 +376,17 @@ export function SiteHeader({
                     >
                       <Sparkles className="size-4" />
                       Esther AI Try-On
+                    </Link>
+                  </li>
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href={`/${lang}/download-app`}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-brand hover:bg-brand/10 transition-colors"
+                    >
+                      <Smartphone className="size-4" />
+                      {dict.downloadApp}
                     </Link>
                   </li>
                   <li role="none">

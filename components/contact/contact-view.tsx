@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,6 +47,20 @@ export function ContactView({
       purpose: "GENERAL",
     },
   });
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      reset({
+        first_name: session.user.firstName || "",
+        last_name: session.user.lastName || "",
+        email: session.user.email || "",
+        phone_number: session.user.phoneNumber || "",
+        purpose: "GENERAL",
+      });
+    }
+  }, [status, session, reset]);
 
   const onSubmit = async (data: ContactFormValues) => {
     setSuccessMessage(null);

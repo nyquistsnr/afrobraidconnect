@@ -13,6 +13,7 @@
     "signUp": "Registrieren",
     "logIn": "Anmelden",
     "logOut": "Abmelden",
+    "downloadApp": "App Herunterladen",
     "myBookings": "Meine Buchungen",
     "helpCenter": "Hilfebereich",
     "menuLabel": "Menü öffnen",
@@ -1269,5 +1270,16 @@
       "privacy": "Datenschutzerklärung",
       "terms": "Nutzungsbedingungen"
     }
+  },
+  "downloadApp": {
+    "title": "App Herunterladen",
+    "subtitle": "Demnächst",
+    "description": "Wir bringen das beste Flechterlebnis in Ihre Tasche. Tragen Sie sich in die Warteliste ein, um als Erster von unserem Start zu erfahren.",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "Geben Sie Ihre E-Mail ein",
+    "notifyMe": "Benachrichtigen Sie mich",
+    "successMessage": "Sie wurden in die Warteliste aufgenommen!",
+    "downloadOnAppStore": "Laden im App Store",
+    "getItOnGooglePlay": "JETZT BEI Google Play"
   }
 }
