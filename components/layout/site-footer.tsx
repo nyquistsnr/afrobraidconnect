@@ -40,8 +40,8 @@ export function SiteFooter({
           
           <div className="flex flex-col gap-4">
             <h3 className="text-sm font-semibold text-white">{dict.forBusiness}</h3>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.forPartners}</Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.pricing}</Link>
+            <Link href={`/${lang}/partners`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.forPartners}</Link>
+            <Link href={`/${lang}/pricing`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.pricing}</Link>
           </div>
           
           <div className="flex flex-col gap-4">
@@ -50,7 +50,7 @@ export function SiteFooter({
               <Sparkles className="size-4 shrink-0" />
               Esther AI
             </Link>
-            <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.about}</Link>
+            <Link href={`/${lang}/about`} className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.about}</Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.contact}</Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.blog}</Link>
             <Link href="#" className="text-sm text-how-it-works-muted-foreground hover:text-white transition-colors">{dict.sitemap}</Link>

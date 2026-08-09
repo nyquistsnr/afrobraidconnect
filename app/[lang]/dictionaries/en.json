@@ -1195,5 +1195,28 @@
     "noHistorySubtitle": "Your generated looks will appear here.",
     "errorGeneric": "Something went wrong. Please try again.",
     "errorMissingInput": "Please select a style or provide a description."
+  },
+  "comingSoonPage": {
+    "title": "Coming Soon",
+    "subtitle": "We're working hard to bring you this feature. Check back soon!",
+    "backToHome": "Return to Home",
+    "exploreBraiders": "Explore Braiders"
+  },
+  "aboutUs": {
+    "title": "About Us",
+    "heroHeadline": "Redefining Afro Hair Care in Europe",
+    "heroSubtitle": "Connecting you with the best afro hair braiders seamlessly, reliably, and beautifully.",
+    "missionTitle": "Our Mission",
+    "missionText": "We believe everyone deserves access to top-tier afro hair care. Finding a skilled braider shouldn't be a hassle. We created Afrobraids Connect to bridge the gap between talented braiders and clients looking for the perfect style.",
+    "whyChooseUsTitle": "Why Choose Us",
+    "whyLocation": "Location-based Search",
+    "whyLocationText": "Find verified braiders right in your neighborhood or destination.",
+    "whyPortfolios": "Verified Portfolios",
+    "whyPortfoliosText": "Browse genuine photos and reviews before you book.",
+    "whyEstherAI": "Esther AI",
+    "whyEstherAIText": "Not sure what you want? Let our AI assistant generate personalized style recommendations.",
+    "ctaTitle": "Ready for your next look?",
+    "ctaButton": "Start searching",
+    "ctaPartner": "Become a partner"
   }
 }

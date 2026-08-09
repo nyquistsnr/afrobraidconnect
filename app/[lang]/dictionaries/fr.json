@@ -1195,5 +1195,28 @@
     "noHistorySubtitle": "Vos looks générés apparaîtront ici.",
     "errorGeneric": "Quelque chose s'est mal passé. Veuillez réessayer.",
     "errorMissingInput": "Veuillez sélectionner un style ou fournir une description."
+  },
+  "comingSoonPage": {
+    "title": "Bientôt disponible",
+    "subtitle": "Nous travaillons dur pour vous offrir cette fonctionnalité. Revenez bientôt !",
+    "backToHome": "Retour à l'accueil",
+    "exploreBraiders": "Explorer les coiffeurs"
+  },
+  "aboutUs": {
+    "title": "À propos",
+    "heroHeadline": "Redéfinir le soin des cheveux afro en Europe",
+    "heroSubtitle": "Vous connecter avec les meilleurs coiffeurs afro de manière fluide, fiable et esthétique.",
+    "missionTitle": "Notre Mission",
+    "missionText": "Nous pensons que tout le monde mérite d'avoir accès à des soins capillaires afro de premier ordre. Trouver un coiffeur qualifié ne devrait pas être compliqué. Nous avons créé Afrobraids Connect pour combler le fossé entre les coiffeurs talentueux et les clients à la recherche du style parfait.",
+    "whyChooseUsTitle": "Pourquoi nous choisir",
+    "whyLocation": "Recherche basée sur la localisation",
+    "whyLocationText": "Trouvez des coiffeurs vérifiés directement dans votre quartier ou votre destination.",
+    "whyPortfolios": "Portfolios vérifiés",
+    "whyPortfoliosText": "Parcourez des photos et des avis authentiques avant de réserver.",
+    "whyEstherAI": "Esther AI",
+    "whyEstherAIText": "Vous ne savez pas ce que vous voulez ? Laissez notre assistant IA générer des recommandations de style personnalisées.",
+    "ctaTitle": "Prêt pour votre prochain look ?",
+    "ctaButton": "Commencer la recherche",
+    "ctaPartner": "Devenir partenaire"
   }
 }
