@@ -13,6 +13,7 @@ import {
   LogIn,
   LogOut,
   X,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
@@ -241,6 +242,15 @@ export function MobileTabBar({
           </div>
 
           <div className="my-2 border-t border-border" />
+
+          <Link
+            href={`/${lang}/esther-ai`}
+            onClick={() => setProfileOpen(false)}
+            className="flex items-center gap-2 rounded-xl px-3 py-3 text-sm font-semibold text-brand transition-colors hover:bg-brand/10"
+          >
+            <Sparkles className="size-4" />
+            Esther AI Try-On
+          </Link>
 
           <Link
             href="#"

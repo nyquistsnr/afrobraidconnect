@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -364,6 +365,17 @@ export function SiteHeader({
                     </div>
                   </li>
                   <li role="none" className="my-2 border-t border-border" />
+                  <li role="none">
+                    <Link
+                      role="menuitem"
+                      href={`/${lang}/esther-ai`}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-brand hover:bg-brand/10 transition-colors"
+                    >
+                      <Sparkles className="size-4" />
+                      Esther AI Try-On
+                    </Link>
+                  </li>
                   <li role="none">
                     <Link
                       role="menuitem"
