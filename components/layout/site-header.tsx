@@ -400,7 +400,11 @@ export function SiteHeader({
           </div>
         </div>
 
-        <div className="border-b border-border px-4 py-3 md:hidden">
+        <div
+          className={`px-4 py-3 md:hidden ${
+            isLandingSearch ? "" : "border-b border-border"
+          }`}
+        >
           <MobileSearch
             lang={lang}
             dict={{
