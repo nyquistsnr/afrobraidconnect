@@ -938,3 +938,39 @@ export type RealtimeEvent =
   | ChatMessageTranslatedEvent
   | NotificationEvent;
 
+// ---------------------------------------------------------------------------
+// TryOn (Esther AI)
+// ---------------------------------------------------------------------------
+
+export type TryOnStatus = "PROCESSING" | "COMPLETED" | "FAILED";
+export type TryOnUploadContentType = "image/jpeg" | "image/png" | "image/webp";
+
+export interface TryOnUploadUrlRequest {
+  content_type: TryOnUploadContentType;
+}
+
+export interface TryOnUploadUrlResponse {
+  upload_url: string;
+  object_key: string;
+  expires_in: number;
+}
+
+export interface TryOnRequest {
+  object_key: string;
+  style_id?: string;
+  style_variation_id?: string;
+  description?: string;
+}
+
+export interface TryOnResponse {
+  id: string;
+  status: TryOnStatus;
+  style: { id: string; slug: string; name: string } | null;
+  style_variation: { id: string; name: string } | null;
+  description: string | null;
+  original_url: string | null;
+  result_url: string | null;
+  error_message: string | null;
+  created_at: string;
+}
+

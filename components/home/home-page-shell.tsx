@@ -33,6 +33,7 @@ export function HomePageShell({
   faqsDict,
   finalCtaDict,
   footerDict,
+  estherAiDict,
 }: {
   lang: Locale;
   siteHeaderDict: SiteHeaderDict;
@@ -45,6 +46,7 @@ export function HomePageShell({
   faqsDict: FaqsDict;
   finalCtaDict: FinalCtaDict;
   footerDict: Dictionary["common"]["footer"];
+  estherAiDict: Dictionary["estherAi"];
 }) {
   const scrolled = useScrolled();
   const [panelOpen, setPanelOpen] = useState(false);
@@ -73,7 +75,7 @@ export function HomePageShell({
         <GrowBusiness dict={growBusinessDict} />
         <TestimonialsCarousel dict={testimonialsDict} />
         <Faqs dict={faqsDict} />
-        <FinalCta dict={finalCtaDict} lang={lang} />
+        <FinalCta dict={finalCtaDict} estherAiDict={estherAiDict} lang={lang} />
       </main>
       <SiteFooter lang={lang} dict={footerDict} common={common} />
     </div>
