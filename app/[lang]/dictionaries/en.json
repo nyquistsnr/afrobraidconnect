@@ -930,6 +930,7 @@
   },
   "chatReport": {
     "title": "Report this conversation",
+    "subtitle": "Help us understand what's wrong — our support team reviews every report.",
     "reasonLabel": "Reason",
     "reasons": {
       "HARASSMENT": "Harassment",
@@ -941,6 +942,7 @@
     },
     "detailsLabel": "Additional details (optional)",
     "detailsPlaceholder": "Tell us what happened…",
+    "confidentialNote": "The other person won't be notified that you reported this conversation.",
     "cancel": "Cancel",
     "submit": "Submit report",
     "submitting": "Submitting…",
@@ -973,6 +975,18 @@
     "subtitle": "AfroBraid Connect is the easiest way to find, book and review top-rated braiders in your city. Explore styles you love, and book your next look in just a few clicks.",
     "styleGalleryAlt": "Braid style inspiration",
     "appointmentsBooked": "{count} appointments booked today",
+    "curated": {
+      "title": "Discover Braiders",
+      "tabs": {
+        "trending": "Trending",
+        "topRated": "Top Rated",
+        "new": "New",
+        "recommended": "Recommended"
+      },
+      "loading": "Finding the best braiders...",
+      "error": "Could not load braiders.",
+      "empty": "No braiders found in your area."
+    },
     "howItWorks": {
       "badge": "How it works",
       "title": "3 steps on how to get connected with a braider on AfroBraids",

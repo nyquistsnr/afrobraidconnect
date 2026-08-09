@@ -34,6 +34,7 @@ export interface ChatThreadDict {
 
 export interface ChatReportDict {
   title: string;
+  subtitle: string;
   reasonLabel: string;
   reasons: {
     HARASSMENT: string;
@@ -45,6 +46,7 @@ export interface ChatReportDict {
   };
   detailsLabel: string;
   detailsPlaceholder: string;
+  confidentialNote: string;
   cancel: string;
   submit: string;
   submitting: string;

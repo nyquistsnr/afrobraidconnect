@@ -15,6 +15,7 @@ import {
 } from "@/components/home/testimonials-carousel";
 import { Faqs, type FaqsDict } from "@/components/home/faqs";
 import { FinalCta, type FinalCtaDict } from "@/components/home/final-cta";
+import { CuratedBraiders } from "@/components/home/curated-braiders";
 import type { NotificationBellDict } from "@/components/notifications/types";
 
 // Owns the hero<->header search "docked" signal so the header (rendered
@@ -34,6 +35,8 @@ export function HomePageShell({
   finalCtaDict,
   footerDict,
   estherAiDict,
+  curatedDict,
+  searchResultsDict,
 }: {
   lang: Locale;
   siteHeaderDict: SiteHeaderDict;
@@ -47,6 +50,8 @@ export function HomePageShell({
   finalCtaDict: FinalCtaDict;
   footerDict: Dictionary["common"]["footer"];
   estherAiDict: Dictionary["estherAi"];
+  curatedDict: Dictionary["home"]["curated"];
+  searchResultsDict: Dictionary["searchResults"];
 }) {
   const scrolled = useScrolled();
   const [panelOpen, setPanelOpen] = useState(false);
@@ -70,6 +75,11 @@ export function HomePageShell({
           docked={docked}
           onActivate={() => setActivateSignal((n) => n + 1)}
           lang={lang}
+        />
+        <CuratedBraiders 
+          lang={lang} 
+          dict={curatedDict} 
+          searchResultsDict={searchResultsDict} 
         />
         <HowItWorks dict={howItWorksDict} lang={lang} />
         <GrowBusiness dict={growBusinessDict} />

@@ -72,6 +72,32 @@ export const braidersApi = {
     );
   },
 
+  getCuratedList: (
+    type: "new" | "recommended" | "trending" | "top-rated",
+    params: {
+      lat?: number;
+      lng?: number;
+      radius_km?: number;
+      country_code?: string;
+      page?: number;
+      page_size?: number;
+    } = {},
+    lang?: Locale
+  ) => {
+    const query = new URLSearchParams();
+    if (params.lat != null) query.set("lat", String(params.lat));
+    if (params.lng != null) query.set("lng", String(params.lng));
+    if (params.radius_km != null) query.set("radius_km", String(params.radius_km));
+    if (params.country_code) query.set("country_code", params.country_code);
+    query.set("page", String(params.page ?? 1));
+    query.set("page_size", String(params.page_size ?? 20));
+
+    return get<PaginatedData<BraiderSearchItem>>(
+      `/braiders/${type}?${query.toString()}`,
+      lang
+    );
+  },
+
   getById: (braiderId: string, lang?: Locale) =>
     get<BraiderDetailResponse>(`/braiders/${braiderId}`, lang),
 

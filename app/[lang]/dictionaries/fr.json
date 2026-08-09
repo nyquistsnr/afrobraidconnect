@@ -930,6 +930,7 @@
   },
   "chatReport": {
     "title": "Signaler cette conversation",
+    "subtitle": "Aidez-nous à comprendre ce qui ne va pas — notre équipe examine chaque signalement.",
     "reasonLabel": "Motif",
     "reasons": {
       "HARASSMENT": "Harcèlement",
@@ -941,6 +942,7 @@
     },
     "detailsLabel": "Détails supplémentaires (facultatif)",
     "detailsPlaceholder": "Dites-nous ce qui s'est passé…",
+    "confidentialNote": "L'autre personne ne sera pas informée que vous avez signalé cette conversation.",
     "cancel": "Annuler",
     "submit": "Envoyer le signalement",
     "submitting": "Envoi en cours…",
@@ -1142,6 +1144,18 @@
       "title": "Votre prochain look ou votre prochaine opportunité d'affaires vous attend.",
       "findBraiderCta": "Trouver une tresseuse",
       "joinBraiderCta": "Rejoindre en tant que tresseuse"
+    },
+    "curated": {
+      "title": "Discover Braiders",
+      "tabs": {
+        "trending": "Trending",
+        "topRated": "Top Rated",
+        "new": "New",
+        "recommended": "Recommended"
+      },
+      "loading": "Finding the best braiders...",
+      "error": "Could not load braiders.",
+      "empty": "No braiders found in your area."
     }
   },
   "notFoundPage": {

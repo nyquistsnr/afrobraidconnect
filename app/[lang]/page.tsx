@@ -29,6 +29,8 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
       finalCtaDict={dict.home.finalCta}
       footerDict={dict.common.footer}
       estherAiDict={dict.estherAi}
+      curatedDict={dict.home.curated}
+      searchResultsDict={dict.searchResults}
     />
   );
 }
