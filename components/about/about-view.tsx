@@ -41,7 +41,7 @@ export function AboutView({
             className="object-cover opacity-90 object-center"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-background" />
         </div>
 
         <motion.div
