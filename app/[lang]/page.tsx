@@ -23,6 +23,7 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
         appointmentsBooked: dict.home.appointmentsBooked,
       }}
       howItWorksDict={dict.home.howItWorks}
+      growBusinessDict={dict.home.growBusiness}
       footerDict={dict.common.footer}
     />
   );

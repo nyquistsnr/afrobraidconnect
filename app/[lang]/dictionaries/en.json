@@ -979,6 +979,17 @@
           "description": "Communicate directly with the braider to discuss your style, ask questions, and finalize details."
         }
       ]
+    },
+    "growBusiness": {
+      "title": "Grow Your Business. Get Booked. Get Paid.",
+      "subtitle": "Get noticed by new clients, manage your bookings, and build your brand—all in one place.",
+      "cta": "Join as a Braider",
+      "testimonialImageAlt": "A braider standing in her salon",
+      "testimonialQuote": "My sales grew 30% in 2 months with AfroBraid Connect.",
+      "testimonialAuthor": "twist & braids by Teni",
+      "dashboardImageAlt": "A preview of the braider booking dashboard",
+      "dashboardCalloutTitle": "Your calendar, always up to date.",
+      "dashboardCalloutSubtitle": "New bookings, reschedules, and payments sync automatically — no double-booking, no guesswork."
     }
   }
 }

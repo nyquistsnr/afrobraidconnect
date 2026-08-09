@@ -979,6 +979,17 @@
           "description": "Communiquez directement avec la tresseuse pour discuter du style, poser vos questions et finaliser les détails."
         }
       ]
+    },
+    "growBusiness": {
+      "title": "Développez votre activité. Soyez réservée. Soyez payée.",
+      "subtitle": "Faites-vous remarquer par de nouvelles clientes, gérez vos réservations et développez votre marque—le tout au même endroit.",
+      "cta": "Devenir tresseuse",
+      "testimonialImageAlt": "Une tresseuse dans son salon",
+      "testimonialQuote": "Mes ventes ont augmenté de 30% en 2 mois avec AfroBraid Connect.",
+      "testimonialAuthor": "twist & braids by Teni",
+      "dashboardImageAlt": "Un aperçu du tableau de bord de réservation pour tresseuses",
+      "dashboardCalloutTitle": "Votre agenda, toujours à jour.",
+      "dashboardCalloutSubtitle": "Nouvelles réservations, reports et paiements se synchronisent automatiquement — plus de doubles réservations, plus de suppositions."
     }
   }
 }

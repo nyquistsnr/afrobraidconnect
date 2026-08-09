@@ -979,6 +979,17 @@
           "description": "Kommunizieren Sie direkt mit der Braiderin, um Ihren Style zu besprechen, Fragen zu stellen und Details zu klären."
         }
       ]
+    },
+    "growBusiness": {
+      "title": "Wachsen Sie mit Ihrem Business. Gebucht werden. Bezahlt werden.",
+      "subtitle": "Werden Sie von neuen Kundinnen entdeckt, verwalten Sie Ihre Termine und bauen Sie Ihre Marke auf—alles an einem Ort.",
+      "cta": "Als Braiderin beitreten",
+      "testimonialImageAlt": "Eine Braiderin in ihrem Salon",
+      "testimonialQuote": "Mein Umsatz ist mit AfroBraid Connect in 2 Monaten um 30% gestiegen.",
+      "testimonialAuthor": "twist & braids by Teni",
+      "dashboardImageAlt": "Eine Vorschau des Buchungs-Dashboards für Braiderinnen",
+      "dashboardCalloutTitle": "Ihr Kalender, immer aktuell.",
+      "dashboardCalloutSubtitle": "Neue Buchungen, Terminverschiebungen und Zahlungen werden automatisch synchronisiert — keine Doppelbuchungen, kein Rätselraten."
     }
   }
 }
