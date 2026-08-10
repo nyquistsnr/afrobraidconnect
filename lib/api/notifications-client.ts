@@ -12,6 +12,7 @@ const NOTIFICATIONS_PATH = "/notifications";
 async function authedRequest<TRes>(
   path: string,
   accessToken: string,
+  lang: string,
   options: { method?: string; body?: unknown } = {}
 ): Promise<TRes> {
   if (!API_BASE) {
@@ -28,6 +29,7 @@ async function authedRequest<TRes>(
       method: options.method ?? "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Accept-Language": lang,
         ...(options.body ? { "Content-Type": "application/json" } : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -52,7 +54,7 @@ async function authedRequest<TRes>(
 export const notificationsApi = {
   // Query params are built with URLSearchParams so date_from/date_to's "+"
   // (UTC offset) is percent-encoded correctly rather than decoding as a space.
-  list: (accessToken: string, params: NotificationListParams = {}) => {
+  list: (accessToken: string, lang: string, params: NotificationListParams = {}) => {
     const query = new URLSearchParams();
     if (params.is_read !== undefined) query.set("is_read", String(params.is_read));
     if (params.date_from) query.set("date_from", params.date_from);
@@ -61,28 +63,32 @@ export const notificationsApi = {
     query.set("page_size", String(params.page_size ?? 20));
     return authedRequest<PaginatedData<NotificationResponse>>(
       `${NOTIFICATIONS_PATH}?${query.toString()}`,
-      accessToken
+      accessToken,
+      lang
     );
   },
 
-  markRead: (accessToken: string, notificationId: string) =>
+  markRead: (accessToken: string, lang: string, notificationId: string) =>
     authedRequest<NotificationResponse>(
       `${NOTIFICATIONS_PATH}/${notificationId}/read`,
       accessToken,
+      lang,
       { method: "PATCH" }
     ),
 
-  markAllRead: (accessToken: string) =>
+  markAllRead: (accessToken: string, lang: string) =>
     authedRequest<{ marked_count: number }>(
       `${NOTIFICATIONS_PATH}/read-all`,
       accessToken,
+      lang,
       { method: "POST" }
     ),
 
-  remove: (accessToken: string, notificationId: string) =>
+  remove: (accessToken: string, lang: string, notificationId: string) =>
     authedRequest<{ message: string }>(
       `${NOTIFICATIONS_PATH}/${notificationId}`,
       accessToken,
+      lang,
       { method: "DELETE" }
     ),
 };

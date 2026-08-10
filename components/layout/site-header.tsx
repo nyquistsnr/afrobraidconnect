@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import {
-  Bell,
   CalendarCheck2,
   CircleUserRound,
   LogOut,
@@ -18,12 +17,12 @@ import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
-import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
 import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
 import { useScrolled } from "@/lib/use-scrolled";
 import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 import {
   LogoutConfirmModal,
   type LogoutModalDict,
@@ -125,7 +124,6 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
   const chatUnreadTotal = useChatUnreadTotal();
-  const notificationsUnreadCount = useNotificationsUnreadCount();
   const menuRef = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
@@ -233,6 +231,10 @@ export function SiteHeader({
               />
             </div>
 
+            {isAuthenticated && (
+              <NotificationBell lang={lang} dict={notificationsDict} />
+            )}
+
             <div ref={menuRef} className="relative">
               <button
                 type="button"
@@ -297,24 +299,6 @@ export function SiteHeader({
                           {chatUnreadTotal > 0 && (
                             <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
                               {chatUnreadTotal > 9 ? "9+" : chatUnreadTotal}
-                            </span>
-                          )}
-                        </Link>
-                      </li>
-                      <li role="none">
-                        <Link
-                          role="menuitem"
-                          href={`/${lang}/notifications`}
-                          onClick={() => setMenuOpen(false)}
-                          className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-border/40"
-                        >
-                          <span className="flex items-center gap-2">
-                            <Bell className="size-4" />
-                            {notificationsDict.panelTitle}
-                          </span>
-                          {notificationsUnreadCount > 0 && (
-                            <span className="flex size-5 items-center justify-center rounded-full bg-brand text-[11px] font-semibold text-brand-foreground">
-                              {notificationsUnreadCount > 9 ? "9+" : notificationsUnreadCount}
                             </span>
                           )}
                         </Link>

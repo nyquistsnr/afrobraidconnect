@@ -962,6 +962,8 @@
     "markAllRead": "Tout marquer comme lu",
     "viewAll": "Tout voir",
     "deleteAria": "Supprimer la notification",
+    "muteSound": "Couper le son des notifications",
+    "unmuteSound": "Activer le son des notifications",
     "pageTitle": "Notifications",
     "pageSubtitle": "Mises à jour sur vos réservations et messages.",
     "errorTitle": "Impossible de charger vos notifications",

@@ -5,12 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bell } from "lucide-react";
+import { Bell, Volume2, VolumeX } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { notificationsApi } from "@/lib/api/notifications-client";
 import { notificationsKey } from "@/lib/notifications/query-keys";
 import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
+import { getNotificationTarget } from "@/lib/notifications/notification-link";
+import {
+  isNotificationSoundEnabled,
+  setNotificationSoundEnabled,
+} from "@/lib/notifications/notification-sound";
 import { formatThreadTimestamp } from "@/lib/chat/format";
+import { NotificationTypeIcon } from "@/components/notifications/notification-type-icon";
 import type { NotificationResponse } from "@/lib/api/types";
 import type { NotificationBellDict } from "@/components/notifications/types";
 
@@ -30,6 +36,16 @@ export function NotificationBell({
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  // Lazy-init from localStorage is safe here (no SSR hydration mismatch
+  // risk) because this button only ever renders once `open` is true, which
+  // can't happen until after the user has clicked the bell client-side.
+  const [soundEnabled, setSoundEnabled] = useState(() => isNotificationSoundEnabled());
+
+  function toggleSound() {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    setNotificationSoundEnabled(next);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -42,23 +58,23 @@ export function NotificationBell({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  const unreadCount = useNotificationsUnreadCount();
+  const unreadCount = useNotificationsUnreadCount(lang);
 
   const { data: recent } = useQuery({
     queryKey: notificationsKey.panel(),
-    queryFn: () => notificationsApi.list(accessToken!, { page_size: PANEL_SIZE }),
+    queryFn: () => notificationsApi.list(accessToken!, lang, { page_size: PANEL_SIZE }),
     enabled: isAuthenticated && open,
   });
 
   const markReadMutation = useMutation({
-    mutationFn: (id: string) => notificationsApi.markRead(accessToken!, id),
+    mutationFn: (id: string) => notificationsApi.markRead(accessToken!, lang, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationsKey.all() });
     },
   });
 
   const markAllReadMutation = useMutation({
-    mutationFn: () => notificationsApi.markAllRead(accessToken!),
+    mutationFn: () => notificationsApi.markAllRead(accessToken!, lang),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationsKey.all() });
     },
@@ -67,9 +83,8 @@ export function NotificationBell({
   function handleRowClick(notification: NotificationResponse) {
     if (!notification.is_read) markReadMutation.mutate(notification.id);
     setOpen(false);
-    if (notification.related_type === "chat_thread" && notification.related_id) {
-      router.push(`/${lang}/chat/${notification.related_id}`);
-    }
+    const target = getNotificationTarget(notification, lang);
+    if (target) router.push(target);
   }
 
   if (!isAuthenticated) return null;
@@ -102,16 +117,31 @@ export function NotificationBell({
         >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <span className="text-sm font-semibold text-foreground">{dict.panelTitle}</span>
-            {hasUnread && (
+            <div className="flex items-center gap-3">
+              {hasUnread && (
+                <button
+                  type="button"
+                  onClick={() => markAllReadMutation.mutate()}
+                  disabled={markAllReadMutation.isPending}
+                  className="text-xs font-semibold text-brand hover:underline disabled:opacity-50"
+                >
+                  {dict.markAllRead}
+                </button>
+              )}
               <button
                 type="button"
-                onClick={() => markAllReadMutation.mutate()}
-                disabled={markAllReadMutation.isPending}
-                className="text-xs font-semibold text-brand hover:underline disabled:opacity-50"
+                onClick={toggleSound}
+                aria-label={soundEnabled ? dict.muteSound : dict.unmuteSound}
+                aria-pressed={!soundEnabled}
+                className="rounded-full p-1 text-muted-foreground hover:bg-border/40 hover:text-foreground"
               >
-                {dict.markAllRead}
+                {soundEnabled ? (
+                  <Volume2 className="size-4" />
+                ) : (
+                  <VolumeX className="size-4" />
+                )}
               </button>
-            )}
+            </div>
           </div>
 
           {items.length === 0 ? (
@@ -127,17 +157,20 @@ export function NotificationBell({
                     type="button"
                     role="menuitem"
                     onClick={() => handleRowClick(notification)}
-                    className="flex w-full items-start gap-2 px-4 py-2.5 text-left hover:bg-border/40"
+                    className="flex w-full items-start gap-2.5 px-4 py-2.5 text-left hover:bg-border/40"
                   >
-                    {!notification.is_read && (
-                      <span className="mt-1.5 size-2 shrink-0 rounded-full bg-brand" aria-hidden />
-                    )}
-                    <div className={`min-w-0 flex-1 ${notification.is_read ? "pl-4" : ""}`}>
-                      <p
-                        className={`truncate text-sm ${notification.is_read ? "font-medium text-foreground" : "font-semibold text-foreground"}`}
-                      >
-                        {notification.title}
-                      </p>
+                    <NotificationTypeIcon type={notification.type} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <p
+                          className={`truncate text-sm ${notification.is_read ? "font-medium text-foreground" : "font-semibold text-foreground"}`}
+                        >
+                          {notification.title}
+                        </p>
+                        {!notification.is_read && (
+                          <span className="size-2 shrink-0 rounded-full bg-brand" aria-hidden />
+                        )}
+                      </div>
                       <p className="truncate text-xs text-muted-foreground">{notification.body}</p>
                       <p className="mt-0.5 text-[11px] text-muted-foreground">
                         {formatThreadTimestamp(notification.created_at, lang)}

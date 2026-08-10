@@ -9,8 +9,10 @@ import { Loader } from "@/components/ui/loader";
 import type { Locale } from "@/lib/i18n";
 import { notificationsApi } from "@/lib/api/notifications-client";
 import { notificationsKey } from "@/lib/notifications/query-keys";
+import { getNotificationTarget } from "@/lib/notifications/notification-link";
 import { formatThreadTimestamp } from "@/lib/chat/format";
 import { PaginationControl } from "@/components/ui/pagination-control";
+import { NotificationTypeIcon } from "@/components/notifications/notification-type-icon";
 import type { NotificationResponse } from "@/lib/api/types";
 import type { NotificationsListDict } from "@/components/notifications/types";
 
@@ -32,31 +34,30 @@ export function NotificationsListView({
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: notificationsKey.list(page),
-    queryFn: () => notificationsApi.list(accessToken!, { page, page_size: PAGE_SIZE }),
+    queryFn: () => notificationsApi.list(accessToken!, lang, { page, page_size: PAGE_SIZE }),
     enabled: isAuthenticated,
     placeholderData: keepPreviousData,
   });
 
   const markReadMutation = useMutation({
-    mutationFn: (id: string) => notificationsApi.markRead(accessToken!, id),
+    mutationFn: (id: string) => notificationsApi.markRead(accessToken!, lang, id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: notificationsKey.all() }),
   });
 
   const markAllReadMutation = useMutation({
-    mutationFn: () => notificationsApi.markAllRead(accessToken!),
+    mutationFn: () => notificationsApi.markAllRead(accessToken!, lang),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: notificationsKey.all() }),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => notificationsApi.remove(accessToken!, id),
+    mutationFn: (id: string) => notificationsApi.remove(accessToken!, lang, id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: notificationsKey.all() }),
   });
 
   function handleRowClick(notification: NotificationResponse) {
     if (!notification.is_read) markReadMutation.mutate(notification.id);
-    if (notification.related_type === "chat_thread" && notification.related_id) {
-      router.push(`/${lang}/chat/${notification.related_id}`);
-    }
+    const target = getNotificationTarget(notification, lang);
+    if (target) router.push(target);
   }
 
   const items = data?.items ?? [];
@@ -115,17 +116,20 @@ export function NotificationsListView({
                 <button
                   type="button"
                   onClick={() => handleRowClick(notification)}
-                  className="flex min-w-0 flex-1 items-start gap-2 text-left"
+                  className="flex min-w-0 flex-1 items-start gap-2.5 text-left"
                 >
-                  {!notification.is_read && (
-                    <span className="mt-1.5 size-2 shrink-0 rounded-full bg-brand" aria-hidden />
-                  )}
-                  <div className={`min-w-0 flex-1 ${notification.is_read ? "pl-4" : ""}`}>
-                    <p
-                      className={`text-sm ${notification.is_read ? "font-medium text-foreground" : "font-semibold text-foreground"}`}
-                    >
-                      {notification.title}
-                    </p>
+                  <NotificationTypeIcon type={notification.type} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <p
+                        className={`text-sm ${notification.is_read ? "font-medium text-foreground" : "font-semibold text-foreground"}`}
+                      >
+                        {notification.title}
+                      </p>
+                      {!notification.is_read && (
+                        <span className="size-2 shrink-0 rounded-full bg-brand" aria-hidden />
+                      )}
+                    </div>
                     <p className="mt-0.5 text-sm text-muted-foreground">{notification.body}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {formatThreadTimestamp(notification.created_at, lang)}

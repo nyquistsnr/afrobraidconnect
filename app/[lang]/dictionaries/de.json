@@ -962,6 +962,8 @@
     "markAllRead": "Alle als gelesen markieren",
     "viewAll": "Alle anzeigen",
     "deleteAria": "Benachrichtigung löschen",
+    "muteSound": "Benachrichtigungston stummschalten",
+    "unmuteSound": "Benachrichtigungston aktivieren",
     "pageTitle": "Benachrichtigungen",
     "pageSubtitle": "Neuigkeiten zu Ihren Buchungen und Nachrichten.",
     "errorTitle": "Ihre Benachrichtigungen konnten nicht geladen werden",

@@ -7,6 +7,8 @@ export interface NotificationBellDict {
   emptySubtitle: string;
   markAllRead: string;
   viewAll: string;
+  muteSound: string;
+  unmuteSound: string;
 }
 
 export interface NotificationsListDict extends PaginationControlDict {

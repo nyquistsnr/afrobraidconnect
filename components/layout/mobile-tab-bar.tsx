@@ -68,7 +68,7 @@ export function MobileTabBar({
   const isAuthenticated = status === "authenticated";
   const { logout, isLoggingOut } = useLogout(lang);
   const chatUnreadTotal = useChatUnreadTotal();
-  const notificationsUnreadCount = useNotificationsUnreadCount();
+  const notificationsUnreadCount = useNotificationsUnreadCount(lang);
 
   const homeHref = `/${lang}`;
   // "Explore" covers the whole browse/discover flow (home, search, braider

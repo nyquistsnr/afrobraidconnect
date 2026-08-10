@@ -6,6 +6,7 @@ import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
 import { buildRealtimeSocketUrl } from "@/lib/api/ws-url";
 import { chatThreadsKey, chatMessagesKey } from "@/lib/chat/query-keys";
 import { notificationsKey } from "@/lib/notifications/query-keys";
+import { playNotificationSound } from "@/lib/notifications/notification-sound";
 import type {
   ChatMessageResponse,
   PaginatedData,
@@ -97,6 +98,7 @@ export function RealtimeProvider({ children }: { children: React.ReactNode }) {
         }
         case "notification": {
           qc.invalidateQueries({ queryKey: notificationsKey.all() });
+          playNotificationSound();
           break;
         }
       }

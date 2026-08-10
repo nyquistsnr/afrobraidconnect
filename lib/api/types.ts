@@ -888,7 +888,15 @@ export interface ChatReportResponse {
 // Notifications
 // ---------------------------------------------------------------------------
 
-export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
+export type NotificationType =
+  | "PAYMENT_DEPOSIT_SUCCEEDED"
+  | "PAYMENT_FULL_SUCCEEDED"
+  | "PAYMENT_BALANCE_SUCCEEDED"
+  | "CHAT_NEW_MESSAGE"
+  | "CHAT_MESSAGE_FLAGGED"
+  | "PROFILE_UPDATED"
+  | "PASSWORD_CHANGED"
+  | "NEW_LOGIN";
 
 export interface NotificationResponse {
   id: string;
