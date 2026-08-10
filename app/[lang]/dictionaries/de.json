@@ -219,9 +219,18 @@
     "previousPage": "Vorherige Seite",
     "nextPage": "Nächste Seite",
     "pageOf": "Seite {current} von {total}",
-    "referencePrefix": "Ref"
+    "referencePrefix": "Ref",
+    "rescheduleButton": "Verschieben"
   },
   "bookingDetail": {
+    "rescheduleTitle": "Buchung verschieben",
+    "rescheduleButton": "Verschieben",
+    "rescheduleConfirm": "Verschieben bestätigen",
+    "rescheduleSuccess": "Buchung erfolgreich verschoben.",
+    "rescheduleError": "Fehler beim Verschieben der Buchung. Bitte versuche es erneut.",
+    "rescheduleLoadError": "Fehler beim Laden der Verfügbarkeit.",
+    "rescheduleNoSlots": "Keine freien Termine an diesem Tag.",
+    "rescheduleCancel": "Abbrechen",
     "backToBookings": "Zurück zu den Buchungen",
     "loadErrorTitle": "Diese Buchung konnte nicht gefunden werden",
     "loadErrorSubtitle": "Sie wurde möglicherweise entfernt, oder der Link ist nicht korrekt.",

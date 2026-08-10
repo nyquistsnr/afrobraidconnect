@@ -219,9 +219,18 @@
     "previousPage": "Page précédente",
     "nextPage": "Page suivante",
     "pageOf": "Page {current} sur {total}",
-    "referencePrefix": "Réf"
+    "referencePrefix": "Réf",
+    "rescheduleButton": "Reprogrammer"
   },
   "bookingDetail": {
+    "rescheduleTitle": "Reprogrammer la réservation",
+    "rescheduleButton": "Reprogrammer",
+    "rescheduleConfirm": "Confirmer la reprogrammation",
+    "rescheduleSuccess": "Réservation reprogrammée avec succès.",
+    "rescheduleError": "Échec de la reprogrammation. Veuillez réessayer.",
+    "rescheduleLoadError": "Erreur lors du chargement des disponibilités.",
+    "rescheduleNoSlots": "Aucun créneau disponible ce jour-là.",
+    "rescheduleCancel": "Annuler",
     "backToBookings": "Retour aux réservations",
     "loadErrorTitle": "Cette réservation est introuvable",
     "loadErrorSubtitle": "Elle a peut-être été supprimée, ou le lien est incorrect.",

@@ -34,9 +34,18 @@ export interface BookingsListDict {
   nextPage: string;
   pageOf: string;
   referencePrefix: string;
+  rescheduleButton: string;
 }
 
 export interface BookingDetailDict {
+  rescheduleTitle: string;
+  rescheduleButton: string;
+  rescheduleConfirm: string;
+  rescheduleSuccess: string;
+  rescheduleError: string;
+  rescheduleLoadError: string;
+  rescheduleNoSlots: string;
+  rescheduleCancel: string;
   backToBookings: string;
   loadErrorTitle: string;
   loadErrorSubtitle: string;

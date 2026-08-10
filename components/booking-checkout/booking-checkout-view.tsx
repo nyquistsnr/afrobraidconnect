@@ -38,7 +38,7 @@ const FATAL_CALCULATION_CODES = new Set([
   "BOOKING_STARTS_IN_PAST",
 ]);
 
-const POLL_INTERVAL_MS = 2500;
+const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 90_000;
 
 function formatDurationMinutes(totalMinutes: number): string {
@@ -128,7 +128,7 @@ export function BookingCheckoutView({
   // customer's confirmPayment() call resolves client-side.
   const pollCancelledRef = useRef(false);
   useEffect(() => {
-    if (phase !== "confirming" || !effectiveBooking || !session?.accessToken) {
+    if (phase !== "confirming" || !effectiveBooking?.id || !session?.accessToken) {
       return;
     }
 
@@ -162,7 +162,7 @@ export function BookingCheckoutView({
     return () => {
       pollCancelledRef.current = true;
     };
-  }, [phase, effectiveBooking, session?.accessToken, lang]);
+  }, [phase, effectiveBooking?.id, session?.accessToken, lang]);
 
   // --- Fatal / not-found quote or booking --------------------------------
   if (

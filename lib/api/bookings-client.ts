@@ -168,5 +168,16 @@ export const bookingsApi = {
       }
     ),
 
+  reschedule: (accessToken: string, lang: Locale, bookingId: string, startsAt: string) =>
+    authedRequest<BookingResponse>(
+      `${BOOKINGS_PATH}/${bookingId}/reschedule`,
+      accessToken,
+      lang,
+      {
+        method: "POST",
+        body: { starts_at: startsAt },
+      }
+    ),
+
   getTodayCount: () => publicRequest<number>(`${BOOKINGS_PATH}/today-count`),
 };

@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, ArrowLeft } from "lucide-react";
@@ -23,6 +24,7 @@ import {
 import { BookingStatusBadge } from "@/components/bookings/status-badge";
 import { BalanceRetryBanner } from "@/components/bookings/balance-retry-banner";
 import { ReviewModal } from "@/components/reviews/review-modal";
+import { RescheduleModal } from "@/components/bookings/reschedule-modal";
 import { braidersApi } from "@/lib/api/braiders-client";
 import { Star } from "lucide-react";
 import { ChatButton } from "@/components/chat/chat-button";
@@ -68,6 +70,9 @@ export function BookingDetailView({
   errorsDict: Dictionary["common"]["errors"];
 }) {
   const { data: session, status: sessionStatus } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const accessToken = session?.accessToken;
   const bookingsHref = `/${lang}/bookings`;
 
@@ -94,6 +99,18 @@ export function BookingDetailView({
   });
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("reschedule") === "true") {
+      setIsRescheduleModalOpen(true);
+      // Clean up the URL
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("reschedule");
+      const search = params.toString() ? `?${params.toString()}` : "";
+      router.replace(`${pathname}${search}`, { scroll: false });
+    }
+  }, [searchParams, pathname, router]);
 
   if (isError) {
     return (
@@ -323,6 +340,14 @@ export function BookingDetailView({
                 })
               : dict.cancellationAfterCutoff}
           </p>
+          {cancellable && booking.status === "CONFIRMED" && (
+            <button
+              onClick={() => setIsRescheduleModalOpen(true)}
+              className="mt-3 rounded-full bg-foreground px-4 py-2 text-sm font-semibold text-background transition-colors hover:bg-foreground/90"
+            >
+              {dict.rescheduleButton}
+            </button>
+          )}
         </div>
       )}
 
@@ -335,6 +360,17 @@ export function BookingDetailView({
           initialReview={myReview ?? null}
           lang={lang}
           dict={reviewsDict}
+        />
+      )}
+
+      {booking && (
+        <RescheduleModal
+          isOpen={isRescheduleModalOpen}
+          onClose={() => setIsRescheduleModalOpen(false)}
+          booking={booking}
+          accessToken={accessToken!}
+          lang={lang}
+          dict={dict}
         />
       )}
     </div>

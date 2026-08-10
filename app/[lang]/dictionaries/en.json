@@ -219,9 +219,18 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "pageOf": "Page {current} of {total}",
-    "referencePrefix": "Ref"
+    "referencePrefix": "Ref",
+    "rescheduleButton": "Reschedule"
   },
   "bookingDetail": {
+    "rescheduleTitle": "Reschedule booking",
+    "rescheduleButton": "Reschedule",
+    "rescheduleConfirm": "Confirm reschedule",
+    "rescheduleSuccess": "Booking rescheduled successfully.",
+    "rescheduleError": "Failed to reschedule booking. Please try again.",
+    "rescheduleLoadError": "Error loading availability.",
+    "rescheduleNoSlots": "No slots on this day.",
+    "rescheduleCancel": "Cancel",
     "backToBookings": "Back to bookings",
     "loadErrorTitle": "This booking couldn't be found",
     "loadErrorSubtitle": "It may have been removed, or the link isn't quite right.",
