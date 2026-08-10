@@ -21,11 +21,13 @@ export function MessageBubble({
   viewerChatLocale: string | null;
   dict: ChatThreadDict;
 }) {
+  const targetLocale = viewerChatLocale || lang;
   const canShowTranslation =
     !!message.translated_body &&
     !!message.translated_locale &&
-    message.translated_locale === viewerChatLocale;
-  const [showOriginal, setShowOriginal] = useState(!canShowTranslation);
+    message.translated_locale === targetLocale &&
+    message.body_locale !== targetLocale;
+  const [showOriginal, setShowOriginal] = useState(true);
 
   const time = formatMessageTime(message.created_at, lang);
 
