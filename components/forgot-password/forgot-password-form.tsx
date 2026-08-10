@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
+import type { ForgotPasswordRequest } from "@/lib/api/types";
 import { authApi, ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,7 @@ export function ForgotPasswordForm({
   const [email, setEmail] = useState("");
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: authApi.forgotPassword,
+    mutationFn: (body: ForgotPasswordRequest) => authApi.forgotPassword(body, lang),
     onSuccess: () => {
       toast.success(common.toasts.forgotPasswordSuccess);
       router.push(`/${lang}/reset-password?email=${encodeURIComponent(email)}`);

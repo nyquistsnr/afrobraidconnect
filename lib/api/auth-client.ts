@@ -14,6 +14,7 @@ import type {
   SocialProvider,
   VerifyEmailRequest,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 
 // NEXT_PUBLIC_API_BASE_URL is expected to already include the /api/v1
 // prefix (e.g. http://localhost:8000/api/v1) — this only appends /auth.
@@ -32,7 +33,15 @@ export class ApiError extends Error {
   }
 }
 
-async function post<TReq, TRes>(path: string, body: TReq): Promise<TRes> {
+// lang is optional here (unlike the other clients' request helpers) because
+// two callers below — refresh() and logout() — run as background/best-effort
+// calls with no user-facing text in their response, so there's nothing to
+// localize; every other method must pass it.
+async function post<TReq, TRes>(
+  path: string,
+  body: TReq,
+  lang?: Locale
+): Promise<TRes> {
   if (!API_BASE) {
     throw new ApiError(
       "API_BASE_NOT_CONFIGURED",
@@ -45,7 +54,10 @@ async function post<TReq, TRes>(path: string, body: TReq): Promise<TRes> {
   try {
     res = await fetch(`${API_BASE}${AUTH_PATH}${path}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(lang ? { "Accept-Language": lang } : {}),
+      },
       body: JSON.stringify(body),
     });
   } catch {
@@ -66,41 +78,56 @@ async function post<TReq, TRes>(path: string, body: TReq): Promise<TRes> {
 }
 
 export const authApi = {
-  signup: (body: SignupEmailRequest) =>
+  signup: (body: SignupEmailRequest, lang: Locale) =>
     post<SignupEmailRequest, { message: string; email: string }>(
       "/signup/email",
-      body
+      body,
+      lang
     ),
 
-  verifyEmail: (body: VerifyEmailRequest) =>
-    post<VerifyEmailRequest, AuthTokenResponse>("/verify-email", body),
+  verifyEmail: (body: VerifyEmailRequest, lang: Locale) =>
+    post<VerifyEmailRequest, AuthTokenResponse>("/verify-email", body, lang),
 
-  resendVerification: (body: ResendVerificationRequest) =>
+  resendVerification: (body: ResendVerificationRequest, lang: Locale) =>
     post<ResendVerificationRequest, { message: string }>(
       "/resend-verification",
-      body
+      body,
+      lang
     ),
 
-  login: (body: LoginRequest) =>
-    post<LoginRequest, AuthTokenResponse>("/login", body),
+  // The Accept-Language sent here is also what determines the locale baked
+  // into that login's NEW_LOGIN notification (fixed at creation time).
+  login: (body: LoginRequest, lang: Locale) =>
+    post<LoginRequest, AuthTokenResponse>("/login", body, lang),
 
-  socialLogin: (provider: SocialProvider, body: SocialLoginRequest) =>
-    post<SocialLoginRequest, AuthTokenResponse>(`/social/${provider}`, body),
+  socialLogin: (provider: SocialProvider, body: SocialLoginRequest, lang: Locale) =>
+    post<SocialLoginRequest, AuthTokenResponse>(`/social/${provider}`, body, lang),
 
+  // Background token refresh — no user-facing text in the response, so
+  // there's nothing here that needs localizing.
   refresh: (refresh_token: string) =>
     post<RefreshTokenRequest, AuthTokenResponse>("/refresh", {
       refresh_token,
     }),
 
+  // Best-effort revoke on sign-out; the response message is never surfaced
+  // to the user (see app/api/auth/logout/route.ts), so no lang needed.
   logout: (refresh_token: string) =>
     post<LogoutRequest, { message: string }>("/logout", { refresh_token }),
 
-  forgotPassword: (body: ForgotPasswordRequest) =>
+  forgotPassword: (body: ForgotPasswordRequest, lang: Locale) =>
     post<ForgotPasswordRequest, { message: string }>(
       "/forgot-password",
-      body
+      body,
+      lang
     ),
 
-  resetPassword: (body: ResetPasswordRequest) =>
-    post<ResetPasswordRequest, { message: string }>("/reset-password", body),
+  // Also determines the locale baked into that reset's PASSWORD_CHANGED
+  // notification.
+  resetPassword: (body: ResetPasswordRequest, lang: Locale) =>
+    post<ResetPasswordRequest, { message: string }>(
+      "/reset-password",
+      body,
+      lang
+    ),
 };

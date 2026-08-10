@@ -151,7 +151,7 @@ export function BraiderDetailView({
     error: previewErrorObj,
   } = useQuery<BookingCalculationPreviewResponse, ApiError>({
     queryKey: ["booking-calculation-preview", debouncedPreviewInput],
-    queryFn: () => bookingCalculationsApi.preview(debouncedPreviewInput!),
+    queryFn: () => bookingCalculationsApi.preview(debouncedPreviewInput!, lang),
     enabled: debouncedPreviewInput != null,
     staleTime: 15_000,
     // A rejected quote (invalid selection, out-of-range address, etc.) is
@@ -174,21 +174,24 @@ export function BraiderDetailView({
       if (!selectedStyle || !selectedSlot) {
         return Promise.reject(new Error("Missing style or slot selection"));
       }
-      return bookingCalculationsApi.create({
-        braider_id: braider.id,
-        style_id: selectedStyle.style_id,
-        braider_style_variation_id: selectedVariationId ?? undefined,
-        braider_style_addon_ids:
-          selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
-        ...(hasMobileAddress && clientAddress
-          ? {
-              is_mobile: true,
-              client_address: formatClientAddress(clientAddress),
-              client_latitude: String(clientAddress.lat),
-              client_longitude: String(clientAddress.lng),
-            }
-          : {}),
-      });
+      return bookingCalculationsApi.create(
+        {
+          braider_id: braider.id,
+          style_id: selectedStyle.style_id,
+          braider_style_variation_id: selectedVariationId ?? undefined,
+          braider_style_addon_ids:
+            selectedAddonIds.size > 0 ? [...selectedAddonIds] : undefined,
+          ...(hasMobileAddress && clientAddress
+            ? {
+                is_mobile: true,
+                client_address: formatClientAddress(clientAddress),
+                client_latitude: String(clientAddress.lat),
+                client_longitude: String(clientAddress.lng),
+              }
+            : {}),
+        },
+        lang
+      );
     },
     onSuccess: (calculation) => {
       const params = new URLSearchParams({

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Mail, User } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
+import type { SignupEmailRequest } from "@/lib/api/types";
 import { authApi, ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { Input } from "@/components/ui/input";
@@ -31,7 +32,7 @@ export function SignupForm({
   const router = useRouter();
 
   const signupMutation = useMutation({
-    mutationFn: authApi.signup,
+    mutationFn: (body: SignupEmailRequest) => authApi.signup(body, lang),
     onSuccess: ({ email }) => {
       toast.success(common.toasts.signupSuccess);
       const url = new URL(`/${lang}/verify-email`, window.location.origin);

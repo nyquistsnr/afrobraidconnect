@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
+import type { ForgotPasswordRequest, ResetPasswordRequest } from "@/lib/api/types";
 import { authApi, ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { Input } from "@/components/ui/input";
@@ -32,7 +33,7 @@ export function ResetPasswordForm({
   const router = useRouter();
 
   const resetPasswordMutation = useMutation({
-    mutationFn: authApi.resetPassword,
+    mutationFn: (body: ResetPasswordRequest) => authApi.resetPassword(body, lang),
     onSuccess: () => {
       toast.success(common.toasts.resetPasswordSuccess);
       router.push(`/${lang}/login`);
@@ -44,7 +45,7 @@ export function ResetPasswordForm({
   });
 
   const resendMutation = useMutation({
-    mutationFn: authApi.forgotPassword,
+    mutationFn: (body: ForgotPasswordRequest) => authApi.forgotPassword(body, lang),
     onSuccess: () => toast.success(common.toasts.resendSuccess),
     onError: (error) => {
       const errorCode = error instanceof ApiError ? error.code : undefined;

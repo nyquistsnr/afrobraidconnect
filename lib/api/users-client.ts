@@ -3,6 +3,7 @@ import type {
   UserPublic,
   UserProfileUpdateRequest,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { ApiError } from "@/lib/api/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -17,6 +18,7 @@ interface RequestOptions {
 async function authedFetchJson<T>(
   path: string,
   accessToken: string,
+  lang: Locale,
   options: RequestOptions = {}
 ): Promise<T> {
   const url = `${API_BASE}${path}`;
@@ -24,6 +26,7 @@ async function authedFetchJson<T>(
     method: options.method ?? "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      "Accept-Language": lang,
       ...options.headers,
     },
     body: options.body,
@@ -44,20 +47,23 @@ async function authedFetchJson<T>(
 }
 
 export const usersApi = {
-  async getMe(accessToken: string): Promise<UserPublic> {
+  async getMe(accessToken: string, lang: Locale): Promise<UserPublic> {
     return authedFetchJson<UserPublic>(
       `${USERS_PATH}/me`,
-      accessToken
+      accessToken,
+      lang
     );
   },
 
   async updateMe(
     accessToken: string,
+    lang: Locale,
     updates: UserProfileUpdateRequest
   ): Promise<UserPublic> {
     return authedFetchJson<UserPublic>(
       `${USERS_PATH}/me`,
       accessToken,
+      lang,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

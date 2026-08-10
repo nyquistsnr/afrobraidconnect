@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { BraiderCard } from "@/components/search-results/braider-card";
@@ -140,54 +140,72 @@ export function CuratedBraiders({
         })}
       </div>
 
-      <div className="mt-6 min-h-[300px]">
+      {/*
+        Fixed-height wrapper prevents layout shift during tab transitions.
+        The outer overflow-hidden clips any motion artifacts at the edges.
+      */}
+      <div className="mt-6 min-h-[380px] relative">
         {isLoading ? (
-          <div className="flex h-[300px] items-center justify-center">
+          <div className="flex h-[380px] items-center justify-center">
             <Loader className="size-8 animate-spin text-brand" />
           </div>
         ) : isError ? (
-          <div className="flex h-[300px] flex-col items-center justify-center text-center">
+          <div className="flex h-[380px] flex-col items-center justify-center text-center">
             <p className="text-sm font-semibold text-foreground">{dict.error}</p>
           </div>
         ) : (
-          <div 
-            ref={scrollRef}
-            className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          >
-            <AnimatePresence mode="popLayout">
-              {activeBraiders.map((braider, index) => (
-                <motion.div
-                  key={`${activeTab}-${braider.id}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{
-                    duration: 0.4,
-                    delay: index * 0.1,
-                    ease: "easeOut",
-                  }}
-                  className="min-w-[280px] sm:min-w-[320px] max-w-[320px] shrink-0 snap-start"
-                >
-                  <BraiderCard
-                    item={braider}
-                    isHighlighted={hoveredId === braider.id}
-                    onHover={setHoveredId}
-                    lang={lang}
-                    dict={searchResultsDict}
-                    searchLinkContext={{
-                      location: null,
-                      lat: null,
-                      lng: null,
-                      country_code: null,
-                      date_from: null,
-                      date_to: null,
-                      radius_km: null,
+          /*
+            mode="wait" ensures the exiting tab fully fades out before
+            the entering tab fades in — no overlapping cards fighting for
+            the same space.  initial={false} prevents the animation
+            running on the very first render.
+          */
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: "easeInOut" }}
+            >
+              <div
+                ref={scrollRef}
+                className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              >
+                {activeBraiders.map((braider, index) => (
+                  <motion.div
+                    key={braider.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.28,
+                      // Tight stagger so cards cascade in quickly without lag
+                      delay: index * 0.04,
+                      ease: [0.25, 0.46, 0.45, 0.94],
                     }}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                    className="min-w-[280px] sm:min-w-[320px] max-w-[320px] shrink-0 snap-start"
+                  >
+                    <BraiderCard
+                      item={braider}
+                      isHighlighted={hoveredId === braider.id}
+                      onHover={setHoveredId}
+                      lang={lang}
+                      dict={searchResultsDict}
+                      searchLinkContext={{
+                        location: null,
+                        lat: null,
+                        lng: null,
+                        country_code: null,
+                        date_from: null,
+                        date_to: null,
+                        radius_km: null,
+                      }}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         )}
       </div>
     </section>

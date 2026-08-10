@@ -123,7 +123,7 @@ export function SiteHeader({
   }, [isLandingSearch, searchDocked]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
-  const chatUnreadTotal = useChatUnreadTotal();
+  const chatUnreadTotal = useChatUnreadTotal(lang);
   const menuRef = useRef<HTMLDivElement>(null);
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";

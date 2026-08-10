@@ -54,7 +54,7 @@ export function BookingsListView({
   const { data, isLoading, isFetching, isError, refetch } = useQuery({
     queryKey: ["bookings", tab, debouncedSearch, page],
     queryFn: () =>
-      bookingsApi.list(accessToken!, {
+      bookingsApi.list(accessToken!, lang, {
         ...dateParams,
         search: debouncedSearch || undefined,
         page,

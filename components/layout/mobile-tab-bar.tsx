@@ -67,7 +67,7 @@ export function MobileTabBar({
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const { logout, isLoggingOut } = useLogout(lang);
-  const chatUnreadTotal = useChatUnreadTotal();
+  const chatUnreadTotal = useChatUnreadTotal(lang);
   const notificationsUnreadCount = useNotificationsUnreadCount(lang);
 
   const homeHref = `/${lang}`;

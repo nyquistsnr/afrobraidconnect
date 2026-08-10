@@ -82,14 +82,14 @@ export function BookingCheckoutView({
 
   const calculationQuery = useQuery({
     queryKey: ["booking-calculation", calculationId],
-    queryFn: () => bookingCalculationsApi.get(calculationId),
+    queryFn: () => bookingCalculationsApi.get(calculationId, lang),
     enabled: !resumeBookingId,
     retry: false,
   });
 
   const resumeBookingQuery = useQuery({
     queryKey: ["booking", resumeBookingId],
-    queryFn: () => bookingsApi.getById(session!.accessToken, resumeBookingId!),
+    queryFn: () => bookingsApi.getById(session!.accessToken, lang, resumeBookingId!),
     enabled: !!resumeBookingId && !!session?.accessToken,
     retry: false,
   });
@@ -105,7 +105,7 @@ export function BookingCheckoutView({
       if (!session?.accessToken) {
         return Promise.reject(new Error("NOT_AUTHENTICATED"));
       }
-      return bookingsApi.create(session.accessToken, {
+      return bookingsApi.create(session.accessToken, lang, {
         booking_calculation_id: calculationId,
         starts_at: startsAt,
         terms_accepted: true,
@@ -143,7 +143,7 @@ export function BookingCheckoutView({
         Date.now() - startedAt < POLL_TIMEOUT_MS
       ) {
         try {
-          const latest = await bookingsApi.getById(accessToken, bookingId);
+          const latest = await bookingsApi.getById(accessToken, lang, bookingId);
           if (pollCancelledRef.current) return;
           setBooking(latest);
           if (latest.status === "CONFIRMED") {
@@ -162,7 +162,7 @@ export function BookingCheckoutView({
     return () => {
       pollCancelledRef.current = true;
     };
-  }, [phase, effectiveBooking, session?.accessToken]);
+  }, [phase, effectiveBooking, session?.accessToken, lang]);
 
   // --- Fatal / not-found quote or booking --------------------------------
   if (

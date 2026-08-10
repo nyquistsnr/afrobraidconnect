@@ -9,6 +9,7 @@ import type {
   ChatThreadResponse,
   PaginatedData,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { ApiError } from "@/lib/api/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -17,6 +18,7 @@ const CHAT_PATH = "/chat";
 async function authedRequest<TRes>(
   path: string,
   accessToken: string,
+  lang: Locale,
   options: { method?: string; body?: unknown } = {}
 ): Promise<TRes> {
   if (!API_BASE) {
@@ -33,6 +35,7 @@ async function authedRequest<TRes>(
       method: options.method ?? "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Accept-Language": lang,
         ...(options.body ? { "Content-Type": "application/json" } : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -57,6 +60,7 @@ async function authedRequest<TRes>(
 export const chatApi = {
   listThreads: (
     accessToken: string,
+    lang: Locale,
     params: { page?: number; page_size?: number } = {}
   ) => {
     const query = new URLSearchParams();
@@ -64,21 +68,24 @@ export const chatApi = {
     query.set("page_size", String(params.page_size ?? 20));
     return authedRequest<PaginatedData<ChatThreadResponse>>(
       `${CHAT_PATH}/threads?${query.toString()}`,
-      accessToken
+      accessToken,
+      lang
     );
   },
 
   // Creates the thread on first call — only succeeds once the booking has
   // had a successful payment. Gate the "Chat" CTA on booking status instead
   // of calling this speculatively.
-  getOrCreateThreadForBooking: (accessToken: string, bookingId: string) =>
+  getOrCreateThreadForBooking: (accessToken: string, lang: Locale, bookingId: string) =>
     authedRequest<ChatThreadResponse>(
       `/chat/bookings/${bookingId}/thread`,
-      accessToken
+      accessToken,
+      lang
     ),
 
   listMessages: (
     accessToken: string,
+    lang: Locale,
     threadId: string,
     params: { page?: number; page_size?: number } = {}
   ) => {
@@ -87,28 +94,35 @@ export const chatApi = {
     query.set("page_size", String(params.page_size ?? 20));
     return authedRequest<PaginatedData<ChatMessageResponse>>(
       `${CHAT_PATH}/threads/${threadId}/messages?${query.toString()}`,
-      accessToken
+      accessToken,
+      lang
     );
   },
 
-  sendMessage: (accessToken: string, threadId: string, body: string) =>
+  sendMessage: (accessToken: string, lang: Locale, threadId: string, body: string) =>
     authedRequest<ChatMessageResponse>(
       `${CHAT_PATH}/threads/${threadId}/messages`,
       accessToken,
+      lang,
       { method: "POST", body: { body } satisfies ChatMessageSendRequest }
     ),
 
-  markRead: (accessToken: string, threadId: string) =>
+  // POSTing here doubles as "open this thread" (see ChatThreadView) — the
+  // Accept-Language sent on this call is how the backend learns/refreshes
+  // the caller's chat language, so it must always carry the current UI lang.
+  markRead: (accessToken: string, lang: Locale, threadId: string) =>
     authedRequest<ChatThreadResponse>(
       `${CHAT_PATH}/threads/${threadId}/read`,
       accessToken,
+      lang,
       { method: "POST" }
     ),
 
-  report: (accessToken: string, threadId: string, body: ChatReportRequest) =>
+  report: (accessToken: string, lang: Locale, threadId: string, body: ChatReportRequest) =>
     authedRequest<ChatReportResponse>(
       `${CHAT_PATH}/threads/${threadId}/report`,
       accessToken,
+      lang,
       { method: "POST", body }
     ),
 };

@@ -6,16 +6,19 @@ import { ArrowLeft, RefreshCw, AlertTriangle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { TryOnResponse } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { tryonApi } from "@/lib/api/tryon-client";
 import { ApiError } from "@/lib/api/auth-client";
 
 export function EstherAiResult({
   tryonId,
+  lang,
   accessToken,
   dict,
   onReset,
 }: {
   tryonId: string;
+  lang: Locale;
   accessToken: string;
   dict: Dictionary["estherAi"];
   onReset: () => void;
@@ -30,7 +33,7 @@ export function EstherAiResult({
 
     const poll = async () => {
       try {
-        const data = await tryonApi.getById(accessToken, tryonId);
+        const data = await tryonApi.getById(accessToken, lang, tryonId);
         setTryon(data);
 
         if (data.status === "PROCESSING") {
@@ -48,7 +51,7 @@ export function EstherAiResult({
     poll();
 
     return () => clearTimeout(timeoutId);
-  }, [tryonId, accessToken, dict]);
+  }, [tryonId, lang, accessToken, dict]);
 
   if (error) {
     return (

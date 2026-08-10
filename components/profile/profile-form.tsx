@@ -36,7 +36,7 @@ export function ProfileForm({
   const { data: profile, isLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const data = await usersApi.getMe(accessToken);
+      const data = await usersApi.getMe(accessToken, lang);
       if (!initialized) {
         setFirstName(data.first_name ?? "");
         setLastName(data.last_name ?? "");
@@ -50,7 +50,7 @@ export function ProfileForm({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      return usersApi.updateMe(accessToken, {
+      return usersApi.updateMe(accessToken, lang, {
         first_name: firstName || undefined,
         last_name: lastName || undefined,
         phone_number: phoneNumber || undefined,

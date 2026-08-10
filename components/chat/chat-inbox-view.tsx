@@ -27,7 +27,7 @@ export function ChatInboxView({
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: chatThreadsKey.list(page),
-    queryFn: () => chatApi.listThreads(accessToken!, { page, page_size: PAGE_SIZE }),
+    queryFn: () => chatApi.listThreads(accessToken!, lang, { page, page_size: PAGE_SIZE }),
     enabled: sessionStatus === "authenticated" && !!accessToken,
     placeholderData: keepPreviousData,
   });

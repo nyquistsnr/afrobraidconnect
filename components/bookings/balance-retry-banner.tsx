@@ -33,7 +33,7 @@ export function BalanceRetryBanner({
   async function handleAddCard() {
     setIsStartingFlow(true);
     try {
-      const { client_secret } = await bookingsApi.setupIntent(accessToken, booking.id);
+      const { client_secret } = await bookingsApi.setupIntent(accessToken, lang, booking.id);
       setSetupClientSecret(client_secret);
       setIsModalOpen(true);
     } catch (err) {
@@ -46,7 +46,7 @@ export function BalanceRetryBanner({
   async function handleConfirmPayment() {
     setIsStartingFlow(true);
     try {
-      const response = await bookingsApi.pay(accessToken, booking.id);
+      const response = await bookingsApi.pay(accessToken, lang, booking.id);
       
       if (response.status === "PENDING" && response.client_secret) {
         const { loadStripe } = await import("@stripe/stripe-js");
@@ -156,6 +156,7 @@ export function BalanceRetryBanner({
             onClose={() => setIsModalOpen(false)}
             clientSecret={setupClientSecret}
             bookingId={booking.id}
+            lang={lang}
             accessToken={accessToken}
             dict={dict}
             onSuccess={handleSuccess}

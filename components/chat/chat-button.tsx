@@ -30,7 +30,7 @@ export function ChatButton({
   const router = useRouter();
 
   const mutation = useMutation({
-    mutationFn: () => chatApi.getOrCreateThreadForBooking(accessToken, bookingId),
+    mutationFn: () => chatApi.getOrCreateThreadForBooking(accessToken, lang, bookingId),
     onSuccess: (thread) => {
       router.push(`/${lang}/chat/${thread.id}`);
     },

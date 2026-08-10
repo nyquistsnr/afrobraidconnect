@@ -21,4 +21,8 @@ export interface NotificationsListDict extends PaginationControlDict {
   retry: string;
   markAllRead: string;
   deleteAria: string;
+  deleteConfirmTitle: string;
+  deleteConfirmBody: string;
+  deleteConfirmCancel: string;
+  deleteConfirmDelete: string;
 }

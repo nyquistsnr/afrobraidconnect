@@ -13,6 +13,7 @@ import { Loader } from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { bookingsApi } from "@/lib/api/bookings-client";
+import type { Locale } from "@/lib/i18n";
 import type { BalanceRetryDict } from "@/components/bookings/types";
 
 const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -27,12 +28,14 @@ function getStripe(): Promise<Stripe | null> | null {
 
 function RetryForm({
   bookingId,
+  lang,
   accessToken,
   dict,
   onSuccess,
   onClose,
 }: {
   bookingId: string;
+  lang: Locale;
   accessToken: string;
   dict: BalanceRetryDict;
   onSuccess: () => void;
@@ -80,6 +83,7 @@ function RetryForm({
     try {
       const response = await bookingsApi.pay(
         accessToken,
+        lang,
         bookingId,
         paymentMethodId
       );
@@ -126,6 +130,7 @@ export function BalanceRetryModal({
   onClose,
   clientSecret,
   bookingId,
+  lang,
   accessToken,
   dict,
   onSuccess,
@@ -134,6 +139,7 @@ export function BalanceRetryModal({
   onClose: () => void;
   clientSecret: string;
   bookingId: string;
+  lang: Locale;
   accessToken: string;
   dict: BalanceRetryDict;
   onSuccess: () => void;
@@ -163,6 +169,7 @@ export function BalanceRetryModal({
         <Elements stripe={stripe} options={{ clientSecret }}>
           <RetryForm
             bookingId={bookingId}
+            lang={lang}
             accessToken={accessToken}
             dict={dict}
             onSuccess={onSuccess}

@@ -150,7 +150,7 @@ export function NotificationBell({
               <p className="text-xs text-muted-foreground">{dict.emptySubtitle}</p>
             </div>
           ) : (
-            <ul className="max-h-96 overflow-y-auto py-1">
+            <ul className="max-h-96 overflow-y-auto py-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {items.map((notification) => (
                 <li key={notification.id}>
                   <button

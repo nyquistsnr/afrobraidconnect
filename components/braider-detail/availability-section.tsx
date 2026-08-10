@@ -120,11 +120,15 @@ export function AvailabilitySection({
   } = useQuery<AvailableSlotResponse[], ApiError>({
     queryKey: ["braider-availability", braiderId, style.style_id, dateFrom, dateTo],
     queryFn: () =>
-      braidersApi.getAvailabilitySlots(braiderId, {
-        style_id: style.style_id,
-        date_from: dateFrom,
-        date_to: dateTo,
-      }),
+      braidersApi.getAvailabilitySlots(
+        braiderId,
+        {
+          style_id: style.style_id,
+          date_from: dateFrom,
+          date_to: dateTo,
+        },
+        lang
+      ),
     enabled: hasDuration,
   });
 

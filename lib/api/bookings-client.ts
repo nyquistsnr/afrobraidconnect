@@ -8,14 +8,20 @@ import type {
   CreateBookingRequest,
   PaginatedData,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { ApiError } from "@/lib/api/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 const BOOKINGS_PATH = "/bookings";
 
+// The Accept-Language sent here matters beyond this response: per the
+// notifications API, a booking's payment-succeeded notification locale is
+// fixed forever at "the language the booking was paid/checked out in" —
+// i.e. whatever lang these calls carry at create/pay time.
 async function authedRequest<TRes>(
   path: string,
   accessToken: string,
+  lang: Locale,
   options: { method?: string; body?: unknown } = {}
 ): Promise<TRes> {
   if (!API_BASE) {
@@ -32,6 +38,7 @@ async function authedRequest<TRes>(
       method: options.method ?? "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Accept-Language": lang,
         ...(options.body ? { "Content-Type": "application/json" } : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -101,17 +108,18 @@ interface RawBookingListResponse {
 export const bookingsApi = {
   // Consumes a DRAFT calculation + an appointment time; creates the booking
   // and a Stripe PaymentIntent (client_secret only returned here, once).
-  create: (accessToken: string, body: CreateBookingRequest) =>
-    authedRequest<BookingResponse>(BOOKINGS_PATH, accessToken, {
+  create: (accessToken: string, lang: Locale, body: CreateBookingRequest) =>
+    authedRequest<BookingResponse>(BOOKINGS_PATH, accessToken, lang, {
       method: "POST",
       body,
     }),
 
-  getById: (accessToken: string, bookingId: string) =>
-    authedRequest<BookingResponse>(`${BOOKINGS_PATH}/${bookingId}`, accessToken),
+  getById: (accessToken: string, lang: Locale, bookingId: string) =>
+    authedRequest<BookingResponse>(`${BOOKINGS_PATH}/${bookingId}`, accessToken, lang),
 
   list: async (
     accessToken: string,
+    lang: Locale,
     params: BookingListParams = {}
   ): Promise<PaginatedData<BookingSummary>> => {
     const query = new URLSearchParams();
@@ -124,7 +132,8 @@ export const bookingsApi = {
 
     const raw = await authedRequest<RawBookingListResponse>(
       `${BOOKINGS_PATH}?${query.toString()}`,
-      accessToken
+      accessToken,
+      lang
     );
 
     return {
@@ -140,17 +149,19 @@ export const bookingsApi = {
     };
   },
 
-  setupIntent: (accessToken: string, bookingId: string) =>
+  setupIntent: (accessToken: string, lang: Locale, bookingId: string) =>
     authedRequest<{ client_secret: string }>(
       `${BOOKINGS_PATH}/${bookingId}/payment-method/setup-intent`,
       accessToken,
+      lang,
       { method: "POST" }
     ),
 
-  pay: (accessToken: string, bookingId: string, paymentMethodId?: string) =>
+  pay: (accessToken: string, lang: Locale, bookingId: string, paymentMethodId?: string) =>
     authedRequest<BookingPaymentResponse>(
       `${BOOKINGS_PATH}/${bookingId}/pay`,
       accessToken,
+      lang,
       {
         method: "POST",
         body: paymentMethodId ? { payment_method_id: paymentMethodId } : {},

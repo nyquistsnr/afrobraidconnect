@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
+import type { ResendVerificationRequest, VerifyEmailRequest } from "@/lib/api/types";
 import { authApi, ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { Input } from "@/components/ui/input";
@@ -32,7 +33,7 @@ export function VerifyEmailForm({
   const router = useRouter();
 
   const verifyMutation = useMutation({
-    mutationFn: authApi.verifyEmail,
+    mutationFn: (body: VerifyEmailRequest) => authApi.verifyEmail(body, lang),
     onSuccess: () => {
       toast.success(common.toasts.verifyEmailSuccess);
       const url = new URL(`/${lang}/login`, window.location.origin);
@@ -46,7 +47,7 @@ export function VerifyEmailForm({
   });
 
   const resendMutation = useMutation({
-    mutationFn: authApi.resendVerification,
+    mutationFn: (body: ResendVerificationRequest) => authApi.resendVerification(body, lang),
     onSuccess: () => toast.success(common.toasts.resendSuccess),
     onError: (error) => {
       const errorCode = error instanceof ApiError ? error.code : undefined;

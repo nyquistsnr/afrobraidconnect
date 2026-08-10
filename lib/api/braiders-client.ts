@@ -103,7 +103,8 @@ export const braidersApi = {
 
   getAvailabilitySlots: (
     braiderId: string,
-    params: { style_id: string; date_from: string; date_to: string }
+    params: { style_id: string; date_from: string; date_to: string },
+    lang?: Locale
   ) => {
     const query = new URLSearchParams({
       style_id: params.style_id,
@@ -111,7 +112,8 @@ export const braidersApi = {
       date_to: params.date_to,
     });
     return get<AvailableSlotResponse[]>(
-      `/braiders/${braiderId}/availability/slots?${query.toString()}`
+      `/braiders/${braiderId}/availability/slots?${query.toString()}`,
+      lang
     );
   },
 
@@ -129,10 +131,15 @@ export const braidersApi = {
     );
   },
 
-  getMyReview: (braiderId: string, accessToken: string) => {
+  getMyReview: (braiderId: string, accessToken: string, lang?: Locale) => {
     if (!API_BASE) return Promise.reject(new Error("API_BASE not set"));
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    if (lang) headers["Accept-Language"] = lang;
+
     return fetch(`${API_BASE}/braiders/${braiderId}/reviews/me`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers,
     }).then(async (res) => {
       const json = await res.json();
       if (!res.ok || json.status === "error") {

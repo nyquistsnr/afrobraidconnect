@@ -6,6 +6,7 @@ import { Upload, X, Wand2, ImageIcon } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { StylePublicResponse } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { tryonApi } from "@/lib/api/tryon-client";
 import { EstherAiResult } from "@/components/esther-ai/esther-ai-result";
 import { Modal } from "@/components/ui/modal";
@@ -13,10 +14,12 @@ import { ApiError } from "@/lib/api/auth-client";
 
 export function EstherAiForm({
   dict,
+  lang,
   accessToken,
   styles,
 }: {
   dict: Dictionary["estherAi"];
+  lang: Locale;
   accessToken: string;
   styles: StylePublicResponse[];
 }) {
@@ -73,7 +76,7 @@ export function EstherAiForm({
 
     try {
       // 1. Get upload URL
-      const { upload_url, object_key } = await tryonApi.getUploadUrl(accessToken, {
+      const { upload_url, object_key } = await tryonApi.getUploadUrl(accessToken, lang, {
         content_type: file.type as any,
       });
 
@@ -81,7 +84,7 @@ export function EstherAiForm({
       await tryonApi.uploadFile(upload_url, file);
 
       // 3. Create the try-on
-      const tryon = await tryonApi.create(accessToken, {
+      const tryon = await tryonApi.create(accessToken, lang, {
         object_key,
         style_id: styleId || undefined,
         description: description.trim() || undefined,
@@ -103,10 +106,11 @@ export function EstherAiForm({
   // If a TryOn has been created, render the result poller view instead
   if (tryonId) {
     return (
-      <EstherAiResult 
-        tryonId={tryonId} 
-        accessToken={accessToken} 
-        dict={dict} 
+      <EstherAiResult
+        tryonId={tryonId}
+        lang={lang}
+        accessToken={accessToken}
+        dict={dict}
         onReset={() => {
           setTryonId(null);
           handleClearFile();

@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import type { JWT } from "next-auth/jwt";
 import { ApiError, authApi } from "@/lib/api/auth-client";
 import type { AuthTokenResponse } from "@/lib/api/types";
+import { defaultLocale, hasLocale } from "@/lib/i18n";
 
 // Auth.js redirects thrown-CredentialsSignin subclasses back to the client
 // with `code` set to this instance property — this is how our backend's
@@ -60,6 +61,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: {},
         password: {},
         rememberMe: {},
+        lang: {},
       },
       authorize: async (credentials) => {
         const email = credentials?.email;
@@ -69,12 +71,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new LoginError("VALIDATION_ERROR");
         }
 
+        const lang =
+          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
+            ? credentials.lang
+            : defaultLocale;
+
         try {
-          const tokens = await authApi.login({
-            email,
-            password,
-            remember_me: credentials?.rememberMe === "true",
-          });
+          const tokens = await authApi.login(
+            {
+              email,
+              password,
+              remember_me: credentials?.rememberMe === "true",
+            },
+            lang
+          );
           return toAuthUser(tokens);
         } catch (error) {
           throw new LoginError(
@@ -93,6 +103,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       name: "Google",
       credentials: {
         providerToken: {},
+        lang: {},
       },
       authorize: async (credentials) => {
         const providerToken = credentials?.providerToken;
@@ -101,13 +112,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new LoginError("VALIDATION_ERROR");
         }
 
+        const lang =
+          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
+            ? credentials.lang
+            : defaultLocale;
+
         try {
-          const tokens = await authApi.socialLogin("google", {
-            provider_token: providerToken,
-            // Ignored by the backend if the Google account already maps to
-            // an existing user — only applies to brand-new sign-ups.
-            user_type: "CUSTOMER",
-          });
+          const tokens = await authApi.socialLogin(
+            "google",
+            {
+              provider_token: providerToken,
+              // Ignored by the backend if the Google account already maps to
+              // an existing user — only applies to brand-new sign-ups.
+              user_type: "CUSTOMER",
+            },
+            lang
+          );
           return toAuthUser(tokens);
         } catch (error) {
           throw new LoginError(

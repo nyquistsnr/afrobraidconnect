@@ -6,15 +6,18 @@ import { Trash2, AlertTriangle, AlertCircle, Download } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { TryOnResponse } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { tryonApi } from "@/lib/api/tryon-client";
 import { ApiError } from "@/lib/api/auth-client";
 import { formatDistanceToNow } from "date-fns";
 
 export function EstherAiHistory({
   dict,
+  lang,
   accessToken,
 }: {
   dict: Dictionary["estherAi"];
+  lang: Locale;
   accessToken: string;
 }) {
   const [history, setHistory] = useState<TryOnResponse[]>([]);
@@ -25,7 +28,7 @@ export function EstherAiHistory({
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const data = await tryonApi.list(accessToken);
+        const data = await tryonApi.list(accessToken, lang);
         setHistory(data);
       } catch (err) {
         if (err instanceof ApiError) {
@@ -39,14 +42,14 @@ export function EstherAiHistory({
     };
 
     fetchHistory();
-  }, [accessToken, dict]);
+  }, [accessToken, lang, dict]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm(dict.deleteConfirm)) return;
 
     setDeletingId(id);
     try {
-      await tryonApi.delete(accessToken, id);
+      await tryonApi.delete(accessToken, lang, id);
       setHistory((prev) => prev.filter((item) => item.id !== id));
     } catch (err) {
       alert(dict.errorGeneric);

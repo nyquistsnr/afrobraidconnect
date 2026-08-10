@@ -47,9 +47,9 @@ export function EstherAiShell({
 
       <div className="w-full">
         {activeTab === "new" ? (
-          <EstherAiForm dict={dict} accessToken={accessToken} styles={styles} />
+          <EstherAiForm dict={dict} lang={lang} accessToken={accessToken} styles={styles} />
         ) : (
-          <EstherAiHistory dict={dict} accessToken={accessToken} />
+          <EstherAiHistory dict={dict} lang={lang} accessToken={accessToken} />
         )}
       </div>
     </div>

@@ -22,6 +22,7 @@ import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import type { ChatReportReason } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import type { ChatReportDict } from "@/components/chat/types";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
@@ -49,6 +50,7 @@ export function ReportModal({
   open,
   onClose,
   threadId,
+  lang,
   accessToken,
   closeLabel,
   dict,
@@ -57,6 +59,7 @@ export function ReportModal({
   open: boolean;
   onClose: () => void;
   threadId: string;
+  lang: Locale;
   accessToken: string;
   closeLabel: string;
   dict: ChatReportDict;
@@ -67,7 +70,7 @@ export function ReportModal({
 
   const mutation = useMutation({
     mutationFn: () =>
-      chatApi.report(accessToken, threadId, {
+      chatApi.report(accessToken, lang, threadId, {
         reason: reason as ChatReportReason,
         details: details.trim() || undefined,
       }),

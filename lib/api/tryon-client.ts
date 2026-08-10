@@ -5,6 +5,7 @@ import type {
   TryOnUploadUrlRequest,
   TryOnUploadUrlResponse,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 import { ApiError } from "@/lib/api/auth-client";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -13,6 +14,7 @@ const TRYON_PATH = "/tryon";
 async function authedRequest<TRes>(
   path: string,
   accessToken: string,
+  lang: Locale,
   options: { method?: string; body?: unknown } = {}
 ): Promise<TRes> {
   if (!API_BASE) {
@@ -29,6 +31,7 @@ async function authedRequest<TRes>(
       method: options.method ?? "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Accept-Language": lang,
         ...(options.body ? { "Content-Type": "application/json" } : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -56,8 +59,8 @@ async function authedRequest<TRes>(
 }
 
 export const tryonApi = {
-  getUploadUrl: (accessToken: string, body: TryOnUploadUrlRequest) =>
-    authedRequest<TryOnUploadUrlResponse>(`${TRYON_PATH}/upload-url`, accessToken, {
+  getUploadUrl: (accessToken: string, lang: Locale, body: TryOnUploadUrlRequest) =>
+    authedRequest<TryOnUploadUrlResponse>(`${TRYON_PATH}/upload-url`, accessToken, lang, {
       method: "POST",
       body,
     }),
@@ -76,18 +79,18 @@ export const tryonApi = {
     }
   },
 
-  create: (accessToken: string, body: TryOnRequest) =>
-    authedRequest<TryOnResponse>(TRYON_PATH, accessToken, {
+  create: (accessToken: string, lang: Locale, body: TryOnRequest) =>
+    authedRequest<TryOnResponse>(TRYON_PATH, accessToken, lang, {
       method: "POST",
       body,
     }),
 
-  getById: (accessToken: string, id: string) =>
-    authedRequest<TryOnResponse>(`${TRYON_PATH}/${id}`, accessToken),
+  getById: (accessToken: string, lang: Locale, id: string) =>
+    authedRequest<TryOnResponse>(`${TRYON_PATH}/${id}`, accessToken, lang),
 
-  list: (accessToken: string) =>
-    authedRequest<TryOnResponse[]>(TRYON_PATH, accessToken),
+  list: (accessToken: string, lang: Locale) =>
+    authedRequest<TryOnResponse[]>(TRYON_PATH, accessToken, lang),
 
-  delete: (accessToken: string, id: string) =>
-    authedRequest<void>(`${TRYON_PATH}/${id}`, accessToken, { method: "DELETE" }),
+  delete: (accessToken: string, lang: Locale, id: string) =>
+    authedRequest<void>(`${TRYON_PATH}/${id}`, accessToken, lang, { method: "DELETE" }),
 };

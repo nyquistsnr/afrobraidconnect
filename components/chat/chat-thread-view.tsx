@@ -72,7 +72,7 @@ export function ChatThreadView({
     isError: isThreadMetaError,
   } = useQuery({
     queryKey: ["chat-thread-meta", threadId],
-    queryFn: () => chatApi.markRead(accessToken!, threadId),
+    queryFn: () => chatApi.markRead(accessToken!, lang, threadId),
     enabled: sessionStatus === "authenticated" && !!accessToken,
     staleTime: Infinity,
     retry: false,
@@ -80,14 +80,14 @@ export function ChatThreadView({
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
-    queryFn: () => usersApi.getMe(accessToken!),
+    queryFn: () => usersApi.getMe(accessToken!, lang),
     enabled: sessionStatus === "authenticated" && !!accessToken,
   });
 
   const messagesQuery = useInfiniteQuery({
     queryKey: chatMessagesKey(threadId),
     queryFn: ({ pageParam }) =>
-      chatApi.listMessages(accessToken!, threadId, {
+      chatApi.listMessages(accessToken!, lang, threadId, {
         page: pageParam,
         page_size: PAGE_SIZE,
       }),
@@ -98,7 +98,7 @@ export function ChatThreadView({
   });
 
   const sendMutation = useMutation({
-    mutationFn: (body: string) => chatApi.sendMessage(accessToken!, threadId, body),
+    mutationFn: (body: string) => chatApi.sendMessage(accessToken!, lang, threadId, body),
     onSuccess: (message) => {
       // The WS `chat_message` broadcast fires for the sender too (per the
       // API doc), and can race ahead of this awaited REST response — the
@@ -270,6 +270,7 @@ export function ChatThreadView({
           open={reportOpen}
           onClose={() => setReportOpen(false)}
           threadId={threadId}
+          lang={lang}
           accessToken={accessToken}
           closeLabel={common.close}
           dict={reportDict}

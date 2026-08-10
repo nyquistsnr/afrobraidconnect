@@ -77,7 +77,7 @@ export function BookingDetailView({
     isError,
   } = useQuery({
     queryKey: ["booking", bookingId],
-    queryFn: () => bookingsApi.getById(accessToken!, bookingId),
+    queryFn: () => bookingsApi.getById(accessToken!, lang, bookingId),
     enabled: sessionStatus === "authenticated" && !!accessToken,
     retry: false,
   });
@@ -88,7 +88,7 @@ export function BookingDetailView({
 
   const { data: myReview } = useQuery({
     queryKey: ["my-review", booking?.braider_id],
-    queryFn: () => braidersApi.getMyReview(booking!.braider_id, accessToken!),
+    queryFn: () => braidersApi.getMyReview(booking!.braider_id, accessToken!, lang),
     enabled: isEligibleForReview && !!accessToken && !!booking,
     retry: false, // 404 means no review yet
   });

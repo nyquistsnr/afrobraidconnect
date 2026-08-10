@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertCircle, Bell, X } from "lucide-react";
+import { AlertCircle, Bell, Trash2, X } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import type { Locale } from "@/lib/i18n";
 import { notificationsApi } from "@/lib/api/notifications-client";
@@ -31,6 +31,7 @@ export function NotificationsListView({
   const router = useRouter();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: notificationsKey.list(page),
@@ -54,6 +55,20 @@ export function NotificationsListView({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: notificationsKey.all() }),
   });
 
+  function handleDeleteClick(id: string) {
+    setPendingDeleteId(id);
+  }
+
+  function handleDeleteCancel() {
+    setPendingDeleteId(null);
+  }
+
+  function handleDeleteConfirm() {
+    if (!pendingDeleteId) return;
+    deleteMutation.mutate(pendingDeleteId);
+    setPendingDeleteId(null);
+  }
+
   function handleRowClick(notification: NotificationResponse) {
     if (!notification.is_read) markReadMutation.mutate(notification.id);
     const target = getNotificationTarget(notification, lang);
@@ -65,6 +80,52 @@ export function NotificationsListView({
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+      {/* Delete Confirmation Modal */}
+      {pendingDeleteId && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-notification-title"
+        >
+          <div className="w-full max-w-sm rounded-3xl border border-border bg-surface p-8 shadow-2xl">
+            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10">
+              <Trash2 className="size-6 text-red-500" />
+            </div>
+            <h2
+              id="delete-notification-title"
+              className="mb-2 text-lg font-bold text-foreground"
+            >
+              {dict.deleteConfirmTitle}
+            </h2>
+            <p className="mb-8 text-sm text-muted-foreground">
+              {dict.deleteConfirmBody}
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleDeleteCancel}
+                className="flex-1 rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
+              >
+                {dict.deleteConfirmCancel}
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteConfirm}
+                disabled={deleteMutation.isPending}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-red-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-red-600 disabled:opacity-50"
+              >
+                {deleteMutation.isPending ? (
+                  <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  dict.deleteConfirmDelete
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">{dict.pageTitle}</h1>
@@ -138,9 +199,9 @@ export function NotificationsListView({
                 </button>
                 <button
                   type="button"
-                  onClick={() => deleteMutation.mutate(notification.id)}
+                  onClick={() => handleDeleteClick(notification.id)}
                   aria-label={dict.deleteAria}
-                  className="shrink-0 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-border/40 hover:text-foreground"
+                  className="shrink-0 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-500"
                 >
                   <X className="size-4" />
                 </button>
