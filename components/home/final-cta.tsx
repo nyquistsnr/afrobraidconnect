@@ -28,14 +28,10 @@ export function FinalCta({
 
   return (
     <section className="relative isolate flex min-h-[32rem] sm:min-h-[36rem] md:min-h-[40rem] lg:min-h-[44rem] xl:min-h-[52rem] 2xl:min-h-[60rem] items-center justify-center overflow-hidden py-14 md:py-20 px-6">
-      <Image
+      <img
         src={BACKGROUND_IMAGE}
         alt={dict.imageAlt}
-        fill
-        sizes="100vw"
-        className="object-cover object-[center_30%]"
-        priority={false}
-        unoptimized
+        className="absolute inset-0 h-full w-full object-cover object-[center_30%]"
       />
       {/* A subtle uniform overlay to ensure text readability without making the image too dark */}
       <div className="absolute inset-0 bg-black/20" />

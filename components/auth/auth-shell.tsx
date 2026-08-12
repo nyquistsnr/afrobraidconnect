@@ -54,14 +54,10 @@ export function AuthShell({
       </div>
 
       <div className="relative hidden lg:block lg:w-1/2">
-        <Image
+        <img
           src="/images/hero.png"
           alt={heroImageAlt}
-          fill
-          priority
-          sizes="50vw"
-          className="object-cover"
-          unoptimized
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
     </div>
