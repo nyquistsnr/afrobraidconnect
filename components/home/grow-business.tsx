@@ -13,10 +13,14 @@ export interface GrowBusinessDict {
   dashboardCalloutSubtitle: string;
 }
 
+const braiderAppUrl = process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
+
 const PORTRAIT_IMAGE = "/images/home_grow_business/person21.webp";
 const DASHBOARD_IMAGE = "/images/home_grow_business/person20.webp";
 
-export function GrowBusiness({ dict }: { dict: GrowBusinessDict }) {
+export function GrowBusiness({ dict, lang }: { dict: GrowBusinessDict; lang: string }) {
+  const braiderSignupUrl = `${braiderAppUrl}/${lang}/signup`;
+
   return (
     <section className="bg-background px-6 py-14 md:py-20">
       <div className="mx-auto max-w-5xl">
@@ -31,7 +35,7 @@ export function GrowBusiness({ dict }: { dict: GrowBusinessDict }) {
           </div>
 
           <Link
-            href="#"
+            href={braiderSignupUrl}
             className="inline-flex shrink-0 items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
           >
             {dict.cta}

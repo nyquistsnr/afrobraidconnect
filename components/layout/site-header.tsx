@@ -69,6 +69,8 @@ export interface SiteHeaderDict {
   logoutModal: LogoutModalDict;
 }
 
+const braiderAppUrl = process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
+
 export function SiteHeader({
   lang,
   dict,
@@ -138,6 +140,8 @@ export function SiteHeader({
     await logout();
     setLogoutConfirmOpen(false);
   }
+
+  const braiderSignupUrl = `${braiderAppUrl}/${lang}/signup`;
 
   const [location, setLocation] = useState<SelectedLocation | null>(
     initialLocation || null
@@ -376,7 +380,7 @@ export function SiteHeader({
                   <li role="none">
                     <Link
                       role="menuitem"
-                      href="#"
+                      href={braiderSignupUrl}
                       onClick={() => setMenuOpen(false)}
                       className="block px-4 py-2.5 text-sm text-foreground hover:bg-border/40"
                     >

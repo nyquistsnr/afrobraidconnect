@@ -82,7 +82,7 @@ export function HomePageShell({
           searchResultsDict={searchResultsDict} 
         />
         <HowItWorks dict={howItWorksDict} lang={lang} />
-        <GrowBusiness dict={growBusinessDict} />
+        <GrowBusiness dict={growBusinessDict} lang={lang} />
         <TestimonialsCarousel dict={testimonialsDict} />
         <Faqs dict={faqsDict} />
         <FinalCta dict={finalCtaDict} estherAiDict={estherAiDict} lang={lang} />

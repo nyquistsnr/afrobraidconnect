@@ -953,6 +953,11 @@ export type RealtimeEvent =
 export type TryOnStatus = "PROCESSING" | "COMPLETED" | "FAILED";
 export type TryOnUploadContentType = "image/jpeg" | "image/png" | "image/webp";
 
+export type TryOnFailureReason =
+  | "GENERATION_FAILED"
+  | "AI_CREDIT_EXHAUSTED"
+  | null;
+
 export interface TryOnUploadUrlRequest {
   content_type: TryOnUploadContentType;
 }
@@ -978,6 +983,7 @@ export interface TryOnResponse {
   description: string | null;
   original_url: string | null;
   result_url: string | null;
+  failure_reason: TryOnFailureReason;
   error_message: string | null;
   created_at: string;
 }

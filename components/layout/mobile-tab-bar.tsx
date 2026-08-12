@@ -46,6 +46,8 @@ export interface MobileTabBarDict {
   logoutModal: LogoutModalDict;
 }
 
+const braiderAppUrl = process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
+
 // Mirrors Airbnb's mobile bottom nav: a few primary destinations plus a
 // "Profile" tab that houses account actions and settings that would
 // otherwise live in a header hamburger menu — the mobile header itself
@@ -126,6 +128,8 @@ export function MobileTabBar({
     await logout();
     setLogoutConfirmOpen(false);
   }
+
+  const braiderSignupUrl = `${braiderAppUrl}/${lang}/signup`;
 
   return (
     <>
@@ -253,7 +257,7 @@ export function MobileTabBar({
           </Link>
 
           <Link
-            href="#"
+            href={braiderSignupUrl}
             onClick={() => setProfileOpen(false)}
             className="rounded-xl px-3 py-3 text-sm text-foreground transition-colors hover:bg-border/40"
           >

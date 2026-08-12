@@ -81,7 +81,7 @@ export function EstherAiResult({
     );
   }
 
-  if (tryon.status === "FAILED") {
+  if (tryon.status === "FAILED" && tryon.failure_reason !== "AI_CREDIT_EXHAUSTED") {
     return (
       <div className="w-full max-w-2xl mx-auto rounded-3xl border border-border bg-surface p-10 shadow-sm text-center">
         <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-destructive/10 mb-4">
@@ -184,6 +184,33 @@ export function EstherAiResult({
             </div>
             <div className="absolute top-4 right-4 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
               {dict.originalLabel}
+            </div>
+          </div>
+        ) : tryon.status === "FAILED" && tryon.failure_reason === "AI_CREDIT_EXHAUSTED" ? (
+          <div className="absolute inset-0">
+            {tryon.original_url && (
+              <Image 
+                src={tryon.original_url} 
+                alt="Original" 
+                fill 
+                className="object-cover opacity-80"
+                sizes="(max-width: 640px) 100vw, 400px"
+              />
+            )}
+            
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-black/40 text-center">
+              <div className="rounded-2xl bg-surface/95 px-6 py-6 backdrop-blur-md max-w-sm flex flex-col items-center border border-border shadow-2xl">
+                <p className="text-sm font-medium text-foreground mb-6">
+                  {tryon.error_message || "The AI credit has finished for now. Please try again later."}
+                </p>
+                <button
+                  onClick={onReset}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-brand px-6 text-sm font-bold text-brand-foreground transition-all hover:bg-brand/90 shadow-sm"
+                >
+                  <ArrowLeft className="size-4" />
+                  {dict.tryAgain}
+                </button>
+              </div>
             </div>
           </div>
         ) : (

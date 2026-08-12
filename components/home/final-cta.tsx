@@ -11,6 +11,8 @@ export interface FinalCtaDict {
   joinBraiderCta: string;
 }
 
+const braiderAppUrl = process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
+
 const BACKGROUND_IMAGE = "/images/hero.png";
 
 export function FinalCta({ 
@@ -22,6 +24,8 @@ export function FinalCta({
   estherAiDict: Dictionary["estherAi"];
   lang: Locale;
 }) {
+  const braiderSignupUrl = `${braiderAppUrl}/${lang}/signup`;
+
   return (
     <section className="relative isolate flex min-h-[32rem] sm:min-h-[36rem] md:min-h-[40rem] lg:min-h-[44rem] xl:min-h-[52rem] 2xl:min-h-[60rem] items-center justify-center overflow-hidden py-14 md:py-20 px-6">
       <Image
@@ -49,7 +53,7 @@ export function FinalCta({
             {dict.findBraiderCta}
           </Link>
           <Link
-            href="#"
+            href={braiderSignupUrl}
             className="rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-brand shadow-sm transition-colors hover:bg-white/90"
           >
             {dict.joinBraiderCta}
