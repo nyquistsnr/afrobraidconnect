@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ImageOff, X } from "lucide-react";
@@ -19,7 +19,6 @@ export function PhotoGallery({
 }) {
   const sorted = [...images].sort((a, b) => a.position - b.position);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   const showNext = useCallback(() => {
     setLightboxIndex((i) => (i === null ? i : Math.min(i + 1, sorted.length - 1)));
@@ -28,20 +27,6 @@ export function PhotoGallery({
   const showPrev = useCallback(() => {
     setLightboxIndex((i) => (i === null ? i : Math.max(i - 1, 0)));
   }, []);
-
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth * 0.8;
-      scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      const scrollAmount = scrollRef.current.clientWidth * 0.8;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
 
   const alt = useCallback(
     (img: BraiderPortfolioImage) =>
@@ -63,52 +48,44 @@ export function PhotoGallery({
   // Uses dict.showAllPhotos for title if possible, or falls back to "Portfolio"
   const title = dict.showAllPhotos ? dict.showAllPhotos.split(" ")[0] + " Portfolio" : "Portfolio";
 
+  const displayImages = sorted.slice(0, 4);
+
   return (
-    <div className="flex flex-col gap-4 border-t border-border pt-8">
+    <div className="flex flex-col gap-4 border-t border-border pt-8 w-full overflow-hidden">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-foreground">
-          Portfolio
+          {title}
         </h2>
-        {sorted.length > 2 && (
-          <div className="hidden sm:flex items-center gap-2">
-            <button
-              onClick={scrollLeft}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <button
-              onClick={scrollRight}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background shadow-sm transition-colors hover:bg-border/50 text-foreground"
-              aria-label="Scroll right"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        )}
       </div>
 
-      <div 
-        ref={scrollRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 pt-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-      >
-        {sorted.map((img, i) => (
-          <button
-            key={img.id}
-            type="button"
-            onClick={() => setLightboxIndex(i)}
-            className="group relative h-48 w-48 sm:h-56 sm:w-56 shrink-0 snap-start overflow-hidden rounded-2xl bg-border/50 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
-          >
-            <Image
-              src={img.url}
-              alt={alt(img)}
-              fill
-              sizes="(min-width: 640px) 224px, 192px"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </button>
-        ))}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4 w-full">
+        {displayImages.map((img, i) => {
+          const isLast = i === 3;
+          const hasMore = sorted.length > 4;
+          
+          return (
+            <button
+              key={img.id}
+              type="button"
+              onClick={() => setLightboxIndex(i)}
+              className="group relative aspect-square w-full overflow-hidden rounded-2xl bg-border/50 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+            >
+              <Image
+                src={img.url}
+                alt={alt(img)}
+                fill
+                sizes="(min-width: 640px) 25vw, 50vw"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              {isLast && hasMore && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white transition-colors group-hover:bg-black/70">
+                  <span className="text-2xl sm:text-3xl font-semibold">+{sorted.length - 3}</span>
+                  <span className="text-sm font-medium">others</span>
+                </div>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {lightboxIndex !== null && (

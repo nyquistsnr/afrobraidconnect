@@ -126,7 +126,7 @@ export function SearchResultsView({
   return (
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div
-        className={`min-h-0 w-full md:w-[500px] lg:w-[650px] xl:w-[750px] flex-shrink-0 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
+        className={`flex-1 md:flex-none min-h-0 w-full md:w-[500px] lg:w-[650px] xl:w-[750px] flex-shrink-0 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
           mobileView === "map" || isMapExpanded ? "hidden md:hidden" : "block"
         }`}
       >
