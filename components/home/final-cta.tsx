@@ -35,6 +35,7 @@ export function FinalCta({
         sizes="100vw"
         className="object-cover object-[center_30%]"
         priority={false}
+        unoptimized
       />
       {/* A subtle uniform overlay to ensure text readability without making the image too dark */}
       <div className="absolute inset-0 bg-black/20" />

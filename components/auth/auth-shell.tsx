@@ -61,6 +61,7 @@ export function AuthShell({
           priority
           sizes="50vw"
           className="object-cover"
+          unoptimized
         />
       </div>
     </div>
