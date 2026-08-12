@@ -11,16 +11,17 @@ export interface FinalCtaDict {
   joinBraiderCta: string;
 }
 
-const braiderAppUrl = process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
+const braiderAppUrl =
+  process.env.NEXT_PUBLIC_BRAIDER_APP_URL || "https://braider.afrobraid.com";
 
-const BACKGROUND_IMAGE = "/images/hero.png";
+const BACKGROUND_IMAGE = "/images/hero_hero.png";
 
-export function FinalCta({ 
-  dict, 
+export function FinalCta({
+  dict,
   estherAiDict,
-  lang 
-}: { 
-  dict: FinalCtaDict; 
+  lang,
+}: {
+  dict: FinalCtaDict;
   estherAiDict: Dictionary["estherAi"];
   lang: Locale;
 }) {
@@ -38,7 +39,7 @@ export function FinalCta({
 
       <div className="relative flex flex-col items-center justify-center gap-8 md:gap-10 w-full max-w-4xl text-center z-10">
         <EstherAiCta dict={estherAiDict} lang={lang} />
-        
+
         <h2 className="text-3xl font-bold tracking-tight text-white drop-shadow-md sm:text-4xl md:text-5xl leading-tight mt-4">
           {dict.title}
         </h2>

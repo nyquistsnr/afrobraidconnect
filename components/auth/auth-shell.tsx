@@ -55,7 +55,7 @@ export function AuthShell({
 
       <div className="relative hidden lg:block lg:w-1/2">
         <img
-          src="/images/hero.png"
+          src="/images/hero_hero.png"
           alt={heroImageAlt}
           className="absolute inset-0 h-full w-full object-cover"
         />
