@@ -9,7 +9,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import type { BookingResponse, BraiderDetailResponse } from "@/lib/api/types";
+import type {
+  BookingResponse,
+  BraiderDetailResponse,
+  PaymentProvider,
+} from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { formatPrice } from "@/lib/braider-pricing";
@@ -23,6 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PriceSummary } from "@/components/booking-checkout/price-summary";
 import { PaymentStep } from "@/components/booking-checkout/payment-step";
+import { PayPalPaymentStep } from "@/components/booking-checkout/paypal-payment-step";
 import type { BookingCheckoutDict } from "@/components/booking-checkout/types";
 
 type ErrorsDict = Dictionary["common"]["errors"];
@@ -72,6 +77,7 @@ export function BookingCheckoutView({
   const { data: session, status: sessionStatus } = useSession();
 
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>("STRIPE");
   const [booking, setBooking] = useState<BookingResponse | null>(null);
   const [phase, setPhase] = useState<Phase>(
     resumeBookingId ? "confirming" : "review"
@@ -109,6 +115,7 @@ export function BookingCheckoutView({
         booking_calculation_id: calculationId,
         starts_at: startsAt,
         terms_accepted: true,
+        payment_provider: paymentProvider,
       });
     },
     onSuccess: (data) => {
@@ -352,6 +359,35 @@ export function BookingCheckoutView({
 
           {phase === "review" && (
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
+              <div className="flex flex-col gap-2">
+                <span className="text-sm font-medium text-foreground">
+                  {dict.paymentMethodLabel}
+                </span>
+                <div className="flex gap-2" role="radiogroup" aria-label={dict.paymentMethodLabel}>
+                  {(
+                    [
+                      { value: "STRIPE", label: dict.payWithCardLabel },
+                      { value: "PAYPAL", label: dict.payWithPaypalLabel },
+                    ] as const
+                  ).map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={paymentProvider === option.value}
+                      onClick={() => setPaymentProvider(option.value)}
+                      className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors ${
+                        paymentProvider === option.value
+                          ? "border-brand bg-brand/10 text-brand"
+                          : "border-border bg-input text-foreground hover:bg-border/40"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <label className="flex cursor-pointer items-start gap-3">
                 <Checkbox
                   checked={termsAccepted}
@@ -389,7 +425,22 @@ export function BookingCheckoutView({
                   {dict.paymentSubtitle}
                 </p>
               </div>
-              {booking.payments[0]?.client_secret ? (
+              {booking.payments[0]?.provider === "PAYPAL" &&
+              booking.payments[0].paypal_order_id &&
+              session?.accessToken ? (
+                <PayPalPaymentStep
+                  orderId={booking.payments[0].paypal_order_id}
+                  bookingId={booking.id}
+                  accessToken={session.accessToken}
+                  lang={lang}
+                  dict={dict}
+                  errorsDict={errorsDict}
+                  onCaptured={(captured) => {
+                    setBooking(captured);
+                    setPhase("success");
+                  }}
+                />
+              ) : booking.payments[0]?.client_secret ? (
                 <PaymentStep
                   clientSecret={booking.payments[0].client_secret}
                   amountLabel={`€${formatPrice(booking.payments[0].amount)}`}
