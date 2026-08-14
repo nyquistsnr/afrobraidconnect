@@ -9,11 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import type {
-  BookingResponse,
-  BraiderDetailResponse,
-  PaymentProvider,
-} from "@/lib/api/types";
+import type { BookingResponse, BraiderDetailResponse } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { formatPrice } from "@/lib/braider-pricing";
@@ -27,7 +23,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PriceSummary } from "@/components/booking-checkout/price-summary";
 import { PaymentStep } from "@/components/booking-checkout/payment-step";
-import { PayPalPaymentStep } from "@/components/booking-checkout/paypal-payment-step";
 import type { BookingCheckoutDict } from "@/components/booking-checkout/types";
 
 type ErrorsDict = Dictionary["common"]["errors"];
@@ -74,13 +69,17 @@ export function BookingCheckoutView({
   const searchParams = useSearchParams();
   const router = useRouter();
   const resumeBookingId = searchParams.get("booking_id");
+  // Stripe appends this to return_url after an off-site redirect (PayPal,
+  // and any other redirect-based payment method) — "failed" means the
+  // PaymentIntent still needs a new attempt, so send the customer back to
+  // the payment step instead of into the confirm-and-poll phase.
+  const redirectStatus = searchParams.get("redirect_status");
   const { data: session, status: sessionStatus } = useSession();
 
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>("STRIPE");
   const [booking, setBooking] = useState<BookingResponse | null>(null);
   const [phase, setPhase] = useState<Phase>(
-    resumeBookingId ? "confirming" : "review"
+    resumeBookingId ? (redirectStatus === "failed" ? "payment" : "confirming") : "review"
   );
   const [fatalError, setFatalError] = useState(false);
 
@@ -115,7 +114,6 @@ export function BookingCheckoutView({
         booking_calculation_id: calculationId,
         starts_at: startsAt,
         terms_accepted: true,
-        payment_provider: paymentProvider,
       });
     },
     onSuccess: (data) => {
@@ -171,6 +169,16 @@ export function BookingCheckoutView({
     };
   }, [phase, effectiveBooking?.id, session?.accessToken, lang]);
 
+  // Surface the failed off-site attempt once, on the render that lands back
+  // here with redirect_status=failed — the PaymentIntent is still open
+  // below (same client_secret), so this is just a nudge to retry it.
+  useEffect(() => {
+    if (resumeBookingId && redirectStatus === "failed") {
+      toast.error(dict.paymentErrorFallback);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // --- Fatal / not-found quote or booking --------------------------------
   if (
     (!resumeBookingId &&
@@ -207,11 +215,13 @@ export function BookingCheckoutView({
   }
 
   const calculation = calculationQuery.data ?? null;
-  const styleName = booking?.style_name ?? calculation?.style_name ?? "";
-  const durationMinutes = booking?.duration_minutes ?? calculation?.duration_minutes;
+  const styleName = effectiveBooking?.style_name ?? calculation?.style_name ?? "";
+  const durationMinutes =
+    effectiveBooking?.duration_minutes ?? calculation?.duration_minutes;
   const appointmentLabel = formatSlotDateTime(startsAt, lang);
-  const isMobile = booking?.is_mobile ?? calculation?.is_mobile ?? false;
-  const clientAddress = booking?.client_address ?? calculation?.client_address ?? null;
+  const isMobile = effectiveBooking?.is_mobile ?? calculation?.is_mobile ?? false;
+  const clientAddress =
+    effectiveBooking?.client_address ?? calculation?.client_address ?? null;
   const locationValue = isMobile
     ? formatTemplate(dict.locationMobileValue, { address: clientAddress ?? "" })
     : formatTemplate(dict.locationInPersonValue, {
@@ -350,44 +360,15 @@ export function BookingCheckoutView({
                 />
               </div>
             )}
-            {phase === "payment" && booking && (
+            {phase === "payment" && effectiveBooking && (
               <div className="mt-4 border-t border-border pt-4">
-                <PriceSummary breakdown={booking} dict={dict} />
+                <PriceSummary breakdown={effectiveBooking} dict={dict} />
               </div>
             )}
           </div>
 
           {phase === "review" && (
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
-              <div className="flex flex-col gap-2">
-                <span className="text-sm font-medium text-foreground">
-                  {dict.paymentMethodLabel}
-                </span>
-                <div className="flex gap-2" role="radiogroup" aria-label={dict.paymentMethodLabel}>
-                  {(
-                    [
-                      { value: "STRIPE", label: dict.payWithCardLabel },
-                      { value: "PAYPAL", label: dict.payWithPaypalLabel },
-                    ] as const
-                  ).map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      role="radio"
-                      aria-checked={paymentProvider === option.value}
-                      onClick={() => setPaymentProvider(option.value)}
-                      className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors ${
-                        paymentProvider === option.value
-                          ? "border-brand bg-brand/10 text-brand"
-                          : "border-border bg-input text-foreground hover:bg-border/40"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               <label className="flex cursor-pointer items-start gap-3">
                 <Checkbox
                   checked={termsAccepted}
@@ -415,7 +396,7 @@ export function BookingCheckoutView({
             </div>
           )}
 
-          {phase === "payment" && booking && (
+          {phase === "payment" && effectiveBooking && (
             <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
               <div>
                 <h2 className="text-base font-semibold text-foreground">
@@ -425,26 +406,11 @@ export function BookingCheckoutView({
                   {dict.paymentSubtitle}
                 </p>
               </div>
-              {booking.payments[0]?.provider === "PAYPAL" &&
-              booking.payments[0].paypal_order_id &&
-              session?.accessToken ? (
-                <PayPalPaymentStep
-                  orderId={booking.payments[0].paypal_order_id}
-                  bookingId={booking.id}
-                  accessToken={session.accessToken}
-                  lang={lang}
-                  dict={dict}
-                  errorsDict={errorsDict}
-                  onCaptured={(captured) => {
-                    setBooking(captured);
-                    setPhase("success");
-                  }}
-                />
-              ) : booking.payments[0]?.client_secret ? (
+              {effectiveBooking.payments[0]?.client_secret ? (
                 <PaymentStep
-                  clientSecret={booking.payments[0].client_secret}
-                  amountLabel={`€${formatPrice(booking.payments[0].amount)}`}
-                  returnUrl={`${window.location.origin}${profileHref}/book?calculation_id=${calculationId}&starts_at=${encodeURIComponent(startsAt)}&booking_id=${booking.id}`}
+                  clientSecret={effectiveBooking.payments[0].client_secret}
+                  amountLabel={`€${formatPrice(effectiveBooking.payments[0].amount)}`}
+                  returnUrl={`${window.location.origin}${profileHref}/book?calculation_id=${calculationId}&starts_at=${encodeURIComponent(startsAt)}&booking_id=${effectiveBooking.id}`}
                   dict={dict}
                   onSubmitted={() => setPhase("confirming")}
                 />

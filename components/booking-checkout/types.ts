@@ -16,16 +16,12 @@ export interface BookingCheckoutDict {
   dueTodayLabel: string;
   dueLaterLabel: string;
   termsLabel: string;
-  paymentMethodLabel: string;
-  payWithCardLabel: string;
-  payWithPaypalLabel: string;
   confirmButton: string;
   confirmButtonLoading: string;
   paymentTitle: string;
   paymentSubtitle: string;
   payButton: string;
   payButtonLoading: string;
-  retryButton: string;
   confirmingPaymentTitle: string;
   confirmingPaymentSubtitle: string;
   stillProcessingNotice: string;

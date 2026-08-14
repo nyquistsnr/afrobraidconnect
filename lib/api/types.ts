@@ -708,23 +708,18 @@ export interface BookingPaymentMethod {
   exp_year: number;
 }
 
-export type PaymentProvider = "STRIPE" | "PAYPAL";
-
 export interface BookingPaymentResponse {
   purpose: PaymentPurpose;
   status: PaymentStatus;
   amount: string;
   currency: "EUR";
-  provider: PaymentProvider;
   client_secret: string | null;
-  paypal_order_id: string | null;
 }
 
 export interface CreateBookingRequest {
   booking_calculation_id: string;
   starts_at: string;
   terms_accepted: true;
-  payment_provider?: PaymentProvider;
 }
 
 export interface BookingResponse {

@@ -107,8 +107,7 @@ interface RawBookingListResponse {
 
 export const bookingsApi = {
   // Consumes a DRAFT calculation + an appointment time; creates the booking
-  // and a payment on the chosen provider (Stripe PaymentIntent client_secret,
-  // or a PayPal order id — only returned here, once).
+  // and a Stripe PaymentIntent (client_secret only returned here, once).
   create: (accessToken: string, lang: Locale, body: CreateBookingRequest) =>
     authedRequest<BookingResponse>(BOOKINGS_PATH, accessToken, lang, {
       method: "POST",
@@ -167,17 +166,6 @@ export const bookingsApi = {
         method: "POST",
         body: paymentMethodId ? { payment_method_id: paymentMethodId } : {},
       }
-    ),
-
-  // Called from the PayPal button's onApprove — the customer already
-  // approved the order in PayPal's UI, this tells the backend to capture
-  // it server-side. Idempotent: safe to retry on a flaky network.
-  capturePaypal: (accessToken: string, lang: Locale, bookingId: string) =>
-    authedRequest<BookingResponse>(
-      `${BOOKINGS_PATH}/${bookingId}/payments/paypal/capture`,
-      accessToken,
-      lang,
-      { method: "POST" }
     ),
 
   reschedule: (accessToken: string, lang: Locale, bookingId: string, startsAt: string) =>
