@@ -69,11 +69,16 @@ export function BookingCheckoutView({
   const searchParams = useSearchParams();
   const router = useRouter();
   const resumeBookingId = searchParams.get("booking_id");
-  // Stripe appends this to return_url after an off-site redirect (PayPal,
+  // Stripe appends these to return_url after an off-site redirect (PayPal,
   // and any other redirect-based payment method) — "failed" means the
   // PaymentIntent still needs a new attempt, so send the customer back to
-  // the payment step instead of into the confirm-and-poll phase.
+  // the payment step instead of into the confirm-and-poll phase. The booking
+  // GET endpoint never re-returns client_secret (only the original POST
+  // /bookings response does), so retrying after a redirect has to reuse the
+  // secret Stripe just handed back to us in the URL — same PaymentIntent,
+  // still open for another attempt.
   const redirectStatus = searchParams.get("redirect_status");
+  const redirectClientSecret = searchParams.get("payment_intent_client_secret");
   const { data: session, status: sessionStatus } = useSession();
 
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -402,7 +407,12 @@ export function BookingCheckoutView({
           )}
 
           {phase === "payment" && effectiveBooking && (
-            <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
+            // scroll-mt keeps this clear of the sticky header (z-50) if a
+            // scroll/anchor ever lands it flush with the top of the
+            // viewport — without it, Stripe's payment-method tabs could end
+            // up geometrically under the header and swallow taps meant for
+            // them, even though nothing looks wrong in the DOM.
+            <div className="flex scroll-mt-28 flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
               <div>
                 <h2 className="text-base font-semibold text-foreground">
                   {dict.paymentTitle}
@@ -411,19 +421,32 @@ export function BookingCheckoutView({
                   {dict.paymentSubtitle}
                 </p>
               </div>
-              {effectiveBooking.payments[0]?.client_secret ? (
-                <PaymentStep
-                  clientSecret={effectiveBooking.payments[0].client_secret}
-                  amountLabel={`€${formatPrice(effectiveBooking.payments[0].amount)}`}
-                  returnUrl={`${window.location.origin}${profileHref}/book?calculation_id=${calculationId}&starts_at=${encodeURIComponent(startsAt)}&booking_id=${effectiveBooking.id}`}
-                  dict={dict}
-                  onSubmitted={() => setPhase("confirming")}
-                />
-              ) : (
-                <p className="text-sm text-red-500">
-                  {dict.paymentErrorFallback}
-                </p>
-              )}
+              {(() => {
+                const clientSecret =
+                  effectiveBooking.payments[0]?.client_secret ??
+                  (redirectStatus === "failed" ? redirectClientSecret : null);
+                return clientSecret ? (
+                  <PaymentStep
+                    clientSecret={clientSecret}
+                    amountLabel={`€${formatPrice(effectiveBooking.payments[0].amount)}`}
+                    returnUrl={`${window.location.origin}${profileHref}/book?calculation_id=${calculationId}&starts_at=${encodeURIComponent(startsAt)}&booking_id=${effectiveBooking.id}`}
+                    dict={dict}
+                    onSubmitted={() => setPhase("confirming")}
+                  />
+                ) : (
+                  <div className="flex flex-col items-start gap-3">
+                    <p className="text-sm text-red-500">
+                      {dict.paymentErrorFallback}
+                    </p>
+                    <Link
+                      href={profileHref}
+                      className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
+                    >
+                      {dict.reconfigureCta}
+                    </Link>
+                  </div>
+                );
+              })()}
             </div>
           )}
         </>
