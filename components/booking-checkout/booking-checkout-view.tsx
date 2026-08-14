@@ -233,7 +233,12 @@ export function BookingCheckoutView({
       <Link
         href={profileHref}
         onClick={(e) => {
-          if (window.history.length > 1) {
+          // Skip the smart-back shortcut once this page has been reached via
+          // a resumed/redirected load (e.g. back from PayPal through
+          // Stripe's off-site flow) — browser history at that point still
+          // has the off-site payment page in it, so history.back() would
+          // send the customer right back to PayPal instead of the profile.
+          if (!resumeBookingId && window.history.length > 1) {
             e.preventDefault();
             router.back();
           }
@@ -270,7 +275,7 @@ export function BookingCheckoutView({
             <Link
               href={profileHref}
               onClick={(e) => {
-                if (window.history.length > 1) {
+                if (!resumeBookingId && window.history.length > 1) {
                   e.preventDefault();
                   router.back();
                 }

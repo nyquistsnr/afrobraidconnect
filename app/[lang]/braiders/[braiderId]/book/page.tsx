@@ -50,7 +50,7 @@ export default async function BookingCheckoutPage({
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background pb-24 md:pb-0">
       <SiteHeader
         lang={lang}
         dict={dict.siteHeader}
