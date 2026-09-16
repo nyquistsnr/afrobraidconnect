@@ -19,12 +19,6 @@ export default async function BookingCheckoutPage({
   if (!session?.user) {
     redirect(await loginPath(lang));
   }
-  // Booking creation is a CUSTOMER-only endpoint — a braider account landing
-  // here (e.g. a shared link) has nothing to do but go back to the profile.
-  if (session.user.userType !== "CUSTOMER") {
-    redirect(`/${lang}/braiders/${braiderId}`);
-  }
-
   const sp = await searchParams;
   const calculationIdParam = sp.calculation_id;
   const startsAtParam = sp.starts_at;
