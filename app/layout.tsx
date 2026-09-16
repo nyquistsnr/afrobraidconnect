@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Fira_Sans } from "next/font/google";
 import Script from "next/script";
 import { SessionProvider } from "next-auth/react";
@@ -7,6 +7,7 @@ import { RealtimeProvider } from "@/components/realtime/realtime-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { InlineScript } from "@/components/theme/inline-script";
 import { AppToastContainer } from "@/components/toast-container";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { QueryProvider } from "@/lib/query-provider";
 import { themeInitScript } from "@/lib/theme";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,6 +32,26 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Afrobraid Connect",
   description: "Connecting clients with professional hair braiders.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Afrobraid Connect",
+  },
+  openGraph: {
+    title: "Afrobraid Connect",
+    description: "Connecting clients with professional hair braiders.",
+    siteName: "Afrobraid Connect",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Afrobraid Connect",
+    description: "Connecting clients with professional hair braiders.",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#b9713f",
 };
 
 export default function RootLayout({
@@ -62,6 +83,7 @@ export default function RootLayout({
                   {children}
                 </GoogleMapsProvider>
                 <AppToastContainer />
+                <ServiceWorkerRegister />
               </RealtimeProvider>
             </QueryProvider>
           </ThemeProvider>
