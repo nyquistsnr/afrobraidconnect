@@ -15,10 +15,6 @@ export default async function BookingDetailPage({
   if (!session?.user) {
     redirect(await loginPath(lang));
   }
-  if (session.user.userType !== "CUSTOMER") {
-    redirect(`/${lang}`);
-  }
-
   const dict = await getDictionary(lang);
 
   return (

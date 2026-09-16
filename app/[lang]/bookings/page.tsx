@@ -15,12 +15,6 @@ export default async function BookingsPage({
   if (!session?.user) {
     redirect(await loginPath(lang));
   }
-  // Only customers have bookings to look back on — a braider account
-  // landing here has nothing to see.
-  if (session.user.userType !== "CUSTOMER") {
-    redirect(`/${lang}`);
-  }
-
   const dict = await getDictionary(lang);
 
   return (
