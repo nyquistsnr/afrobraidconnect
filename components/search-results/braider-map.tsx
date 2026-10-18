@@ -38,6 +38,7 @@ import {
 } from "@/components/maps/map-styles";
 import { buildBraiderHref } from "@/components/search-results/braider-card";
 import type { SearchResultsDict } from "@/components/search-results/types";
+import { placeNameFor } from "@/components/maps/place-name";
 
 // Rendered without a mapId on purpose: our own JSON styles (map-styles.ts)
 // only apply to non-cloud-styled maps, so markers are HtmlMarker overlays
@@ -51,6 +52,8 @@ const FALLBACK_ZOOM = 5;
 // are padded to at least this span (degrees, roughly zoom 13).
 const MIN_FIT_SPAN_DEG = 0.04;
 const BRAND_COLOR = "#b9713f";
+// Share of the map's shorter side covered by the "Search this area" ring.
+const AREA_RING = 0.92;
 
 interface Pin {
   item: BraiderSearchItem;
@@ -350,7 +353,12 @@ export function BraiderMap({
   activeId: string | null;
   onHoverPin: (id: string | null) => void;
   onSelectPin: (id: string | null) => void;
-  onSearchArea: (lat: number, lng: number, radiusKm: number) => Promise<void>;
+  onSearchArea: (
+    lat: number,
+    lng: number,
+    radiusKm: number,
+    placeName?: string | null
+  ) => Promise<void>;
   isExpanded?: boolean;
   onToggleExpand?: () => void;
   lang: Locale;
@@ -365,9 +373,16 @@ export function BraiderMap({
   // "Search this area" button (Airbnb-style), so browsing the map can't
   // silently shrink the radius or rename the location.
   const [userMoved, setUserMoved] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  // Town under the live center pin, looked up once the map settles, so the
+  // button can say exactly where it will search ("Search near Regensburg").
+  const [areaName, setAreaName] = useState<{ lat: number; lng: number; name: string } | null>(null);
   const [searchingArea, setSearchingArea] = useState(false);
   const [fitNonce, setFitNonce] = useState(0);
   const cameraRef = useRef<{ lat: number; lng: number; radiusKm: number } | null>(null);
+  // Snapshot of the camera each time the map comes to rest — render-safe
+  // (unlike cameraRef) and the trigger for the place-name lookup below.
+  const [settledCamera, setSettledCamera] = useState<{ lat: number; lng: number } | null>(null);
   // True while a camera change is ours (fitBounds/panTo/setZoom), so it
   // isn't mistaken for the user exploring. Cleared on the next idle.
   const programmaticRef = useRef(true);
@@ -400,12 +415,14 @@ export function BraiderMap({
 
   function handleCameraChanged(event: MapCameraChangedEvent) {
     const { center: c, bounds } = event.detail;
-    // Out to the farther visible edge (not the corner, which reaches well
-    // past what's on screen), so "this area" means roughly what you see.
-    const radius = Math.max(
-      distanceKm(c.lat, c.lng, bounds.north, c.lng),
-      distanceKm(c.lat, c.lng, c.lat, bounds.east)
-    );
+    // The circle that fits inside the visible map (AREA_RING of the shorter
+    // side) — exactly the dashed ring drawn around the live center pin, so
+    // what you see outlined is what gets searched.
+    const radius =
+      Math.min(
+        distanceKm(c.lat, c.lng, bounds.north, c.lng),
+        distanceKm(c.lat, c.lng, c.lat, bounds.east)
+      ) * AREA_RING;
     cameraRef.current = {
       lat: c.lat,
       lng: c.lng,
@@ -414,12 +431,31 @@ export function BraiderMap({
     if (!programmaticRef.current) setUserMoved(true);
   }
 
+  // Reverse-geocode the pin's spot once the map comes to rest after a move.
+  useEffect(() => {
+    if (!userMoved || dragging || !settledCamera) return;
+    let cancelled = false;
+    const { lat, lng } = settledCamera;
+    const timer = window.setTimeout(async () => {
+      const name = await placeNameFor(lat, lng);
+      if (!cancelled && name) setAreaName({ lat, lng, name });
+    }, 450);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [userMoved, dragging, settledCamera]);
+
   async function handleSearchArea() {
     const camera = cameraRef.current;
     if (!camera) return;
     setSearchingArea(true);
+    const knownName =
+      areaName && distanceKm(areaName.lat, areaName.lng, camera.lat, camera.lng) < 0.5
+        ? areaName.name
+        : null;
     try {
-      await onSearchArea(camera.lat, camera.lng, camera.radiusKm);
+      await onSearchArea(camera.lat, camera.lng, camera.radiusKm, knownName);
       setUserMoved(false);
     } finally {
       setSearchingArea(false);
@@ -427,6 +463,16 @@ export function BraiderMap({
   }
 
   const showSearchArea = userMoved && !isUpdating && !searchingArea;
+  // The live pin + ring stay up from the first nudge until the new results
+  // land, so the user always sees where the next search is anchored.
+  const showLivePin = userMoved || searchingArea;
+  const liveName =
+    !dragging &&
+    areaName &&
+    settledCamera &&
+    distanceKm(areaName.lat, areaName.lng, settledCamera.lat, settledCamera.lng) < 0.5
+      ? areaName.name
+      : null;
   const showUpdating = isUpdating || searchingArea;
 
   return (
@@ -442,8 +488,12 @@ export function BraiderMap({
         clickableIcons={false}
         className="h-full w-full"
         onCameraChanged={handleCameraChanged}
+        onDragstart={() => setDragging(true)}
+        onDragend={() => setDragging(false)}
         onIdle={() => {
           programmaticRef.current = false;
+          const camera = cameraRef.current;
+          if (camera) setSettledCamera({ lat: camera.lat, lng: camera.lng });
         }}
         onClick={() => onSelectPin(null)}
       >
@@ -463,10 +513,10 @@ export function BraiderMap({
               center={center}
               radius={radiusKm * 1000}
               strokeColor={BRAND_COLOR}
-              strokeOpacity={0.55}
+              strokeOpacity={showLivePin ? 0.18 : 0.55}
               strokeWeight={1.5}
               fillColor={BRAND_COLOR}
-              fillOpacity={0.06}
+              fillOpacity={showLivePin ? 0.015 : 0.06}
               clickable={false}
             />
             {/* The searched spot, Uber-style: a solid dot in a soft breathing
@@ -535,15 +585,48 @@ export function BraiderMap({
         />
       </Map>
 
-      <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center">
+      {/* Uber-style live pin: fixed at the map's center while the map
+          moves underneath it — lifts while dragging, drops when it settles —
+          inside a dashed ring marking the exact area "Search" will cover. */}
+      {showLivePin && (
+        <div className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-center [container-type:size]" aria-hidden>
+          <span
+            className={`search-pop-in absolute size-[min(92cqw,92cqh)] rounded-full border-2 border-dashed transition-colors duration-200 ${
+              dragging ? "border-brand/70 bg-brand/[0.07]" : "border-brand/50 bg-brand/[0.04]"
+            }`}
+          />
+          <span
+            className={`absolute size-2 rounded-full bg-black/35 blur-[1px] transition-transform duration-200 ${
+              dragging ? "scale-150 opacity-60" : "scale-100"
+            }`}
+          />
+          <span
+            className={`relative -translate-y-1/2 transition-transform duration-200 ease-out ${
+              dragging ? "-mt-5" : "mt-0"
+            }`}
+          >
+            <span className="flex size-10 items-center justify-center rounded-full border-[3px] border-white bg-brand text-brand-foreground shadow-[0_6px_16px_rgba(0,0,0,0.35)]">
+              <Search className="size-4" strokeWidth={3} />
+            </span>
+            <span className="mx-auto block h-3 w-[3px] rounded-b-full bg-brand shadow" />
+          </span>
+        </div>
+      )}
+
+      <div className="pointer-events-none absolute inset-x-0 top-4 z-10 flex justify-center px-16">
         {showSearchArea && (
           <button
             type="button"
             onClick={handleSearchArea}
-            className="search-pop-in pointer-events-auto flex items-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-semibold text-background shadow-xl transition-transform hover:scale-[1.03] active:scale-95"
+            disabled={dragging}
+            className="search-pop-in pointer-events-auto flex max-w-full items-center gap-2 rounded-full bg-foreground px-4 py-2.5 text-sm font-semibold text-background shadow-xl transition-all hover:scale-[1.03] active:scale-95 disabled:opacity-80"
           >
-            <Search className="size-4" />
-            {dict.searchThisArea}
+            <Search className="size-4 shrink-0" />
+            <span className="truncate">
+              {liveName
+                ? formatTemplate(dict.searchNear, { place: liveName })
+                : dict.searchThisArea}
+            </span>
           </button>
         )}
         {showUpdating && (

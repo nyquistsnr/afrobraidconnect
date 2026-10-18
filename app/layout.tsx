@@ -9,7 +9,7 @@ import { InlineScript } from "@/components/theme/inline-script";
 import { AppToastContainer } from "@/components/toast-container";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { QueryProvider } from "@/lib/query-provider";
-import { themeInitScript } from "@/lib/theme";
+import { themeChromeColors, themeInitScript } from "@/lib/theme";
 import { installCaptureScript } from "@/lib/pwa/install-capture-script";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
@@ -54,8 +54,13 @@ export const metadata: Metadata = {
   },
 };
 
+// Per-scheme so the status bar matches the page even before JS runs;
+// ThemeProvider then keeps it in step with the in-app theme toggle.
 export const viewport: Viewport = {
-  themeColor: "#b9713f",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: themeChromeColors.light },
+    { media: "(prefers-color-scheme: dark)", color: themeChromeColors.dark },
+  ],
 };
 
 export default function RootLayout({

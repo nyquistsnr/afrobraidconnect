@@ -25,7 +25,17 @@ export type InstallPlatform =
   | "ios-safari"
   | "ios-other" // Chrome/Edge/Firefox on iOS: share sheet lives top-right
   | "android"
-  | "desktop";
+  // Chrome / Edge / Brave / Opera on Windows, macOS, Linux, ChromeOS —
+  // installable via beforeinstallprompt or the address-bar install icon.
+  | "desktop-chromium"
+  // Safari 17+ on macOS Sonoma+: File / Share → "Add to Dock".
+  | "mac-safari"
+  // Firefox and others: can't install web apps; point to another browser.
+  | "desktop-other";
+
+export function isDesktopPlatform(platform: InstallPlatform): boolean {
+  return platform === "desktop-chromium" || platform === "mac-safari" || platform === "desktop-other";
+}
 
 export interface InstallEnvironment {
   platform: InstallPlatform;
@@ -49,7 +59,9 @@ export function detectInstallEnvironment(): InstallEnvironment {
   if (IN_APP_UA.test(ua)) platform = "in-app";
   else if (isIOS) platform = /CriOS|FxiOS|EdgiOS|OPiOS/.test(ua) ? "ios-other" : "ios-safari";
   else if (/Android/.test(ua)) platform = "android";
-  else platform = "desktop";
+  else if (/Chrome|Chromium|CriOS|Edg\//.test(ua) && !/Firefox/.test(ua)) platform = "desktop-chromium";
+  else if (/Macintosh/.test(ua) && /Safari/.test(ua) && !/Firefox/.test(ua)) platform = "mac-safari";
+  else platform = "desktop-other";
 
   return { platform, isIPad, isStandalone };
 }

@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { isTheme, themeStorageKey, type Theme } from "@/lib/theme";
+import { isTheme, themeStorageKey, type Theme, themeChromeColors } from "@/lib/theme";
 
 type ThemeContextValue = {
   theme: Theme;
@@ -58,6 +58,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+  // The theme-color metas are media-scoped to the *system* scheme; when the
+  // user picks a theme in-app, both must carry that theme's color or the
+  // status bar would follow the OS instead of the page.
+  useEffect(() => {
+    const color = themeChromeColors[resolvedTheme];
+    document
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((meta) => meta.setAttribute("content", color));
+  }, [resolvedTheme]);
 
   const value = useMemo(
     () => ({ theme, resolvedTheme, setTheme }),

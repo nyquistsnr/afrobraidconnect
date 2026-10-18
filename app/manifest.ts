@@ -11,7 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["lifestyle", "beauty", "shopping"],
     display: "standalone",
     background_color: "#ffffff",
-    theme_color: "#b9713f",
+    // Neutral, like the page — not a brand-colored title/status bar.
+    theme_color: "#ffffff",
     icons: [
       {
         src: "/favicon_io/favicon-16x16.png",

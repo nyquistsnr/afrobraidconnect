@@ -13,14 +13,18 @@ import {
   EllipsisVertical,
   Ellipsis,
   Globe,
+  AppWindow,
   Heart,
+  LayoutGrid,
   MessageCircle,
+  MonitorDown,
   Share,
   SquarePlus,
   X,
   Zap,
 } from "lucide-react";
 import {
+  isDesktopPlatform,
   OPEN_INSTALL_EVENT,
   runNativeInstall,
   useInstallEnvironment,
@@ -36,6 +40,27 @@ export interface InstallAppDict {
   benefitFast: string;
   benefitBookings: string;
   benefitLight: string;
+  subtitleDesktop: string;
+  benefitWindowDesktop: string;
+  benefitLaunchDesktop: string;
+  addToDock: string;
+  showHowDesktop: string;
+  stepsTitleMac: string;
+  stepsTitleDesktop: string;
+  stepsTitleOtherBrowser: string;
+  macStepShare: string;
+  macStepShareHint: string;
+  macStepDock: string;
+  macStepDockHint: string;
+  macStepConfirm: string;
+  macStepConfirmHint: string;
+  desktopStepIcon: string;
+  desktopStepIconHint: string;
+  desktopStepInstall: string;
+  desktopStepDone: string;
+  otherStepCopy: string;
+  otherStepOpen: string;
+  otherStepInstall: string;
   install: string;
   showHow: string;
   openInBrowser: string;
@@ -228,8 +253,12 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
   const primaryRef = useRef<HTMLButtonElement>(null);
   const pageViews = useRef(0);
 
+  // Automatic showing only where installing is actually possible; Firefox
+  // users can still open it from the menu to learn the Chrome/Safari route.
   const canShowAtAll = (e: InstallEnvironment | null) =>
-    !!e && !e.isStandalone && (e.platform !== "desktop" || !!nativeEvent);
+    !!e &&
+    !e.isStandalone &&
+    (e.platform === "desktop-chromium" ? !!nativeEvent : e.platform !== "desktop-other");
 
   // On-demand opening (menu item / download page) skips the timing rules.
   useEffect(() => {
@@ -303,9 +332,11 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
   if (!open || !env || typeof document === "undefined") return null;
 
   const { platform, isIPad } = env;
+  const isDesktop = isDesktopPlatform(platform);
+  const hasNative = !!nativeEvent && (platform === "android" || platform === "desktop-chromium");
 
   async function handlePrimary() {
-    if (nativeEvent && (platform === "android" || platform === "desktop")) {
+    if (hasNative && nativeEvent) {
       setInstalling(true);
       try {
         const accepted = await runNativeInstall(nativeEvent);
@@ -328,31 +359,38 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
     }
   }
 
-  const primaryLabel =
-    nativeEvent && (platform === "android" || platform === "desktop")
-      ? dict.install
-      : platform === "in-app"
-        ? dict.openInBrowser
-        : dict.showHow;
+  const primaryLabel = hasNative
+    ? dict.install
+    : platform === "in-app"
+      ? dict.openInBrowser
+      : platform === "mac-safari"
+        ? dict.addToDock
+        : isDesktop
+          ? dict.showHowDesktop
+          : dict.showHow;
 
   const pointer =
     view === "steps" && platform === "ios-safari"
       ? isIPad
         ? "top-right"
         : "bottom"
-      : view === "steps" && platform === "ios-other"
+      : view === "steps" &&
+          (platform === "ios-other" || platform === "mac-safari" || platform === "desktop-chromium")
         ? "top-right"
         : null;
   // With the arrow pointing at Safari's bottom toolbar, lift the sheet to
   // the top of the screen so it doesn't sit on top of the arrow.
   const anchorTop = pointer === "bottom";
 
-  const stepsTitle =
-    platform === "in-app"
-      ? dict.stepsTitleInApp
-      : platform === "android"
-        ? dict.stepsTitleAndroid
-        : dict.stepsTitleIos;
+  const stepsTitle = {
+    "in-app": dict.stepsTitleInApp,
+    android: dict.stepsTitleAndroid,
+    "ios-safari": dict.stepsTitleIos,
+    "ios-other": dict.stepsTitleIos,
+    "mac-safari": dict.stepsTitleMac,
+    "desktop-chromium": dict.stepsTitleDesktop,
+    "desktop-other": dict.stepsTitleOtherBrowser,
+  }[platform];
 
   return createPortal(
     <div
@@ -423,7 +461,7 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
                   {dict.title}
                 </h2>
                 <p className="mt-2 max-w-xs text-sm leading-relaxed text-pretty text-muted-foreground">
-                  {dict.subtitle}
+                  {isDesktop ? dict.subtitleDesktop : dict.subtitle}
                 </p>
                 <div className="mt-3 flex items-center gap-2">
                   <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
@@ -436,9 +474,19 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
               </div>
 
               <ul className="mt-5 flex flex-col gap-2.5 rounded-2xl border border-border/70 bg-background/60 p-3.5">
-                <Benefit icon={<Zap className="size-4" />}>{dict.benefitFast}</Benefit>
-                <Benefit icon={<MessageCircle className="size-4" />}>{dict.benefitBookings}</Benefit>
-                <Benefit icon={<Heart className="size-4" />}>{dict.benefitLight}</Benefit>
+                {isDesktop ? (
+                  <>
+                    <Benefit icon={<AppWindow className="size-4" />}>{dict.benefitWindowDesktop}</Benefit>
+                    <Benefit icon={<MessageCircle className="size-4" />}>{dict.benefitBookings}</Benefit>
+                    <Benefit icon={<LayoutGrid className="size-4" />}>{dict.benefitLaunchDesktop}</Benefit>
+                  </>
+                ) : (
+                  <>
+                    <Benefit icon={<Zap className="size-4" />}>{dict.benefitFast}</Benefit>
+                    <Benefit icon={<MessageCircle className="size-4" />}>{dict.benefitBookings}</Benefit>
+                    <Benefit icon={<Heart className="size-4" />}>{dict.benefitLight}</Benefit>
+                  </>
+                )}
               </ul>
 
             </div>
@@ -482,6 +530,88 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
                       visual={
                         <MockButton>
                           <SquarePlus className="size-5" />
+                        </MockButton>
+                      }
+                    />
+                  </>
+                ) : platform === "mac-safari" ? (
+                  <>
+                    <Step
+                      n={1}
+                      title={dict.macStepShare}
+                      hint={dict.macStepShareHint}
+                      visual={
+                        <MockButton>
+                          <Share className="size-5" />
+                        </MockButton>
+                      }
+                    />
+                    <Step
+                      n={2}
+                      title={dict.macStepDock}
+                      hint={dict.macStepDockHint}
+                      visual={
+                        <MockButton>
+                          <AppWindow className="size-5 text-foreground" />
+                        </MockButton>
+                      }
+                    />
+                    <Step
+                      n={3}
+                      title={dict.macStepConfirm}
+                      hint={dict.macStepConfirmHint}
+                      visual={<AppIcon size={40} />}
+                    />
+                  </>
+                ) : platform === "desktop-chromium" ? (
+                  <>
+                    <Step
+                      n={1}
+                      title={dict.desktopStepIcon}
+                      hint={dict.desktopStepIconHint}
+                      visual={
+                        <MockButton>
+                          <MonitorDown className="size-5 text-foreground" />
+                        </MockButton>
+                      }
+                    />
+                    <Step
+                      n={2}
+                      title={dict.desktopStepInstall}
+                      visual={
+                        <MockButton wide>
+                          <Download className="size-4" />
+                        </MockButton>
+                      }
+                    />
+                    <Step n={3} title={dict.desktopStepDone} visual={<AppIcon size={40} />} />
+                  </>
+                ) : platform === "desktop-other" ? (
+                  <>
+                    <Step
+                      n={1}
+                      title={dict.otherStepCopy}
+                      visual={
+                        <MockButton>
+                          <Copy className="size-5 text-foreground" />
+                        </MockButton>
+                      }
+                    />
+                    <Step
+                      n={2}
+                      title={dict.otherStepOpen}
+                      visual={
+                        <MockButton>
+                          <Globe className="size-5" />
+                        </MockButton>
+                      }
+                    />
+                    <Step
+                      n={3}
+                      title={dict.otherStepInstall}
+                      visual={
+                        <MockButton>
+                          <MonitorDown className="size-5 text-foreground" />
                         </MockButton>
                       }
                     />
@@ -589,8 +719,10 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
               >
                 {platform === "in-app" ? (
                   <Globe className="size-5" />
-                ) : nativeEvent && platform !== "ios-safari" && platform !== "ios-other" ? (
+                ) : hasNative ? (
                   <Download className="size-5" />
+                ) : isDesktop ? (
+                  <MonitorDown className="size-5" />
                 ) : (
                   <SquarePlus className="size-5" />
                 )}
@@ -606,7 +738,7 @@ export function InstallAppPrompt({ dict }: { dict: InstallAppDict }) {
               </>
             ) : (
               <>
-              {platform === "in-app" && (
+              {(platform === "in-app" || platform === "desktop-other") && (
                 <button
                   type="button"
                   onClick={copyLink}

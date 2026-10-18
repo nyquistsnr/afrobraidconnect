@@ -18,6 +18,7 @@ export interface SearchResultsDict {
   withinRadiusOf: string;
   mapArea: string;
   searchThisArea: string;
+  searchNear: string;
   updatingResults: string;
   distanceHeading: string;
   distanceOption: string;

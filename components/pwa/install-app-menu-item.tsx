@@ -2,6 +2,7 @@
 
 import { MonitorDown, Smartphone } from "lucide-react";
 import {
+  isDesktopPlatform,
   openInstallPrompt,
   useInstallEnvironment,
   useNativeInstallEvent,
@@ -9,7 +10,7 @@ import {
 
 // "Install app" entry for the header / mobile profile menus. Opens the
 // install prompt on demand; hidden when already running as the installed
-// app, and on desktop unless the browser can actually install it.
+// app, and in desktop Chromium unless the browser can actually install it.
 export function InstallAppMenuItem({
   label,
   onSelect,
@@ -24,9 +25,11 @@ export function InstallAppMenuItem({
   const env = useInstallEnvironment();
   const nativeEvent = useNativeInstallEvent();
   if (!env || env.isStandalone) return null;
-  if (env.platform === "desktop" && !nativeEvent) return null;
+  // Chromium only exposes installability via its event (no event usually
+  // means it's already installed); Safari/Firefox get the guided route.
+  if (env.platform === "desktop-chromium" && !nativeEvent) return null;
 
-  const Icon = env.platform === "desktop" ? MonitorDown : Smartphone;
+  const Icon = isDesktopPlatform(env.platform) ? MonitorDown : Smartphone;
   return (
     <button
       type="button"
