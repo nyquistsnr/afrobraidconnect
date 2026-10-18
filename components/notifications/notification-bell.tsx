@@ -60,10 +60,15 @@ export function NotificationBell({
 
   const unreadCount = useNotificationsUnreadCount(lang);
 
-  const { data: recent } = useQuery({
+  // Loaded up front alongside the unread count (not gated on `open`) so the
+  // panel is already populated the moment it opens — gating it made the
+  // first open flash the empty state while the badge showed a count. It's a
+  // small page, and RealtimeProvider invalidates notificationsKey.all() on
+  // each new notification, so it stays fresh in the background.
+  const { data: recent, isPending: recentPending } = useQuery({
     queryKey: notificationsKey.panel(),
     queryFn: () => notificationsApi.list(accessToken!, lang, { page_size: PANEL_SIZE }),
-    enabled: isAuthenticated && open,
+    enabled: isAuthenticated,
   });
 
   const markReadMutation = useMutation({
@@ -144,7 +149,20 @@ export function NotificationBell({
             </div>
           </div>
 
-          {items.length === 0 ? (
+          {recentPending ? (
+            <ul className="py-1" aria-busy="true">
+              {Array.from({ length: Math.min(Math.max(unreadCount, 3), 5) }, (_, i) => (
+                <li key={i} className="flex items-start gap-2.5 px-4 py-2.5">
+                  <span className="size-8 shrink-0 animate-pulse rounded-full bg-border/60" />
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5 pt-0.5">
+                    <span className="h-3 w-3/5 animate-pulse rounded bg-border/60" />
+                    <span className="h-2.5 w-4/5 animate-pulse rounded bg-border/40" />
+                    <span className="h-2 w-1/4 animate-pulse rounded bg-border/40" />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : items.length === 0 ? (
             <div className="flex flex-col items-center gap-1 px-4 py-8 text-center">
               <p className="text-sm font-semibold text-foreground">{dict.emptyTitle}</p>
               <p className="text-xs text-muted-foreground">{dict.emptySubtitle}</p>
