@@ -554,6 +554,7 @@ export interface BraiderSearchParams {
   date_to?: string;
   min_amount?: number;
   max_amount?: number;
+  min_rate?: number;
   country_code?: string;
   is_mobile?: boolean;
   page?: number;

@@ -1,43 +1,145 @@
 "use client";
 
-import { useState, useTransition, useCallback } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { BraiderSearchItem, PaginationMeta } from "@/lib/api/types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { braidersApi } from "@/lib/api/braiders-client";
+import {
+  DEFAULT_RADIUS_KM,
+  parseSearchParams,
+  searchCacheKey,
+  type SearchLinkContext,
+} from "@/lib/search-query";
+import type { BraiderSearchItem, PaginatedData } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
-import type { SearchLinkContext } from "@/lib/search-query";
 import { BraiderList } from "@/components/search-results/braider-list";
 import { BraiderMap } from "@/components/search-results/braider-map";
 import { MobileViewToggle } from "@/components/search-results/mobile-view-toggle";
 import type { SearchResultsDict } from "@/components/search-results/types";
 
+export type SearchPatch = Record<string, string | null>;
+
+// Reverse-geocodes a map position to a town-level name for the header and
+// results heading. Deliberately never falls back to a street address (the
+// old behavior turned "Wrexham" into "23 Ernest Parry Rd" after a tiny drag);
+// UK towns come back as postal_town rather than locality.
+async function placeNameFor(lat: number, lng: number): Promise<string | null> {
+  try {
+    if (!window.google?.maps?.Geocoder) return null;
+    const geocoder = new window.google.maps.Geocoder();
+    const { results } = await geocoder.geocode({ location: { lat, lng } });
+    for (const type of [
+      "locality",
+      "postal_town",
+      "sublocality",
+      "administrative_area_level_2",
+    ]) {
+      for (const result of results) {
+        const match = result.address_components.find((c) => c.types.includes(type));
+        if (match) return match.long_name;
+      }
+    }
+  } catch {
+    // Over quota / zero results — the caller falls back to a generic label.
+  }
+  return null;
+}
+
 export function SearchResultsView({
-  items,
-  pagination,
-  hasError,
-  locationLabel,
-  radiusKm,
-  center,
   lang,
+  initialData,
+  initialKey,
   dict,
 }: {
-  items: BraiderSearchItem[];
-  pagination: PaginationMeta | null;
-  hasError: boolean;
-  locationLabel: string | null;
-  radiusKm: number;
-  center: { lat: number; lng: number } | null;
   lang: Locale;
+  initialData: PaginatedData<BraiderSearchItem> | null;
+  initialKey: string;
   dict: SearchResultsDict;
 }) {
+  const searchParams = useSearchParams();
+  const { ui, filters, api } = useMemo(
+    () => parseSearchParams(Object.fromEntries(searchParams.entries())),
+    [searchParams]
+  );
+  const key = searchCacheKey(api);
+
+  const { data, isFetching, isPlaceholderData, isError, refetch } = useQuery({
+    queryKey: ["braider-search", lang, key],
+    queryFn: () => braidersApi.search(api, lang),
+    initialData: key === initialKey && initialData ? initialData : undefined,
+    // Keeps the current results on screen (dimmed) while the next set loads,
+    // instead of flashing an empty list on every filter tweak.
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+  });
+
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mobileView, setMobileView] = useState<"list" | "map">("list");
   const [isMapExpanded, setIsMapExpanded] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const listScrollRef = useRef<HTMLDivElement>(null);
+  // Searches started from the map itself ("Search this area") keep the
+  // viewport the user chose; every other search re-frames the map around
+  // its results. Holds the cache key of the latest map-driven search.
+  const [mapDrivenKey, setMapDrivenKey] = useState<string | null>(null);
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const center =
+    ui.location?.lat != null && ui.location?.lng != null
+      ? { lat: ui.location.lat, lng: ui.location.lng }
+      : null;
+  const radiusKm = ui.radiusKm ?? DEFAULT_RADIUS_KM;
+
+  // Updates the query string in place (no server round trip) — Next syncs
+  // useSearchParams with history.pushState, which re-keys the query above.
+  const updateSearch = useCallback(
+    (patch: SearchPatch, options: { mapDriven?: boolean } = {}) => {
+      const params = new URLSearchParams(searchParams.toString());
+      for (const [name, value] of Object.entries(patch)) {
+        if (value == null || value === "") params.delete(name);
+        else params.set(name, value);
+      }
+      if (!("page" in patch)) params.delete("page");
+      if (options.mapDriven) {
+        setMapDrivenKey(
+          searchCacheKey(parseSearchParams(Object.fromEntries(params.entries())).api)
+        );
+      }
+      setActiveId(null);
+      const qs = params.toString();
+      window.history.pushState(null, "", qs ? `?${qs}` : window.location.pathname);
+    },
+    [searchParams]
+  );
+
+  const handleSearchArea = useCallback(
+    async (lat: number, lng: number, areaRadiusKm: number) => {
+      const name = await placeNameFor(lat, lng);
+      updateSearch(
+        {
+          lat: lat.toFixed(5),
+          lng: lng.toFixed(5),
+          radius_km: String(areaRadiusKm),
+          location: name ?? dict.mapArea,
+          country_code: null,
+        },
+        { mapDriven: true }
+      );
+    },
+    [updateSearch, dict.mapArea]
+  );
+
+  // Each fresh result set starts at the top of the list.
+  useEffect(() => {
+    listScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  }, [key]);
+
+  const items = data?.items ?? [];
+  const pagination = data?.pagination ?? null;
+  const isUpdating = isFetching && isPlaceholderData;
+  const resultsReady = !!data && !isPlaceholderData;
+  const fitKey =
+    resultsReady && key !== mapDrivenKey ? key : null;
+
   // Carried onto each braider profile link so its header search bar shows
   // the same location/date/radius the customer already had set here.
   const searchLinkContext: SearchLinkContext = {
@@ -50,98 +152,29 @@ export function SearchResultsView({
     radius_km: searchParams.get("radius_km"),
   };
 
-  function handleChangePage(page: number) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(page));
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  }
-
-  function handleSelect(id: string) {
-    setActiveId((current) => (current === id ? null : id));
-  }
-
-  function handleChangeRadius(radius: number) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("radius_km", String(radius));
-    // Reset page to 1 when changing radius
-    params.set("page", "1");
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  }
-
-  const handleMapIdle = useCallback(
-    async (lat: number, lng: number, mapRadiusKm: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      const oldLat = params.get("lat");
-      const oldLng = params.get("lng");
-      const oldRadius = params.get("radius_km");
-
-      if (
-        oldLat !== String(lat) ||
-        oldLng !== String(lng) ||
-        oldRadius !== String(mapRadiusKm)
-      ) {
-        params.set("lat", String(lat));
-        params.set("lng", String(lng));
-        params.set("radius_km", String(mapRadiusKm));
-        params.set("page", "1");
-
-        try {
-          if (window.google?.maps?.Geocoder) {
-            const geocoder = new window.google.maps.Geocoder();
-            const response = await geocoder.geocode({ location: { lat, lng } });
-            if (response.results.length > 0) {
-              const result = response.results[0];
-              const locality = result.address_components.find((c) =>
-                c.types.includes("locality")
-              )?.long_name;
-              const sublocality = result.address_components.find((c) =>
-                c.types.includes("sublocality")
-              )?.long_name;
-
-              const placeName =
-                locality ||
-                sublocality ||
-                result.formatted_address.split(",")[0];
-              if (placeName) {
-                params.set("location", placeName);
-              }
-            }
-          }
-        } catch (err) {
-          // Ignore geocoding errors (e.g. over quota, zero results)
-        }
-
-        startTransition(() => {
-          router.push(`${pathname}?${params.toString()}`);
-        });
-      }
-    },
-    [searchParams, pathname, router]
-  );
-
   return (
     <div className="flex min-h-0 flex-1 flex-col md:flex-row">
       <div
-        className={`flex-1 md:flex-none min-h-0 w-full md:w-[500px] lg:w-[650px] xl:w-[750px] flex-shrink-0 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
+        ref={listScrollRef}
+        className={`min-h-0 w-full flex-1 flex-shrink-0 overflow-y-auto md:w-[500px] md:flex-none lg:w-[650px] xl:w-[750px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
           mobileView === "map" || isMapExpanded ? "hidden md:hidden" : "block"
         }`}
       >
         <BraiderList
           items={items}
           pagination={pagination}
-          hasError={hasError}
-          locationLabel={locationLabel}
+          hasError={isError && !data}
+          isLoading={!data && isFetching}
+          isUpdating={isUpdating}
+          onRetry={() => refetch()}
+          locationLabel={ui.location?.label ?? null}
+          hasCoords={center != null}
           radiusKm={radiusKm}
+          filters={filters}
+          onUpdateSearch={updateSearch}
           hoveredId={hoveredId}
           activeId={activeId}
           onHover={setHoveredId}
-          onChangePage={handleChangePage}
-          onChangeRadius={handleChangeRadius}
-          isPending={isPending}
           lang={lang}
           searchLinkContext={searchLinkContext}
           dict={dict}
@@ -156,13 +189,19 @@ export function SearchResultsView({
         <BraiderMap
           items={items}
           center={center}
+          radiusKm={radiusKm}
+          fitKey={fitKey}
+          isUpdating={isUpdating}
           hoveredId={hoveredId}
           activeId={activeId}
           onHoverPin={setHoveredId}
-          onSelectPin={handleSelect}
+          onSelectPin={setActiveId}
+          onSearchArea={handleSearchArea}
           isExpanded={isMapExpanded}
-          onToggleExpand={() => setIsMapExpanded(!isMapExpanded)}
-          onMapIdle={handleMapIdle}
+          onToggleExpand={() => setIsMapExpanded((v) => !v)}
+          lang={lang}
+          searchLinkContext={searchLinkContext}
+          dict={dict}
         />
       </div>
 

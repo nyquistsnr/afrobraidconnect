@@ -60,6 +60,7 @@ export const braidersApi = {
       query.set("min_amount", String(params.min_amount));
     if (params.max_amount != null)
       query.set("max_amount", String(params.max_amount));
+    if (params.min_rate != null) query.set("min_rate", String(params.min_rate));
     if (params.country_code) query.set("country_code", params.country_code);
     if (params.is_mobile != null)
       query.set("is_mobile", String(params.is_mobile));

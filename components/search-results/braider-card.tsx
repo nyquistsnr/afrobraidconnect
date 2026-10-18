@@ -10,25 +10,11 @@ import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import type { SearchResultsDict } from "@/components/search-results/types";
 
-export function BraiderCard({
-  item,
-  isHighlighted,
-  onHover,
-  lang,
-  searchLinkContext,
-  dict,
-}: {
-  item: BraiderSearchItem;
-  isHighlighted: boolean;
-  onHover: (id: string | null) => void;
-  lang: Locale;
-  searchLinkContext: SearchLinkContext;
-  dict: SearchResultsDict;
-}) {
-  const style = displayStyle(item);
-  const locationLine = [item.location?.city, item.location?.country]
-    .filter(Boolean)
-    .join(", ");
+export function buildBraiderHref(
+  item: BraiderSearchItem,
+  lang: Locale,
+  searchLinkContext: SearchLinkContext
+): string {
   // Only carry the style filter over when it's the one the search actually
   // matched on — not the cheapest-style fallback used just to show a price.
   // The rest of the search (location/date/radius) carries over too, so both
@@ -48,7 +34,29 @@ export function BraiderCard({
   if (searchLinkContext.country_code) params.set("country_code", searchLinkContext.country_code);
   if (searchLinkContext.radius_km) params.set("radius_km", searchLinkContext.radius_km);
   const qs = params.toString();
-  const href = `/${lang}/braiders/${item.id}${qs ? `?${qs}` : ""}`;
+  return `/${lang}/braiders/${item.id}${qs ? `?${qs}` : ""}`;
+}
+
+export function BraiderCard({
+  item,
+  isHighlighted,
+  onHover,
+  lang,
+  searchLinkContext,
+  dict,
+}: {
+  item: BraiderSearchItem;
+  isHighlighted: boolean;
+  onHover: (id: string | null) => void;
+  lang: Locale;
+  searchLinkContext: SearchLinkContext;
+  dict: SearchResultsDict;
+}) {
+  const style = displayStyle(item);
+  const locationLine = [item.location?.city, item.location?.country]
+    .filter(Boolean)
+    .join(", ");
+  const href = buildBraiderHref(item, lang, searchLinkContext);
 
   return (
     <Link

@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../dictionaries";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SearchResultsView } from "@/components/search-results/search-results-view";
+import { SearchPageClient } from "@/components/search-results/search-page-client";
 import { braidersApi } from "@/lib/api/braiders-client";
-import { parseSearchParams } from "@/lib/search-query";
+import { parseSearchParams, searchCacheKey } from "@/lib/search-query";
 import type { BraiderSearchItem, PaginatedData } from "@/lib/api/types";
 
 export default async function SearchPage({
@@ -15,42 +14,27 @@ export default async function SearchPage({
 
   const sp = await searchParams;
   const dict = await getDictionary(lang);
-  const { ui, api } = parseSearchParams(sp);
+  const { api } = parseSearchParams(sp);
 
-  let result: PaginatedData<BraiderSearchItem> | null = null;
-  let hasError = false;
+  // Server-fetched first page so results are in the initial HTML. Every
+  // refinement after that (filters, radius, "search this area", paging)
+  // runs client-side in SearchPageClient without a server round trip.
+  let initialData: PaginatedData<BraiderSearchItem> | null = null;
   try {
-    result = await braidersApi.search(api, lang);
+    initialData = await braidersApi.search(api, lang);
   } catch {
-    hasError = true;
+    initialData = null;
   }
 
-  const center =
-    ui.location?.lat != null && ui.location?.lng != null
-      ? { lat: ui.location.lat, lng: ui.location.lng }
-      : null;
-
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-background">
-      <SiteHeader
-        lang={lang}
-        dict={dict.siteHeader}
-        common={dict.common}
-        notificationsDict={dict.notifications}
-        initialLocation={ui.location}
-        initialStyle={ui.style}
-        initialDateRange={ui.dateRange}
-      />
-      <SearchResultsView
-        items={result?.items ?? []}
-        pagination={result?.pagination ?? null}
-        hasError={hasError}
-        locationLabel={ui.location?.label ?? null}
-        radiusKm={ui.radiusKm ?? 5}
-        center={center}
-        lang={lang}
-        dict={dict.searchResults}
-      />
-    </div>
+    <SearchPageClient
+      lang={lang}
+      initialData={initialData}
+      initialKey={searchCacheKey(api)}
+      headerDict={dict.siteHeader}
+      common={dict.common}
+      notificationsDict={dict.notifications}
+      dict={dict.searchResults}
+    />
   );
 }

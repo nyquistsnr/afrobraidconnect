@@ -17,6 +17,21 @@ export interface SearchQueryState {
   radiusKm?: number;
 }
 
+// Results-page-only refinements (the filter chips above the list) — kept out
+// of SearchQueryState since the header search bar never sets them.
+export interface SearchFilters {
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  mobileOnly?: boolean;
+}
+
+// Wide enough that a city search usually finds someone (5km routinely came
+// back empty), narrow enough that results stay a realistic trip away.
+export const DEFAULT_RADIUS_KM = 25;
+export const RADIUS_PRESETS_KM = [5, 10, 25, 50, 100] as const;
+export const MAX_RADIUS_KM = 100;
+
 // The subset of the /search URL's own query params (location/date/radius —
 // not style, which is per-braider-card via matched_style) that should carry
 // over onto a braider profile link, so the header search bar there reflects
@@ -48,6 +63,12 @@ function fromISODate(value: string): Date | undefined {
 
 function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
+}
+
+function positiveNumber(value: string | undefined): number | undefined {
+  if (!value) return undefined;
+  const num = Number(value);
+  return Number.isFinite(num) && num > 0 ? num : undefined;
 }
 
 export function buildSearchHref(lang: Locale, state: SearchQueryState): string {
@@ -87,6 +108,7 @@ export function parseSearchParams(
   searchParams: Record<string, string | string[] | undefined>
 ): {
   ui: SearchQueryState;
+  filters: SearchFilters;
   api: BraiderSearchParams;
   page: number;
 } {
@@ -101,6 +123,12 @@ export function parseSearchParams(
   const dateTo = first(searchParams.date_to);
   const radiusKmStr = first(searchParams.radius_km);
   const page = Number(first(searchParams.page)) || 1;
+  const filters: SearchFilters = {
+    minPrice: positiveNumber(first(searchParams.min_price)),
+    maxPrice: positiveNumber(first(searchParams.max_price)),
+    minRating: positiveNumber(first(searchParams.min_rating)),
+    mobileOnly: first(searchParams.mobile) === "1" || undefined,
+  };
 
   const parsedLat = lat ? Number(lat) : undefined;
   const parsedLng = lng ? Number(lng) : undefined;
@@ -110,7 +138,7 @@ export function parseSearchParams(
     parsedLng != null &&
     !Number.isNaN(parsedLng);
     
-  const radiusKm = radiusKmStr && !Number.isNaN(Number(radiusKmStr)) ? Number(radiusKmStr) : 5;
+  const radiusKm = Math.min(positiveNumber(radiusKmStr) ?? DEFAULT_RADIUS_KM, MAX_RADIUS_KM);
 
   const ui: SearchQueryState = {
     location: location
@@ -137,8 +165,23 @@ export function parseSearchParams(
     date_from: dateFrom || undefined,
     date_to: dateTo || undefined,
     radius_km: hasCoords ? radiusKm : undefined,
+    min_amount: filters.minPrice,
+    max_amount: filters.maxPrice,
+    min_rate: filters.minRating,
+    is_mobile: filters.mobileOnly,
     page,
   };
 
-  return { ui, api, page };
+  return { ui, filters, api, page };
+}
+
+// Stable cache key for a search — the server page and the client results
+// view both derive it from the same URL, so the server-fetched first page
+// can seed the client cache without a duplicate request.
+export function searchCacheKey(api: BraiderSearchParams): string {
+  return JSON.stringify(
+    Object.entries(api)
+      .filter(([, value]) => value !== undefined)
+      .sort(([a], [b]) => a.localeCompare(b))
+  );
 }
