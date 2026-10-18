@@ -24,6 +24,7 @@ import { useNotificationsUnreadCount } from "@/lib/notifications/use-notificatio
 import type { NotificationBellDict } from "@/components/notifications/types";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { InstallAppMenuItem } from "@/components/pwa/install-app-menu-item";
+import { InstallAppTab } from "@/components/pwa/install-app-tab";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
   LogoutConfirmModal,
@@ -45,6 +46,7 @@ export interface MobileTabBarDict {
   logOut: string;
   helpCenter: string;
   installApp: string;
+  getApp: string;
   logoutModal: LogoutModalDict;
 }
 
@@ -137,8 +139,8 @@ export function MobileTabBar({
     <>
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
         {/* Each tab is an equal flex-1 share of a capped-width row instead of
-            a fixed gap between fixed-width items — with up to 4 tabs (signed
-            in) plus long localized labels (e.g. German "Nachrichten"), a
+            a fixed gap between fixed-width items — with up to 5 tabs (signed
+            in, plus "Get app" until installed) plus long localized labels (e.g. German "Nachrichten"), a
             fixed gap-12 row overflows every real phone width and clips the
             last tab off-screen. This can never overflow: N tabs always sum
             to exactly the row width, at any screen size or label length. */}
@@ -164,6 +166,7 @@ export function MobileTabBar({
               <span className="max-w-full truncate">{label}</span>
             </Link>
           ))}
+          <InstallAppTab label={dict.getApp} />
           <button
             type="button"
             onClick={() => setProfileOpen(true)}
@@ -261,7 +264,7 @@ export function MobileTabBar({
           <InstallAppMenuItem
             label={dict.installApp}
             onSelect={() => setProfileOpen(false)}
-            className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
+            className="my-1 flex items-center gap-2 rounded-xl border border-brand/30 bg-brand/[0.06] px-3 py-3 text-left text-sm font-semibold text-brand transition-colors hover:bg-brand/10"
           />
 
           <Link

@@ -63,6 +63,7 @@ export interface SiteHeaderDict {
   logOut: string;
   downloadApp: string;
   installApp: string;
+  getApp: string;
   myBookings: string;
   helpCenter: string;
   menuLabel: string;
@@ -471,6 +472,7 @@ export function SiteHeader({
           logOut: dict.logOut,
           helpCenter: dict.helpCenter,
           installApp: dict.installApp,
+          getApp: dict.getApp,
           logoutModal: dict.logoutModal,
         }}
         common={common}
