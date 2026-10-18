@@ -10,6 +10,7 @@ import { AppToastContainer } from "@/components/toast-container";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { QueryProvider } from "@/lib/query-provider";
 import { themeInitScript } from "@/lib/theme";
+import { installCaptureScript } from "@/lib/pwa/install-capture-script";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -70,6 +71,7 @@ export default function RootLayout({
     >
       <head>
         <InlineScript html={themeInitScript} />
+        <InlineScript html={installCaptureScript} />
       </head>
       <body className="min-h-full flex flex-col">
         <Script

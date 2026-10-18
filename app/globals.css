@@ -260,6 +260,129 @@ body {
   animation: map-halo 2.6s ease-in-out infinite;
 }
 
+/* Install-app prompt (components/pwa/install-app-prompt.tsx). */
+@keyframes install-backdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.install-backdrop {
+  animation: install-backdrop 260ms ease-out;
+}
+
+@keyframes install-sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes install-sheet-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes install-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.install-sheet-up {
+  animation: install-sheet-up 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.install-sheet-down {
+  animation: install-sheet-down 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 640px) {
+  .install-sheet-up,
+  .install-sheet-down {
+    animation: install-card-in 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes install-view {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.install-view {
+  animation: install-view 260ms ease-out;
+}
+
+.install-step {
+  animation: search-card-in 320ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes install-bounce-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes install-bounce-up {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.install-bounce-down {
+  animation: install-bounce-down 1.1s ease-in-out infinite;
+}
+
+.install-bounce-up {
+  animation: install-bounce-up 1.1s ease-in-out infinite;
+}
+
+@keyframes install-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.install-pop {
+  animation: install-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* "Finding braiders" overlay (components/search/searching-overlay.tsx).
    The short fade-in delay means a fast, cached navigation never flashes it. */
 @keyframes searching-overlay-in {
@@ -352,7 +475,15 @@ body {
   .searching-dot,
   .searching-step,
   .skeleton-shimmer,
-  .map-halo {
+  .map-halo,
+  .install-backdrop,
+  .install-sheet-up,
+  .install-sheet-down,
+  .install-view,
+  .install-step,
+  .install-bounce-down,
+  .install-bounce-up,
+  .install-pop {
     animation: none;
   }
 

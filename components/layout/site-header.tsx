@@ -23,6 +23,7 @@ import { SearchBar } from "@/components/search/search-bar";
 import { MobileSearch } from "@/components/search/mobile-search-sheet";
 import { MobileTabBar } from "@/components/layout/mobile-tab-bar";
 import { NotificationBell } from "@/components/notifications/notification-bell";
+import { InstallAppMenuItem } from "@/components/pwa/install-app-menu-item";
 import {
   LogoutConfirmModal,
   type LogoutModalDict,
@@ -61,6 +62,7 @@ export interface SiteHeaderDict {
   logIn: string;
   logOut: string;
   downloadApp: string;
+  installApp: string;
   myBookings: string;
   helpCenter: string;
   menuLabel: string;
@@ -378,6 +380,14 @@ export function SiteHeader({
                     </Link>
                   </li>
                   <li role="none">
+                    <InstallAppMenuItem
+                      role="menuitem"
+                      label={dict.installApp}
+                      onSelect={() => setMenuOpen(false)}
+                      className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-semibold text-foreground hover:bg-border/40 transition-colors"
+                    />
+                  </li>
+                  <li role="none">
                     <Link
                       role="menuitem"
                       href={braiderSignupUrl}
@@ -455,6 +465,7 @@ export function SiteHeader({
           logIn: dict.logIn,
           logOut: dict.logOut,
           helpCenter: dict.helpCenter,
+          installApp: dict.installApp,
           logoutModal: dict.logoutModal,
         }}
         common={common}

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { hasLocale, locales, getDictionary } from "./dictionaries";
 import { HtmlLangSync } from "@/components/html-lang-sync";
 import { NavigationProgress } from "@/components/navigation-progress";
+import { InstallAppPrompt } from "@/components/pwa/install-app-prompt";
 import { SessionTimeoutModal } from "@/components/auth/session-timeout-modal";
 
 export function generateStaticParams() {
@@ -24,6 +25,7 @@ export default async function LocaleLayout({
       <HtmlLangSync lang={lang} />
       <NavigationProgress />
       {children}
+      <InstallAppPrompt dict={dict.installPrompt} />
       <Suspense>
         <SessionTimeoutModal lang={lang} dict={dict.common.sessionTimeout} />
       </Suspense>

@@ -23,6 +23,7 @@ import { useChatUnreadTotal } from "@/lib/chat/use-chat-unread-total";
 import { useNotificationsUnreadCount } from "@/lib/notifications/use-notifications-unread-count";
 import type { NotificationBellDict } from "@/components/notifications/types";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { InstallAppMenuItem } from "@/components/pwa/install-app-menu-item";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import {
   LogoutConfirmModal,
@@ -43,6 +44,7 @@ export interface MobileTabBarDict {
   logIn: string;
   logOut: string;
   helpCenter: string;
+  installApp: string;
   logoutModal: LogoutModalDict;
 }
 
@@ -255,6 +257,12 @@ export function MobileTabBar({
             <Sparkles className="size-4" />
             Esther AI Try-On
           </Link>
+
+          <InstallAppMenuItem
+            label={dict.installApp}
+            onSelect={() => setProfileOpen(false)}
+            className="flex items-center gap-2 rounded-xl px-3 py-3 text-left text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
+          />
 
           <Link
             href={braiderSignupUrl}
