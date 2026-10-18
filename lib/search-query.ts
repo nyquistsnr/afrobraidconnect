@@ -71,6 +71,15 @@ function positiveNumber(value: string | undefined): number | undefined {
   return Number.isFinite(num) && num > 0 ? num : undefined;
 }
 
+// The distance the customer last picked on the results page, so a fresh
+// search from the header keeps it instead of silently resetting to the
+// default (which could turn "23 braiders within 100 km" into none).
+export function currentRadiusKm(): number | undefined {
+  if (typeof window === "undefined") return undefined;
+  if (!/\/search\/?$/.test(window.location.pathname)) return undefined;
+  return positiveNumber(new URLSearchParams(window.location.search).get("radius_km") ?? undefined);
+}
+
 export function buildSearchHref(lang: Locale, state: SearchQueryState): string {
   const params = new URLSearchParams();
   const { location, style, dateRange } = state;

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -53,6 +54,7 @@ export function BraiderDetailView({
 }) {
   const initialDate = initialDateFrom ? fromISODateLocal(initialDateFrom) : null;
   const router = useRouter();
+  const navigation = usePendingNavigation();
   // No default style is preselected on load — selecting one is what kicks
   // off the preview/availability API calls, so an auto-picked "cheapest
   // style" default would fire those requests before the user has done
@@ -198,7 +200,7 @@ export function BraiderDetailView({
         calculation_id: calculation.id,
         starts_at: selectedSlot!.start_at,
       });
-      router.push(`/${lang}/braiders/${braider.id}/book?${params.toString()}`);
+      navigation.push(`/${lang}/braiders/${braider.id}/book?${params.toString()}`);
     },
     onError: () => {
       toast.error(dict.sidebar.quoteErrorToast);
@@ -432,7 +434,7 @@ export function BraiderDetailView({
               selectedSlot={selectedSlot}
               preview={preview ?? null}
               onContinue={handleContinue}
-              isContinuing={createCalculationMutation.isPending}
+              isContinuing={createCalculationMutation.isPending || navigation.isNavigating}
               lang={lang}
               dict={dict}
             />
@@ -447,7 +449,7 @@ export function BraiderDetailView({
         selectedSlot={selectedSlot}
         preview={preview ?? null}
         onContinue={handleContinue}
-        isContinuing={createCalculationMutation.isPending}
+        isContinuing={createCalculationMutation.isPending || navigation.isNavigating}
         dict={dict}
       />
     </div>

@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
-import { buildSearchHref } from "@/lib/search-query";
+import { buildSearchHref, currentRadiusKm } from "@/lib/search-query";
 import { WherePanel } from "@/components/search/where-panel";
 import { StylePanel } from "@/components/search/style-panel";
 import { CalendarPanel } from "@/components/search/calendar-panel";
+import { SearchingOverlay } from "@/components/search/searching-overlay";
 import type {
   SearchPanelKey,
   SelectedLocation,
@@ -80,6 +81,9 @@ export function SearchBar({
   const [activePanel, setActivePanel] = useState<SearchPanelKey | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  // Held pending until the results page has its data, so the searching
+  // overlay covers the whole wait instead of the page sitting idle.
+  const [isSearching, startSearch] = useTransition();
 
   const expanded = !scrolled || activePanel !== null;
 
@@ -96,10 +100,12 @@ export function SearchBar({
   }, [activateSignal]);
 
   function handleSearch() {
-    // Don't collapse the panel first — SiteHeader (and this bar with it)
-    // unmounts as part of navigating to /search anyway, so closing it here
-    // just adds a premature "did that work?" flash before the page changes.
-    router.push(buildSearchHref(lang, { location, style, dateRange }));
+    setActivePanel(null);
+    startSearch(() => {
+      router.push(
+        buildSearchHref(lang, { location, style, dateRange, radiusKm: currentRadiusKm() })
+      );
+    });
   }
 
   useEffect(() => {
@@ -298,6 +304,13 @@ export function SearchBar({
           </div>
         )}
       </div>
+      <SearchingOverlay
+        open={isSearching}
+        locationLabel={location?.label}
+        styleName={style?.name}
+        dateLabel={dateLabel}
+        dict={dict.search}
+      />
     </div>
   );
 }

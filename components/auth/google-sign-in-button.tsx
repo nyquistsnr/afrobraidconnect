@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
+import { Loader } from "@/components/ui/loader";
 import { getSession, signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -47,7 +48,7 @@ export function GoogleSignInButton({
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const googleSignInMutation = useMutation({
     mutationFn: async (providerToken: string) => {
@@ -127,23 +128,34 @@ export function GoogleSignInButton({
 
   if (!GOOGLE_CLIENT_ID) return null;
 
+  // Covers both the sign-in call and the navigation after it, so the button
+  // stays visibly busy until the next page is actually on screen.
+  const isBusy = googleSignInMutation.isPending || router.isNavigating;
+
   return (
-    <div ref={wrapperRef} className="relative h-10 w-full">
+    <div ref={wrapperRef} className="relative h-10 w-full" aria-busy={isBusy || undefined}>
       <button
         type="button"
         tabIndex={-1}
         aria-hidden="true"
-        className="pointer-events-none flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-border bg-input text-sm font-semibold text-foreground"
+        className={`pointer-events-none flex h-10 w-full items-center justify-center gap-3 rounded-xl border border-border bg-input text-sm font-semibold text-foreground transition-opacity ${
+          isBusy ? "opacity-70" : ""
+        }`}
       >
-        <GoogleIcon className="size-5 shrink-0" />
+        {isBusy ? (
+          <Loader className="size-5" />
+        ) : (
+          <GoogleIcon className="size-5 shrink-0" />
+        )}
         {label}
       </button>
 
       {/* Google's real, functional button — invisible but still the
-          element that actually receives the click and keyboard focus. */}
+          element that actually receives the click and keyboard focus.
+          Disabled while busy so a second click can't start another sign-in. */}
       <div
         ref={containerRef}
-        className="absolute inset-0 overflow-hidden opacity-0"
+        className={`absolute inset-0 overflow-hidden opacity-0 ${isBusy ? "pointer-events-none" : ""}`}
       />
     </div>
   );

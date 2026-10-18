@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useSession } from "next-auth/react";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, Bell, Trash2, X } from "lucide-react";
@@ -28,7 +28,7 @@ export function NotificationsListView({
   const { data: session, status: sessionStatus } = useSession();
   const accessToken = session?.accessToken;
   const isAuthenticated = sessionStatus === "authenticated" && !!accessToken;
-  const router = useRouter();
+  const router = usePendingNavigation();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);

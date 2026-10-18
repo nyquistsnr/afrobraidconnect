@@ -35,6 +35,11 @@
     "search": {
       "clearAll": "Clear all",
       "searchCta": "Search",
+      "searchingNear": "Finding braiders near {location}",
+      "searchingAnywhere": "Finding braiders for you",
+      "searchingStepAvailability": "Checking who's available…",
+      "searchingStepStyle": "Matching your style…",
+      "searchingStepDistance": "Sorting by distance…",
       "where": {
         "searchPlaceholder": "Search destinations",
         "nearbyLabel": "Nearby",

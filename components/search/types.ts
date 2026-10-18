@@ -53,4 +53,9 @@ export interface SearchDict {
   when: WhenPanelDict;
   clearAll: string;
   searchCta: string;
+  searchingNear: string;
+  searchingAnywhere: string;
+  searchingStepAvailability: string;
+  searchingStepStyle: string;
+  searchingStepDistance: string;
 }

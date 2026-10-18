@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail, User } from "lucide-react";
@@ -29,7 +29,7 @@ export function SignupForm({
   callbackUrl?: string | null;
 }) {
   const [phone, setPhone] = useState<string | undefined>();
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const signupMutation = useMutation({
     mutationFn: (body: SignupEmailRequest) => authApi.signup(body, lang),
@@ -123,8 +123,8 @@ export function SignupForm({
           required
         />
 
-        <Button type="submit" disabled={signupMutation.isPending}>
-          {signupMutation.isPending ? common.loading : dict.submit}
+        <Button type="submit" loading={signupMutation.isPending || router.isNavigating}>
+          {signupMutation.isPending || router.isNavigating ? common.loading : dict.submit}
         </Button>
       </form>
 

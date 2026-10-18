@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
@@ -23,7 +23,7 @@ export function ForgotPasswordForm({
   common: Dictionary["common"];
   lang: Locale;
 }) {
-  const router = useRouter();
+  const router = usePendingNavigation();
   const [email, setEmail] = useState("");
 
   const forgotPasswordMutation = useMutation({
@@ -61,8 +61,8 @@ export function ForgotPasswordForm({
           required
         />
 
-        <Button type="submit" disabled={forgotPasswordMutation.isPending}>
-          {forgotPasswordMutation.isPending ? common.loading : dict.submit}
+        <Button type="submit" loading={forgotPasswordMutation.isPending || router.isNavigating}>
+          {forgotPasswordMutation.isPending || router.isNavigating ? common.loading : dict.submit}
         </Button>
       </form>
 

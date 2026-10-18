@@ -251,6 +251,8 @@ export function WherePanel({
                   onClick={() =>
                     selectLocation({
                       label,
+                      lat: destination.lat,
+                      lng: destination.lng,
                       countryCode: destination.countryCode,
                     })
                   }

@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { hasLocale, locales, getDictionary } from "./dictionaries";
 import { HtmlLangSync } from "@/components/html-lang-sync";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { SessionTimeoutModal } from "@/components/auth/session-timeout-modal";
 
 export function generateStaticParams() {
@@ -21,6 +22,7 @@ export default async function LocaleLayout({
   return (
     <>
       <HtmlLangSync lang={lang} />
+      <NavigationProgress />
       {children}
       <Suspense>
         <SessionTimeoutModal lang={lang} dict={dict.common.sessionTimeout} />

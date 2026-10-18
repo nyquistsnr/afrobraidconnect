@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { getSession, signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -26,7 +26,7 @@ export function LoginForm({
   lang: Locale;
   callbackUrl?: string | null;
 }) {
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
@@ -108,8 +108,8 @@ export function LoginForm({
           </Link>
         </div>
 
-        <Button type="submit" disabled={loginMutation.isPending}>
-          {loginMutation.isPending ? common.loading : dict.signIn}
+        <Button type="submit" loading={loginMutation.isPending || router.isNavigating}>
+          {loginMutation.isPending || router.isNavigating ? common.loading : dict.signIn}
         </Button>
       </form>
 

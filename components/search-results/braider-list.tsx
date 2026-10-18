@@ -69,13 +69,22 @@ export function BraiderList({
 }) {
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  // Scrolls only the results list itself — scrollIntoView would also
+  // scroll overflow-hidden ancestors, shoving the whole page (and the phone
+  // bottom sheet) up when a map pin is tapped.
   useEffect(() => {
-    if (activeId) {
-      cardRefs.current[activeId]?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
+    if (!activeId) return;
+    const card = cardRefs.current[activeId];
+    const scroller = card?.closest<HTMLElement>("[data-results-scroll]");
+    if (!card || !scroller) return;
+    const view = scroller.getBoundingClientRect();
+    const rect = card.getBoundingClientRect();
+    const stickyHeader = 140;
+    if (rect.top >= view.top + stickyHeader && rect.bottom <= view.bottom) return;
+    scroller.scrollTo({
+      top: scroller.scrollTop + (rect.top - view.top) - stickyHeader,
+      behavior: "smooth",
+    });
   }, [activeId]);
 
   const count = pagination?.total_items ?? items.length;
@@ -93,7 +102,7 @@ export function BraiderList({
     : null;
 
   return (
-    <div className="flex flex-1 flex-col pb-36 md:pb-10">
+    <div className="flex flex-1 flex-col pb-36 lg:pb-10">
       <div className="sticky top-0 z-20 border-b border-border/60 bg-background/95 px-4 pt-5 pb-3 backdrop-blur-md sm:px-6 lg:px-8">
         <div className="mb-3 flex items-end justify-between gap-4">
           <div className="min-w-0">

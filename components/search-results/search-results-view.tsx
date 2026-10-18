@@ -15,6 +15,7 @@ import type { Locale } from "@/lib/i18n";
 import { BraiderList } from "@/components/search-results/braider-list";
 import { BraiderMap } from "@/components/search-results/braider-map";
 import { MobileViewToggle } from "@/components/search-results/mobile-view-toggle";
+import { ResultsSheet } from "@/components/search-results/results-sheet";
 import type { SearchResultsDict } from "@/components/search-results/types";
 
 export type SearchPatch = Record<string, string | null>;
@@ -75,7 +76,8 @@ export function SearchResultsView({
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [mobileView, setMobileView] = useState<"list" | "map">("list");
+  // Phone bottom sheet: expanded shows the list, collapsed shows the map.
+  const [sheetExpanded, setSheetExpanded] = useState(true);
   const [isMapExpanded, setIsMapExpanded] = useState(false);
   const listScrollRef = useRef<HTMLDivElement>(null);
   // Searches started from the map itself ("Search this area") keep the
@@ -153,11 +155,17 @@ export function SearchResultsView({
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-      <div
-        ref={listScrollRef}
-        className={`min-h-0 w-full flex-1 flex-shrink-0 overflow-y-auto md:w-[500px] md:flex-none lg:w-[650px] xl:w-[750px] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
-          mobileView === "map" || isMapExpanded ? "hidden md:hidden" : "block"
+    // --sheet-peek: how much of the collapsed phone sheet stays visible —
+    // handle + results heading, sitting above the fixed mobile tab bar
+    // (which only exists below md). Below lg the list is a bottom sheet.
+    <div className="relative flex min-h-0 flex-1 flex-col [--sheet-peek:calc(104px+60px+env(safe-area-inset-bottom))] md:[--sheet-peek:104px] lg:flex-row">
+      <ResultsSheet
+        expanded={sheetExpanded}
+        onExpandedChange={setSheetExpanded}
+        scrollRef={listScrollRef}
+        handleLabel={sheetExpanded ? dict.showMap : dict.showList}
+        className={`w-full lg:w-[560px] lg:flex-none xl:w-[750px] ${
+          isMapExpanded ? "lg:hidden" : ""
         }`}
       >
         <BraiderList
@@ -179,12 +187,14 @@ export function SearchResultsView({
           searchLinkContext={searchLinkContext}
           dict={dict}
         />
-      </div>
+      </ResultsSheet>
 
+      {/* Below lg the map always fills the area behind the sheet (never
+          display:none), so it can size and frame results correctly. */}
       <div
-        className={`relative min-h-0 flex-1 ${
-          isMapExpanded ? "" : "md:m-4 md:overflow-hidden md:rounded-2xl md:shadow-md"
-        } ${mobileView === "list" && !isMapExpanded ? "hidden md:block" : "block"}`}
+        className={`min-h-0 max-lg:absolute max-lg:inset-0 lg:relative lg:flex-1 ${
+          isMapExpanded ? "" : "lg:m-4 lg:overflow-hidden lg:rounded-2xl lg:shadow-md"
+        }`}
       >
         <BraiderMap
           items={items}
@@ -205,11 +215,16 @@ export function SearchResultsView({
         />
       </div>
 
-      <MobileViewToggle
-        view={mobileView}
-        onToggle={() => setMobileView((v) => (v === "list" ? "map" : "list"))}
-        dict={dict}
-      />
+      {sheetExpanded && (
+        <MobileViewToggle
+          view="list"
+          onToggle={() => {
+            setActiveId(null);
+            setSheetExpanded(false);
+          }}
+          dict={dict}
+        />
+      )}
     </div>
   );
 }

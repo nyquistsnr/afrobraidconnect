@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useSession } from "next-auth/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Volume2, VolumeX } from "lucide-react";
@@ -32,7 +32,7 @@ export function NotificationBell({
   const { data: session, status: sessionStatus } = useSession();
   const accessToken = session?.accessToken;
   const isAuthenticated = sessionStatus === "authenticated" && !!accessToken;
-  const router = useRouter();
+  const router = usePendingNavigation();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

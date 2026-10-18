@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { MessageCircle } from "lucide-react";
@@ -27,7 +27,7 @@ export function ChatButton({
   dict: ChatButtonDict;
   errorsDict: Dictionary["common"]["errors"];
 }) {
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const mutation = useMutation({
     mutationFn: () => chatApi.getOrCreateThreadForBooking(accessToken, lang, bookingId),
@@ -47,10 +47,10 @@ export function ChatButton({
     <button
       type="button"
       onClick={() => mutation.mutate()}
-      disabled={mutation.isPending}
+      disabled={mutation.isPending || router.isNavigating}
       className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-input px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-border/40 disabled:opacity-60"
     >
-      {mutation.isPending ? (
+      {mutation.isPending || router.isNavigating ? (
         <Loader className="size-4 animate-spin" />
       ) : (
         <MessageCircle className="size-4" />

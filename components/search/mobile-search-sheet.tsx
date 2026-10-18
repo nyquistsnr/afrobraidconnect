@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Search, X, MapPin, Sparkles, Calendar, Check } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
-import { buildSearchHref } from "@/lib/search-query";
+import { buildSearchHref, currentRadiusKm } from "@/lib/search-query";
 import { WherePanel } from "@/components/search/where-panel";
 import { StylePanel } from "@/components/search/style-panel";
 import { CalendarPanel } from "@/components/search/calendar-panel";
+import { SearchingOverlay } from "@/components/search/searching-overlay";
 import type {
   SearchPanelKey,
   SelectedLocation,
@@ -59,10 +60,15 @@ export function MobileSearch({
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<SearchPanelKey>("where");
   const router = useRouter();
+  const [isSearching, startSearch] = useTransition();
 
   function handleSearch() {
     setOpen(false);
-    router.push(buildSearchHref(lang, { location, style, dateRange }));
+    startSearch(() => {
+      router.push(
+        buildSearchHref(lang, { location, style, dateRange, radiusKm: currentRadiusKm() })
+      );
+    });
   }
 
   useEffect(() => {
@@ -212,6 +218,13 @@ export function MobileSearch({
           </div>,
           document.body
         )}
+      <SearchingOverlay
+        open={isSearching}
+        locationLabel={location?.label}
+        styleName={style?.name}
+        dateLabel={dateLabel}
+        dict={dict.search}
+      />
     </>
   );
 }

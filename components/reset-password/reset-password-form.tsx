@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
@@ -30,7 +30,7 @@ export function ResetPasswordForm({
   const [email, setEmail] = useState(defaultEmail);
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const resetPasswordMutation = useMutation({
     mutationFn: (body: ResetPasswordRequest) => authApi.resetPassword(body, lang),
@@ -104,9 +104,10 @@ export function ResetPasswordForm({
 
         <Button
           type="submit"
-          disabled={resetPasswordMutation.isPending || code.length < 6}
+          loading={resetPasswordMutation.isPending || router.isNavigating}
+          disabled={code.length < 6}
         >
-          {resetPasswordMutation.isPending ? common.loading : dict.submit}
+          {resetPasswordMutation.isPending || router.isNavigating ? common.loading : dict.submit}
         </Button>
       </form>
 

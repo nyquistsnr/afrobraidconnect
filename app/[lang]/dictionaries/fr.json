@@ -35,6 +35,11 @@
     "search": {
       "clearAll": "Tout effacer",
       "searchCta": "Rechercher",
+      "searchingNear": "Recherche de tresseuses près de {location}",
+      "searchingAnywhere": "Nous cherchons des tresseuses pour vous",
+      "searchingStepAvailability": "Vérification des disponibilités…",
+      "searchingStepStyle": "Recherche de votre style…",
+      "searchingStepDistance": "Tri par distance…",
       "where": {
         "searchPlaceholder": "Rechercher une destination",
         "nearbyLabel": "À proximité",

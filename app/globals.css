@@ -221,10 +221,143 @@ body {
   animation: search-pop-in 220ms cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* Route loading skeletons (components/ui/skeleton.tsx): a soft highlight
+   sweeping across each placeholder. */
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--foreground) 6%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Search map: the searched-spot marker's slow "breathing" halo. */
+@keyframes map-halo {
+  0%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+}
+
+.map-halo {
+  animation: map-halo 2.6s ease-in-out infinite;
+}
+
+/* "Finding braiders" overlay (components/search/searching-overlay.tsx).
+   The short fade-in delay means a fast, cached navigation never flashes it. */
+@keyframes searching-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.searching-overlay {
+  animation: searching-overlay-in 240ms ease-out 120ms both;
+}
+
+@keyframes searching-ring {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.searching-ring {
+  animation: searching-ring 2.1s cubic-bezier(0.2, 0.6, 0.3, 1) infinite both;
+}
+
+@keyframes searching-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.searching-sweep {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 280deg,
+    color-mix(in srgb, var(--brand) 28%, transparent) 360deg
+  );
+  mask: radial-gradient(circle, transparent 18%, #000 19%);
+  animation: searching-sweep 2.8s linear infinite;
+}
+
+@keyframes searching-dot {
+  0%,
+  12% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  22%,
+  70% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  85%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+.searching-dot {
+  animation: searching-dot 3.2s ease-in-out infinite both;
+}
+
+@keyframes searching-step {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searching-step {
+  animation: searching-step 300ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .search-card-in,
-  .search-pop-in {
+  .search-pop-in,
+  .searching-ring,
+  .searching-sweep,
+  .searching-dot,
+  .searching-step,
+  .skeleton-shimmer,
+  .map-halo {
     animation: none;
+  }
+
+  .searching-ring {
+    opacity: 0.4;
   }
 }
 

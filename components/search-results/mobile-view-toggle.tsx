@@ -16,7 +16,7 @@ export function MobileViewToggle({
     <button
       type="button"
       onClick={onToggle}
-      className="fixed bottom-20 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background shadow-xl transition-transform active:scale-95 md:hidden"
+      className="search-pop-in fixed bottom-[calc(76px+env(safe-area-inset-bottom))] md:bottom-8 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background shadow-xl transition-transform active:scale-95 lg:hidden"
     >
       {view === "list" ? (
         <>

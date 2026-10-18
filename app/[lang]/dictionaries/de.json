@@ -35,6 +35,11 @@
     "search": {
       "clearAll": "Alles löschen",
       "searchCta": "Suchen",
+      "searchingNear": "Wir suchen Braiderinnen in der Nähe von {location}",
+      "searchingAnywhere": "Wir suchen Braiderinnen für dich",
+      "searchingStepAvailability": "Verfügbarkeit wird geprüft…",
+      "searchingStepStyle": "Dein Stil wird abgeglichen…",
+      "searchingStepDistance": "Nach Entfernung sortieren…",
       "where": {
         "searchPlaceholder": "Reiseziel suchen",
         "nearbyLabel": "In der Nähe",

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  AdvancedMarker,
   Circle,
   Map,
   useMap,
@@ -31,15 +30,18 @@ import { MAX_RADIUS_KM, type SearchLinkContext } from "@/lib/search-query";
 import { displayStyle, formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
 import { useTheme } from "@/components/theme/theme-provider";
+import { HtmlMarker } from "@/components/maps/html-marker";
+import {
+  DARK_MAP_STYLES,
+  LIGHT_MAP_STYLES,
+  MAP_BACKGROUND,
+} from "@/components/maps/map-styles";
 import { buildBraiderHref } from "@/components/search-results/braider-card";
 import type { SearchResultsDict } from "@/components/search-results/types";
 
-// Advanced Markers need a Map ID to render custom HTML content (otherwise
-// they silently fall back to the default red pin). No real Map ID has been
-// provisioned in Google Cloud Console yet, so this uses Google's public demo
-// ID — fully functional, just not custom-styled. Override via
-// NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID once a real one exists.
-const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || "DEMO_MAP_ID";
+// Rendered without a mapId on purpose: our own JSON styles (map-styles.ts)
+// only apply to non-cloud-styled maps, so markers are HtmlMarker overlays
+// rather than AdvancedMarkers (which require a mapId).
 
 // Berlin — a reasonable default center for this Germany-based platform when
 // no location was searched and no braider has coordinates yet.
@@ -119,8 +121,16 @@ function FitToResults({
       bounds.extend({ lat: mid.lat() - half, lng: mid.lng() - half });
     }
 
+    // On phones the collapsed results sheet (+ tab bar) covers the bottom of
+    // the map, so frame the results in the part that stays visible.
+    const isPhone = window.matchMedia("(max-width: 1023px)").matches;
     markProgrammatic();
-    map.fitBounds(bounds, { top: 72, right: 72, bottom: 48, left: 48 });
+    map.fitBounds(
+      bounds,
+      isPhone
+        ? { top: 72, right: 56, bottom: 190, left: 24 }
+        : { top: 72, right: 72, bottom: 48, left: 48 }
+    );
     // pins are read via ref: a fit belongs to a search (fitKey), not to
     // every re-render that happens to produce a new pins array.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,7 +240,7 @@ function MapControls({
         </MapButton>
       </div>
       {onToggleExpand && (
-        <div className={`hidden md:block ${card}`}>
+        <div className={`hidden lg:block ${card}`}>
           <MapButton
             onClick={onToggleExpand}
             label={isExpanded ? dict.collapseMap : dict.expandMap}
@@ -258,7 +268,7 @@ function PinPreviewCard({
   const city = [item.location?.city, item.location?.country].filter(Boolean).join(", ");
 
   return (
-    <div className="search-pop-in absolute inset-x-3 bottom-36 z-20 md:inset-x-auto md:bottom-6 md:left-6 md:w-[340px]">
+    <div className="search-pop-in absolute inset-x-3 bottom-[calc(var(--sheet-peek,0px)+12px)] z-20 sm:inset-x-auto sm:left-4 sm:w-[360px] lg:bottom-6 lg:left-6 lg:w-[340px]">
       <div className="relative flex overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl">
         <Link href={href} className="flex min-w-0 flex-1">
           <span className="relative w-28 shrink-0 bg-border/50">
@@ -349,8 +359,7 @@ export function BraiderMap({
 }) {
   const { resolvedTheme } = useTheme();
   const [mapTheme, setMapTheme] = useState<"system" | "dark" | "light">("system");
-  const colorScheme =
-    (mapTheme === "system" ? resolvedTheme : mapTheme) === "dark" ? "DARK" : "LIGHT";
+  const isDark = (mapTheme === "system" ? resolvedTheme : mapTheme) === "dark";
 
   // The map never searches by itself. A user pan/zoom just offers a
   // "Search this area" button (Airbnb-style), so browsing the map can't
@@ -423,11 +432,11 @@ export function BraiderMap({
   return (
     <div className="relative h-full w-full">
       <Map
-        mapId={MAP_ID}
         defaultCenter={center ?? FALLBACK_CENTER}
         defaultZoom={center ? 10 : FALLBACK_ZOOM}
         minZoom={4}
-        colorScheme={colorScheme}
+        styles={isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES}
+        backgroundColor={isDark ? MAP_BACKGROUND.dark : MAP_BACKGROUND.light}
         gestureHandling="greedy"
         disableDefaultUI
         clickableIcons={false}
@@ -460,12 +469,15 @@ export function BraiderMap({
               fillOpacity={0.06}
               clickable={false}
             />
-            <AdvancedMarker position={center} zIndex={0} clickable={false}>
-              <span className="relative flex size-4 items-center justify-center">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-40" />
-                <span className="relative size-3 rounded-full border-2 border-white bg-brand shadow" />
+            {/* The searched spot, Uber-style: a solid dot in a soft breathing
+                halo — "this is where you are looking from". */}
+            <HtmlMarker position={center} zIndex={0}>
+              <span className="pointer-events-none relative flex size-12 translate-y-1/2 items-center justify-center">
+                <span className="map-halo absolute inset-0 rounded-full bg-brand/25" />
+                <span className="absolute inset-[30%] rounded-full bg-brand/20" />
+                <span className="relative size-4 rounded-full border-[3px] border-white bg-brand shadow-[0_2px_8px_rgba(0,0,0,0.35)]" />
               </span>
-            </AdvancedMarker>
+            </HtmlMarker>
           </>
         )}
 
@@ -474,26 +486,39 @@ export function BraiderMap({
           const isActive = activeId === item.id;
           const isHovered = hoveredId === item.id;
           return (
-            <AdvancedMarker
+            <HtmlMarker
               key={item.id}
               position={{ lat, lng }}
               zIndex={isActive ? 1000 : isHovered ? 999 : 1}
               onClick={() => onSelectPin(isActive ? null : item.id)}
             >
-              <span
+              {/* Price pin with a tail that points at the exact spot.
+                  High-contrast against the muted map: ink on the light map,
+                  white on the dark one, brand when selected. */}
+              <button
+                type="button"
                 onMouseEnter={() => onHoverPin(item.id)}
                 onMouseLeave={() => onHoverPin(null)}
-                className={`flex cursor-pointer items-center justify-center rounded-full border px-3 py-1.5 text-xs font-semibold whitespace-nowrap shadow-md transition-all duration-150 select-none ${
-                  isActive
-                    ? "scale-110 border-foreground bg-foreground text-background"
-                    : isHovered
-                      ? "scale-110 border-foreground bg-surface text-foreground shadow-lg"
-                      : "border-border bg-surface text-foreground hover:scale-105 hover:shadow-lg"
+                aria-label={item.business_name ?? undefined}
+                aria-pressed={isActive}
+                className={`map-pin group relative flex origin-bottom cursor-pointer flex-col items-center pb-1.5 transition-transform duration-200 ease-out select-none ${
+                  isActive ? "scale-[1.15]" : isHovered ? "scale-110" : "hover:scale-105"
                 }`}
+                style={{
+                  ["--pin-bg" as string]: isActive
+                    ? BRAND_COLOR
+                    : isDark
+                      ? "#ffffff"
+                      : "#1b1c1f",
+                  ["--pin-fg" as string]: isActive || !isDark ? "#ffffff" : "#1b1c1f",
+                }}
               >
-                {style ? `€${formatPrice(style.base_price)}` : "•"}
-              </span>
-            </AdvancedMarker>
+                <span className="flex min-h-7 items-center rounded-full bg-[var(--pin-bg)] px-3 text-[13px] font-bold tracking-tight whitespace-nowrap text-[var(--pin-fg)] shadow-[0_4px_14px_rgba(0,0,0,0.28)] ring-2 ring-white/90 dark:ring-black/40">
+                  {style ? `€${formatPrice(style.base_price)}` : "•"}
+                </span>
+                <span className="absolute bottom-0.5 size-2.5 rotate-45 rounded-[2px] bg-[var(--pin-bg)]" aria-hidden />
+              </button>
+            </HtmlMarker>
           );
         })}
 

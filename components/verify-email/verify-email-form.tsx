@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePendingNavigation } from "@/lib/navigation/use-pending-navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
@@ -30,7 +30,7 @@ export function VerifyEmailForm({
 }) {
   const [email, setEmail] = useState(defaultEmail);
   const [code, setCode] = useState("");
-  const router = useRouter();
+  const router = usePendingNavigation();
 
   const verifyMutation = useMutation({
     mutationFn: (body: VerifyEmailRequest) => authApi.verifyEmail(body, lang),
@@ -95,9 +95,10 @@ export function VerifyEmailForm({
 
         <Button
           type="submit"
-          disabled={verifyMutation.isPending || code.length < 6}
+          loading={verifyMutation.isPending || router.isNavigating}
+          disabled={code.length < 6}
         >
-          {verifyMutation.isPending ? common.loading : dict.submit}
+          {verifyMutation.isPending || router.isNavigating ? common.loading : dict.submit}
         </Button>
       </form>
 
