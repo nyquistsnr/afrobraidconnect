@@ -84,13 +84,46 @@ export interface BookingDetailDict {
 }
 
 export interface BalanceRetryDict {
-  happyPathNotice: string;
-  failedBannerText: string;
-  cardDeclinedSubtitle: string;
-  authRequiredSubtitle: string;
-  addCardButton: string;
+  scheduledNotice: string;
+  payNowButton: string;
+  failedTitle: string;
+  failedNextRetry: string;
+  failedNoRetry: string;
+  reasonCardDeclined: string;
+  reasonExpiredCard: string;
+  reasonInsufficientFunds: string;
+  reasonAuthRequired: string;
+  reasonGeneric: string;
+  updatePaymentButton: string;
   confirmPaymentButton: string;
-  paymentComplete: string;
+  processingTitle: string;
+  processingSubtitle: string;
+  continuePaymentButton: string;
+  abandonedTitle: string;
   abandonedNotice: string;
-  errorModalTitle: string;
+  paidTitle: string;
+  paidSubtitle: string;
+  modalTitle: string;
+  modalAmount: string;
+  modalPreparing: string;
+  payButton: string;
+  payButtonLoading: string;
+  cancelButton: string;
+  closeButton: string;
+  confirmingTitle: string;
+  confirmingSubtitle: string;
+  stillProcessingTitle: string;
+  stillProcessingSubtitle: string;
+  successTitle: string;
+  successSubtitle: string;
+  errorDeclined: string;
+  errorAuthFailed: string;
+  errorNetwork: string;
+  errorAlreadyPaid: string;
+  errorInProgress: string;
+  errorProviderUnavailable: string;
+  errorGeneric: string;
+  redirectFailed: string;
+  retryButton: string;
+  paymentsNotConfigured: string;
 }

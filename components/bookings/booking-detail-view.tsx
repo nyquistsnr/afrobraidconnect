@@ -26,7 +26,6 @@ import { BalanceRetryBanner } from "@/components/bookings/balance-retry-banner";
 import { ReviewModal } from "@/components/reviews/review-modal";
 import { RescheduleModal } from "@/components/bookings/reschedule-modal";
 import { braidersApi } from "@/lib/api/braiders-client";
-import { Star } from "lucide-react";
 import { ChatButton } from "@/components/chat/chat-button";
 import type { ChatButtonDict } from "@/components/chat/types";
 import type { BookingDetailDict, BookingStatusDict } from "@/components/bookings/types";
@@ -85,6 +84,12 @@ export function BookingDetailView({
     queryFn: () => bookingsApi.getById(accessToken!, lang, bookingId),
     enabled: sessionStatus === "authenticated" && !!accessToken,
     retry: false,
+    // Keeps the balance banner live while a charge is in flight (the
+    // automatic attempt or a webhook-confirmed customer payment).
+    refetchInterval: (query) => {
+      const state = query.state.data?.balance_charge_state;
+      return state === "IN_PROGRESS" || state === "DUE" ? 8000 : false;
+    },
   });
   const now = useMemo(() => new Date(), []);
 
@@ -103,6 +108,7 @@ export function BookingDetailView({
 
   useEffect(() => {
     if (searchParams.get("reschedule") === "true") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off sync from the ?reschedule=true deep link
       setIsRescheduleModalOpen(true);
       // Clean up the URL
       const params = new URLSearchParams(searchParams.toString());

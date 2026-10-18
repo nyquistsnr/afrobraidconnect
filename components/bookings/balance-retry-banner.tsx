@@ -1,16 +1,70 @@
 "use client";
 
-import { useState } from "react";
-import { AlertCircle, CreditCard, Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { AlertCircle, CheckCircle2, CreditCard, Info, ShieldCheck } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import type { BookingResponse } from "@/lib/api/types";
+import { formatPrice } from "@/lib/braider-pricing";
 import { formatTemplate } from "@/lib/format-template";
-import { bookingsApi } from "@/lib/api/bookings-client";
-import { formatBookingDateOnly } from "@/components/bookings/format";
+import { formatBookingDateTime } from "@/components/bookings/format";
 import type { Locale } from "@/lib/i18n";
 import type { BalanceRetryDict } from "@/components/bookings/types";
 import { BalanceRetryModal } from "@/components/bookings/balance-retry-modal";
+
+// Query params Stripe appends to return_url after a redirect-based payment
+// method (PayPal); `balance_payment` is our own marker on that return_url.
+const REDIRECT_PARAMS = [
+  "balance_payment",
+  "payment_intent",
+  "payment_intent_client_secret",
+  "redirect_status",
+];
+
+type BannerKind = "failed" | "processing" | "scheduled" | "abandoned" | null;
+
+// The API never persists FAILED: a declined automatic charge goes back to
+// SCHEDULED (next retry, with attempts > 0 and a last error) or, once the
+// retry ladder runs out, to ABANDONED with the booking CANCELLED_NO_PAYMENT.
+// A customer cancellation also sets ABANDONED, hence the status check.
+function bannerKind(booking: BookingResponse): BannerKind {
+  if (booking.payment_schedule !== "DEPOSIT_THEN_BALANCE") return null;
+  const state = booking.balance_charge_state;
+  if (state === "ABANDONED") {
+    return booking.status === "CANCELLED_NO_PAYMENT" ? "abandoned" : null;
+  }
+  if (booking.status !== "CONFIRMED") return null;
+  const hasFailure =
+    booking.balance_charge_attempts > 0 &&
+    !!(booking.balance_charge_last_error || booking.balance_charge_last_error_code);
+  if ((state === "SCHEDULED" || state === "DUE" || state === "FAILED") && hasFailure) {
+    return "failed";
+  }
+  if (state === "IN_PROGRESS" || state === "DUE") return "processing";
+  if (state === "SCHEDULED") return "scheduled";
+  return null;
+}
+
+function failureReason(code: string | null, dict: BalanceRetryDict): string {
+  switch (code) {
+    case "authentication_required":
+      return dict.reasonAuthRequired;
+    case "expired_card":
+      return dict.reasonExpiredCard;
+    case "insufficient_funds":
+      return dict.reasonInsufficientFunds;
+    case "card_declined":
+      return dict.reasonCardDeclined;
+    default:
+      return dict.reasonGeneric;
+  }
+}
+
+type ModalState = {
+  initialPhase: "preparing" | "confirming";
+  initialError: string | null;
+};
 
 export function BalanceRetryBanner({
   booking,
@@ -23,148 +77,179 @@ export function BalanceRetryBanner({
   accessToken: string;
   dict: BalanceRetryDict;
 }) {
-  const queryClient = useQueryClient();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [setupClientSecret, setSetupClientSecret] = useState<string | null>(null);
-  const [isStartingFlow, setIsStartingFlow] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [modal, setModal] = useState<ModalState | null>(null);
+  const [justPaid, setJustPaid] = useState(false);
 
-  const { balance_charge_state } = booking;
+  // Coming back from PayPal (or another redirect-based method): resume in
+  // the modal, then strip Stripe's params so a refresh doesn't replay it.
+  useEffect(() => {
+    if (searchParams.get("balance_payment") !== "1") return;
+    const redirectStatus = searchParams.get("redirect_status");
+    const succeeded = redirectStatus === "succeeded" || redirectStatus === "processing";
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off sync from the URL Stripe redirected back to
+    setModal(
+      succeeded
+        ? { initialPhase: "confirming", initialError: null }
+        : { initialPhase: "preparing", initialError: dict.redirectFailed }
+    );
+    const params = new URLSearchParams(searchParams.toString());
+    REDIRECT_PARAMS.forEach((key) => params.delete(key));
+    const search = params.toString() ? `?${params.toString()}` : "";
+    router.replace(`${pathname}${search}`, { scroll: false });
+  }, [searchParams, pathname, router, dict.redirectFailed]);
 
-  async function handleAddCard() {
-    setIsStartingFlow(true);
-    try {
-      const { client_secret } = await bookingsApi.setupIntent(accessToken, lang, booking.id);
-      setSetupClientSecret(client_secret);
-      setIsModalOpen(true);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsStartingFlow(false);
-    }
-  }
+  const kind = bannerKind(booking);
+  const amount = formatPrice(booking.balance_amount);
+  const openPayment = () => setModal({ initialPhase: "preparing", initialError: null });
 
-  async function handleConfirmPayment() {
-    setIsStartingFlow(true);
-    try {
-      const response = await bookingsApi.pay(accessToken, lang, booking.id);
-      
-      if (response.status === "PENDING" && response.client_secret) {
-        const { loadStripe } = await import("@stripe/stripe-js");
-        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-        if (stripe) {
-          await stripe.confirmCardPayment(response.client_secret);
-          queryClient.invalidateQueries({ queryKey: ["booking", booking.id] });
-        }
-      } else if (response.status === "SUCCEEDED") {
-        queryClient.invalidateQueries({ queryKey: ["booking", booking.id] });
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsStartingFlow(false);
-    }
-  }
+  const modalNode = modal && (
+    <BalanceRetryModal
+      booking={booking}
+      lang={lang}
+      accessToken={accessToken}
+      dict={dict}
+      initialPhase={modal.initialPhase}
+      initialError={modal.initialError}
+      onClose={() => setModal(null)}
+      onPaid={() => setJustPaid(true)}
+    />
+  );
 
-  function handleSuccess() {
-    setIsModalOpen(false);
-    queryClient.invalidateQueries({ queryKey: ["booking", booking.id] });
-  }
-
-  if (
-    balance_charge_state === "NOT_APPLICABLE" || 
-    balance_charge_state === "SUCCEEDED" || 
-    balance_charge_state === "IN_PROGRESS" || 
-    balance_charge_state === "DUE" ||
-    !balance_charge_state
-  ) {
-    return null;
-  }
-
-  if (balance_charge_state === "SCHEDULED" && booking.balance_charge_due_at) {
+  if (justPaid && booking.balance_charge_state === "SUCCEEDED") {
     return (
-      <div className="flex items-center gap-3 rounded-2xl bg-blue-50 px-4 py-3 text-sm text-blue-800">
-        <Info className="size-5 shrink-0" />
-        <p>
-          {formatTemplate(dict.happyPathNotice, {
-            amount: booking.balance_amount,
-            date: formatBookingDateOnly(booking.balance_charge_due_at, lang)
-          })}
-        </p>
-      </div>
+      <>
+        <div
+          role="status"
+          className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200"
+        >
+          <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="font-semibold">{dict.paidTitle}</p>
+            <p className="mt-1">{dict.paidSubtitle}</p>
+          </div>
+        </div>
+        {modalNode}
+      </>
     );
   }
 
-  if (balance_charge_state === "ABANDONED") {
+  if (kind === "abandoned") {
     return (
-      <div className="flex items-start gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-800">
-        <AlertCircle className="size-5 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
+        <AlertCircle className="mt-0.5 size-5 shrink-0" />
         <div>
-          <p className="font-semibold">{dict.errorModalTitle}</p>
+          <p className="font-semibold">{dict.abandonedTitle}</p>
           <p className="mt-1">{dict.abandonedNotice}</p>
         </div>
       </div>
     );
   }
 
-  if (balance_charge_state === "FAILED") {
-    // If there is an authentication_required error, we should highlight the confirm payment button
-    const isAuthRequired = booking.balance_charge_last_error?.toLowerCase().includes("authenticat") 
-      || booking.balance_charge_last_error?.toLowerCase().includes("confirm");
-
+  if (kind === "scheduled") {
     return (
       <>
-        <div className="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+        <div className="flex flex-col gap-3 rounded-2xl bg-blue-50 p-4 text-sm text-blue-800 sm:flex-row sm:items-center sm:justify-between dark:bg-blue-950/40 dark:text-blue-200">
           <div className="flex items-start gap-3">
-            <AlertCircle className="size-5 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold">{dict.failedBannerText}</p>
-              {booking.balance_charge_last_error && (
-                <p className="mt-1">{booking.balance_charge_last_error}</p>
-              )}
-            </div>
+            <Info className="mt-0.5 size-5 shrink-0" />
+            <p>
+              {booking.balance_charge_due_at
+                ? formatTemplate(dict.scheduledNotice, {
+                    amount,
+                    date: formatBookingDateTime(booking.balance_charge_due_at, lang),
+                  })
+                : formatTemplate(dict.modalAmount, { amount })}
+            </p>
           </div>
-          
-          <div className="mt-2 flex flex-wrap gap-3 sm:ml-8">
-            {!isAuthRequired && (
-              <button
-                onClick={handleAddCard}
-                disabled={isStartingFlow}
-                className="inline-flex items-center gap-2 rounded-full bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
-              >
-                {isStartingFlow ? <Loader className="size-4 animate-spin" /> : <CreditCard className="size-4" />}
-                {dict.addCardButton}
-              </button>
-            )}
-            <button
-              onClick={handleConfirmPayment}
-              disabled={isStartingFlow}
-              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-medium transition-colors disabled:opacity-50 ${
-                isAuthRequired 
-                  ? "bg-red-600 text-white hover:bg-red-700" 
-                  : "bg-red-100 text-red-800 hover:bg-red-200"
-              }`}
-            >
-              {isStartingFlow && isAuthRequired && <Loader className="size-4 animate-spin" />}
-              {dict.confirmPaymentButton}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={openPayment}
+            className="shrink-0 self-start rounded-full px-3 py-1.5 text-sm font-semibold underline underline-offset-2 hover:bg-blue-100 sm:self-auto dark:hover:bg-blue-900/50"
+          >
+            {dict.payNowButton}
+          </button>
         </div>
-
-        {isModalOpen && setupClientSecret && (
-          <BalanceRetryModal
-            open={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            clientSecret={setupClientSecret}
-            bookingId={booking.id}
-            lang={lang}
-            accessToken={accessToken}
-            dict={dict}
-            onSuccess={handleSuccess}
-          />
-        )}
+        {modalNode}
       </>
     );
   }
 
-  return null;
+  if (kind === "processing") {
+    return (
+      <>
+        <div
+          role="status"
+          className="flex flex-col gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100"
+        >
+          <div className="flex items-start gap-3">
+            <Loader className="mt-0.5 size-5 shrink-0 animate-spin" />
+            <div>
+              <p className="font-semibold">{dict.processingTitle}</p>
+              <p className="mt-1">{dict.processingSubtitle}</p>
+            </div>
+          </div>
+          <div className="sm:pl-8">
+            <Button type="button" variant="outline" onClick={openPayment} className="sm:w-auto">
+              {dict.continuePaymentButton}
+            </Button>
+          </div>
+        </div>
+        {modalNode}
+      </>
+    );
+  }
+
+  if (kind === "failed") {
+    const code = booking.balance_charge_last_error_code;
+    const isAuthRequired = code === "authentication_required";
+    const nextRetryAt =
+      booking.balance_charge_state === "SCHEDULED" && booking.balance_charge_due_at
+        ? booking.balance_charge_due_at
+        : null;
+
+    return (
+      <>
+        <div
+          role="alert"
+          className="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="mt-0.5 size-5 shrink-0" />
+            <div className="flex flex-col gap-1">
+              <p className="font-semibold">{dict.failedTitle}</p>
+              <p>{failureReason(code, dict)}</p>
+              <p className="text-red-700 dark:text-red-300">
+                {nextRetryAt
+                  ? formatTemplate(dict.failedNextRetry, {
+                      date: formatBookingDateTime(nextRetryAt, lang),
+                    })
+                  : dict.failedNoRetry}
+              </p>
+            </div>
+          </div>
+          <div className="sm:pl-8">
+            <button
+              type="button"
+              onClick={openPayment}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:w-auto"
+            >
+              {isAuthRequired ? (
+                <ShieldCheck className="size-4" />
+              ) : (
+                <CreditCard className="size-4" />
+              )}
+              {isAuthRequired
+                ? dict.confirmPaymentButton
+                : `${dict.updatePaymentButton} · €${amount}`}
+            </button>
+          </div>
+        </div>
+        {modalNode}
+      </>
+    );
+  }
+
+  return modalNode || null;
 }

@@ -693,6 +693,10 @@ export type PaymentSchedule = "FULL_UPFRONT" | "DEPOSIT_THEN_BALANCE";
 export type PaymentPurpose = "FULL" | "DEPOSIT" | "BALANCE";
 export type PaymentStatus = "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELED";
 
+// FAILED exists in the API enum but is never persisted: a declined
+// automatic charge goes back to SCHEDULED (next retry) with
+// balance_charge_attempts > 0 and balance_charge_last_error set, or to
+// ABANDONED (booking CANCELLED_NO_PAYMENT) once the retry ladder runs out.
 export type BalanceChargeState =
   | "NOT_APPLICABLE"
   | "SCHEDULED"
@@ -701,13 +705,6 @@ export type BalanceChargeState =
   | "FAILED"
   | "ABANDONED"
   | "SUCCEEDED";
-
-export interface BookingPaymentMethod {
-  brand: string;
-  last4: string;
-  exp_month: number;
-  exp_year: number;
-}
 
 export interface BookingPaymentResponse {
   purpose: PaymentPurpose;
@@ -754,12 +751,15 @@ export interface BookingResponse {
   balance_amount: string;
   payment_schedule: PaymentSchedule;
   cancellation_cutoff_at: string;
+  cancelled_at: string | null;
   payments: BookingPaymentResponse[];
   balance_charge_state: BalanceChargeState;
   balance_charge_due_at: string | null;
   balance_charge_attempts: number;
   balance_charge_last_error: string | null;
-  payment_method: BookingPaymentMethod | null;
+  // Stripe's code from the latest failed BALANCE attempt, e.g.
+  // "card_declined", "expired_card", "authentication_required".
+  balance_charge_last_error_code: string | null;
   created_at: string;
 }
 

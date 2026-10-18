@@ -2,7 +2,6 @@
 import type {
   ApiEnvelope,
   BookingListParams,
-  BookingPaymentResponse,
   BookingResponse,
   BookingSummary,
   CreateBookingRequest,
@@ -149,23 +148,17 @@ export const bookingsApi = {
     };
   },
 
-  setupIntent: (accessToken: string, lang: Locale, bookingId: string) =>
-    authedRequest<{ client_secret: string }>(
-      `${BOOKINGS_PATH}/${bookingId}/payment-method/setup-intent`,
-      accessToken,
-      lang,
-      { method: "POST" }
-    ),
-
-  pay: (accessToken: string, lang: Locale, bookingId: string, paymentMethodId?: string) =>
-    authedRequest<BookingPaymentResponse>(
+  // Starts (or, after a declined/abandoned attempt, resumes) an on-session
+  // PaymentIntent for the outstanding balance. Returns the booking; the
+  // client_secret to confirm is on its BALANCE entry in `payments` — see
+  // balanceClientSecret(). 409 BOOKING_PAYMENT_NOT_RESUMABLE when there's
+  // nothing to pay (already paid / automatic charge in flight).
+  pay: (accessToken: string, lang: Locale, bookingId: string) =>
+    authedRequest<BookingResponse>(
       `${BOOKINGS_PATH}/${bookingId}/pay`,
       accessToken,
       lang,
-      {
-        method: "POST",
-        body: paymentMethodId ? { payment_method_id: paymentMethodId } : {},
-      }
+      { method: "POST" }
     ),
 
   reschedule: (accessToken: string, lang: Locale, bookingId: string, startsAt: string) =>
@@ -181,3 +174,10 @@ export const bookingsApi = {
 
   getTodayCount: () => publicRequest<number>(`${BOOKINGS_PATH}/today-count`),
 };
+
+export function balanceClientSecret(booking: BookingResponse): string | null {
+  return (
+    booking.payments.find((p) => p.purpose === "BALANCE" && p.client_secret)
+      ?.client_secret ?? null
+  );
+}
