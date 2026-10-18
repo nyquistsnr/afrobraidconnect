@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AlertCircle, CheckCircle2, CreditCard, Info, ShieldCheck } from "lucide-react";
+import { AlertCircle, CalendarClock, CheckCircle2, CreditCard, ShieldCheck } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Button } from "@/components/ui/button";
 import type { BookingResponse } from "@/lib/api/types";
@@ -121,16 +121,14 @@ export function BalanceRetryBanner({
   if (justPaid && booking.balance_charge_state === "SUCCEEDED") {
     return (
       <>
-        <div
+        <BalanceNotice
+          tone="success"
           role="status"
-          className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200"
+          icon={<CheckCircle2 className="size-5" />}
+          title={dict.paidTitle}
         >
-          <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
-          <div>
-            <p className="font-semibold">{dict.paidTitle}</p>
-            <p className="mt-1">{dict.paidSubtitle}</p>
-          </div>
-        </div>
+          {dict.paidSubtitle}
+        </BalanceNotice>
         {modalNode}
       </>
     );
@@ -138,39 +136,35 @@ export function BalanceRetryBanner({
 
   if (kind === "abandoned") {
     return (
-      <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">
-        <AlertCircle className="mt-0.5 size-5 shrink-0" />
-        <div>
-          <p className="font-semibold">{dict.abandonedTitle}</p>
-          <p className="mt-1">{dict.abandonedNotice}</p>
-        </div>
-      </div>
+      <BalanceNotice
+        tone="danger"
+        icon={<AlertCircle className="size-5" />}
+        title={dict.abandonedTitle}
+      >
+        {dict.abandonedNotice}
+      </BalanceNotice>
     );
   }
 
   if (kind === "scheduled") {
     return (
       <>
-        <div className="flex flex-col gap-3 rounded-2xl bg-blue-50 p-4 text-sm text-blue-800 sm:flex-row sm:items-center sm:justify-between dark:bg-blue-950/40 dark:text-blue-200">
-          <div className="flex items-start gap-3">
-            <Info className="mt-0.5 size-5 shrink-0" />
-            <p>
-              {booking.balance_charge_due_at
-                ? formatTemplate(dict.scheduledNotice, {
-                    amount,
-                    date: formatBookingDateTime(booking.balance_charge_due_at, lang),
-                  })
-                : formatTemplate(dict.modalAmount, { amount })}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={openPayment}
-            className="shrink-0 self-start rounded-full px-3 py-1.5 text-sm font-semibold underline underline-offset-2 hover:bg-blue-100 sm:self-auto dark:hover:bg-blue-900/50"
-          >
-            {dict.payNowButton}
-          </button>
-        </div>
+        <BalanceNotice
+          tone="neutral"
+          icon={<CalendarClock className="size-5" />}
+          title={formatTemplate(dict.scheduledTitle, { amount })}
+          action={
+            <Button type="button" onClick={openPayment} className="sm:w-auto sm:px-5">
+              {dict.payNowButton}
+            </Button>
+          }
+        >
+          {booking.balance_charge_due_at
+            ? formatTemplate(dict.scheduledSubtitle, {
+                date: formatBookingDateTime(booking.balance_charge_due_at, lang),
+              })
+            : null}
+        </BalanceNotice>
         {modalNode}
       </>
     );
@@ -179,23 +173,20 @@ export function BalanceRetryBanner({
   if (kind === "processing") {
     return (
       <>
-        <div
+        <BalanceNotice
+          tone="warning"
           role="status"
-          className="flex flex-col gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-100"
-        >
-          <div className="flex items-start gap-3">
-            <Loader className="mt-0.5 size-5 shrink-0 animate-spin" />
-            <div>
-              <p className="font-semibold">{dict.processingTitle}</p>
-              <p className="mt-1">{dict.processingSubtitle}</p>
-            </div>
-          </div>
-          <div className="sm:pl-8">
-            <Button type="button" variant="outline" onClick={openPayment} className="sm:w-auto">
+          stacked
+          icon={<Loader className="size-5 animate-spin" />}
+          title={dict.processingTitle}
+          action={
+            <Button type="button" variant="outline" onClick={openPayment} className="sm:w-auto sm:px-5">
               {dict.continuePaymentButton}
             </Button>
-          </div>
-        </div>
+          }
+        >
+          {dict.processingSubtitle}
+        </BalanceNotice>
         {modalNode}
       </>
     );
@@ -211,29 +202,17 @@ export function BalanceRetryBanner({
 
     return (
       <>
-        <div
+        <BalanceNotice
+          tone="danger"
           role="alert"
-          className="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
-        >
-          <div className="flex items-start gap-3">
-            <AlertCircle className="mt-0.5 size-5 shrink-0" />
-            <div className="flex flex-col gap-1">
-              <p className="font-semibold">{dict.failedTitle}</p>
-              <p>{failureReason(code, dict)}</p>
-              <p className="text-red-700 dark:text-red-300">
-                {nextRetryAt
-                  ? formatTemplate(dict.failedNextRetry, {
-                      date: formatBookingDateTime(nextRetryAt, lang),
-                    })
-                  : dict.failedNoRetry}
-              </p>
-            </div>
-          </div>
-          <div className="sm:pl-8">
+          stacked
+          icon={<AlertCircle className="size-5" />}
+          title={dict.failedTitle}
+          action={
             <button
               type="button"
               onClick={openPayment}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:w-auto"
             >
               {isAuthRequired ? (
                 <ShieldCheck className="size-4" />
@@ -244,12 +223,77 @@ export function BalanceRetryBanner({
                 ? dict.confirmPaymentButton
                 : `${dict.updatePaymentButton} · €${amount}`}
             </button>
-          </div>
-        </div>
+          }
+        >
+          <span className="block font-medium text-foreground">{failureReason(code, dict)}</span>
+          <span className="mt-1 block">
+            {nextRetryAt
+              ? formatTemplate(dict.failedNextRetry, {
+                  date: formatBookingDateTime(nextRetryAt, lang),
+                })
+              : dict.failedNoRetry}
+          </span>
+        </BalanceNotice>
         {modalNode}
       </>
     );
   }
 
   return modalNode || null;
+}
+
+type NoticeTone = "neutral" | "success" | "warning" | "danger";
+
+// Theme-agnostic on purpose: the app's light/dark switch sets data-theme,
+// which Tailwind's `dark:` variant doesn't follow, so colors here are the
+// surface/foreground tokens plus translucent status tints (the same
+// `-500/10` + `-600` pairing the booking status badge uses), which read
+// correctly on either background.
+const NOTICE_TONES: Record<NoticeTone, { card: string; icon: string }> = {
+  neutral: { card: "border-border bg-surface", icon: "bg-brand/10 text-brand" },
+  success: { card: "border-emerald-500/30 bg-emerald-500/5", icon: "bg-emerald-500/15 text-emerald-500" },
+  warning: { card: "border-amber-500/30 bg-amber-500/5", icon: "bg-amber-500/15 text-amber-500" },
+  danger: { card: "border-red-500/30 bg-red-500/5", icon: "bg-red-500/15 text-red-500" },
+};
+
+function BalanceNotice({
+  tone,
+  icon,
+  title,
+  children,
+  action,
+  role,
+  stacked = false,
+}: {
+  tone: NoticeTone;
+  icon: ReactNode;
+  title: string;
+  children?: ReactNode;
+  action?: ReactNode;
+  role?: "status" | "alert";
+  // Puts the action under the text (aligned with it) - for longer copy that
+  // would otherwise be squeezed next to the button on wider screens.
+  stacked?: boolean;
+}) {
+  const styles = NOTICE_TONES[tone];
+  return (
+    <div
+      role={role}
+      className={`flex flex-col gap-4 rounded-2xl border p-4 sm:p-5 ${stacked ? "" : "sm:flex-row sm:items-center"} ${styles.card}`}
+    >
+      <div className="flex min-w-0 flex-1 items-start gap-3">
+        <span
+          className={`flex size-10 shrink-0 items-center justify-center rounded-full ${styles.icon}`}
+          aria-hidden
+        >
+          {icon}
+        </span>
+        <div className="min-w-0 pt-0.5">
+          <p className="font-semibold text-foreground">{title}</p>
+          {children && <p className="mt-1 text-sm text-muted-foreground">{children}</p>}
+        </div>
+      </div>
+      {action && <div className={`shrink-0 ${stacked ? "sm:pl-13" : ""}`}>{action}</div>}
+    </div>
+  );
 }

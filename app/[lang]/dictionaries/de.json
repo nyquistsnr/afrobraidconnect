@@ -304,7 +304,8 @@
     "cancellationBeforeCutoff": "Kostenlose Stornierung bis {date}.",
     "cancellationAfterCutoff": "Der Zeitraum für die kostenlose Stornierung dieser Buchung ist abgelaufen.",
     "balanceRetry": {
-      "scheduledNotice": "Der Restbetrag von {amount} € wird am {date} automatisch abgebucht.",
+      "scheduledTitle": "Restbetrag: {amount} €",
+      "scheduledSubtitle": "Wird am {date} automatisch abgebucht. Du kannst ihn auch jetzt bezahlen.",
       "payNowButton": "Jetzt bezahlen",
       "failedTitle": "Die Zahlung des Restbetrags ist fehlgeschlagen",
       "failedNextRetry": "Wir versuchen es am {date} automatisch erneut. Damit deine Buchung bestehen bleibt, kannst du jetzt mit einer anderen Karte oder Zahlungsmethode bezahlen.",

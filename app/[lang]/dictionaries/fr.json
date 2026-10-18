@@ -304,7 +304,8 @@
     "cancellationBeforeCutoff": "Annulation gratuite jusqu'au {date}.",
     "cancellationAfterCutoff": "Le délai d'annulation gratuite pour cette réservation est dépassé.",
     "balanceRetry": {
-      "scheduledNotice": "Le solde de {amount} € sera prélevé automatiquement le {date}.",
+      "scheduledTitle": "Solde restant : {amount} €",
+      "scheduledSubtitle": "Prélevé automatiquement le {date}. Vous pouvez aussi le payer dès maintenant.",
       "payNowButton": "Payer maintenant",
       "failedTitle": "Le paiement du solde n'a pas abouti",
       "failedNextRetry": "Nous réessaierons automatiquement le {date}. Pour conserver votre réservation, vous pouvez payer maintenant avec une autre carte ou un autre moyen de paiement.",

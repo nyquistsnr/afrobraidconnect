@@ -84,7 +84,8 @@ export interface BookingDetailDict {
 }
 
 export interface BalanceRetryDict {
-  scheduledNotice: string;
+  scheduledTitle: string;
+  scheduledSubtitle: string;
   payNowButton: string;
   failedTitle: string;
   failedNextRetry: string;

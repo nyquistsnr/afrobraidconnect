@@ -304,7 +304,8 @@
     "cancellationBeforeCutoff": "Free cancellation until {date}.",
     "cancellationAfterCutoff": "The free-cancellation window for this booking has passed.",
     "balanceRetry": {
-      "scheduledNotice": "The remaining €{amount} will be charged automatically on {date}.",
+      "scheduledTitle": "Remaining balance: €{amount}",
+      "scheduledSubtitle": "Charged automatically on {date}. You can also pay it now.",
       "payNowButton": "Pay now",
       "failedTitle": "Your balance payment didn't go through",
       "failedNextRetry": "We'll try again automatically on {date}. To keep your booking, you can pay now with another card or payment method.",
