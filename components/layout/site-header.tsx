@@ -430,10 +430,11 @@ export function SiteHeader({
         </div>
 
         <div
-          className={`px-4 py-3 md:hidden ${
+          className={`flex items-center gap-2.5 px-4 py-3 md:hidden ${
             isLandingSearch ? "" : "border-b border-border"
           }`}
         >
+          <div className="min-w-0 flex-1">
           <MobileSearch
             lang={lang}
             dict={{
@@ -453,6 +454,10 @@ export function SiteHeader({
             dateRange={dateRange}
             onDateRangeChange={setDateRange}
           />
+          </div>
+          {/* Phones had no bell at all (only a Profile-sheet link); it now
+              sits beside the search pill, always one tap away. */}
+          {isAuthenticated && <NotificationBell lang={lang} dict={notificationsDict} />}
         </div>
       </header>
 

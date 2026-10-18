@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
+import { clearNotificationCache } from "@/lib/notifications/cache";
 
 export function useLogout(lang: Locale) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   async function logout() {
     setIsLoggingOut(true);
+    clearNotificationCache();
     // The refresh token only lives in the httpOnly session cookie, so it has
     // to be revoked server-side via this custom route, which clears that
     // cookie via Set-Cookie on its response. But every useSession() consumer

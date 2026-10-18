@@ -8,6 +8,7 @@ import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { clearNotificationCache } from "@/lib/notifications/cache";
 
 const THRESHOLD_MS = 120_000; // 2 minutes
 
@@ -35,6 +36,7 @@ export function SessionTimeoutModal({
 
   useEffect(() => {
     if (session?.error === "RefreshAccessTokenError") {
+      clearNotificationCache();
       signOut({ callbackUrl: buildLoginUrl() });
       return;
     }
@@ -51,6 +53,7 @@ export function SessionTimeoutModal({
 
       if (msUntilExpiry <= 0) {
         // Token has expired, sign out
+        clearNotificationCache();
         signOut({ callbackUrl: buildLoginUrl() });
       } else if (msUntilExpiry <= THRESHOLD_MS) {
         // Within the 2-minute warning window
@@ -80,6 +83,7 @@ export function SessionTimeoutModal({
 
   const handleLogout = () => {
     setIsOpen(false);
+    clearNotificationCache();
     signOut({ callbackUrl: buildLoginUrl() });
   };
 
