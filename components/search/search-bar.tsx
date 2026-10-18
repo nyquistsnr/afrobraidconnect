@@ -129,6 +129,8 @@ export function SearchBar({
   }
 
   const dateLabel = formatDateRange(dateRange, lang);
+  // Where + when are what a search needs; style is an optional refinement.
+  const searchReady = Boolean(location && dateRange.from);
 
   return (
     <div
@@ -286,6 +288,8 @@ export function SearchBar({
                 onChange={onDateRangeChange}
                 onClear={() => onDateRangeChange({})}
                 onClose={() => setActivePanel(null)}
+                onSearch={searchReady ? handleSearch : undefined}
+                searchLabel={dict.search.searchCta}
                 lang={lang}
                 layout="paged"
                 dict={dict.search.when}

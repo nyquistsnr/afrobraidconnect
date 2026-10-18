@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { DayPicker, type DateRange } from "react-day-picker";
 import { enUS, fr, de } from "react-day-picker/locale";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { SelectedDateRange, WhenPanelDict } from "@/components/search/types";
 
@@ -60,6 +60,8 @@ export function CalendarPanel({
   onChange,
   onClear,
   onClose,
+  onSearch,
+  searchLabel,
   lang,
   layout,
   dict,
@@ -68,6 +70,11 @@ export function CalendarPanel({
   onChange: (range: SelectedDateRange) => void;
   onClear: () => void;
   onClose: () => void;
+  // Passed only once the search has everything it needs — the footer's
+  // "Close" then becomes a "Search" that runs it, so the last step of the
+  // flow leads straight to results instead of a dead end.
+  onSearch?: () => void;
+  searchLabel?: string;
   lang: Locale;
   layout: "paged" | "scroll";
   dict: WhenPanelDict;
@@ -178,13 +185,24 @@ export function CalendarPanel({
           >
             {dict.clearDates}
           </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
-          >
-            {dict.closeCalendar}
-          </button>
+          {onSearch ? (
+            <button
+              type="button"
+              onClick={onSearch}
+              className="search-fade-in flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
+            >
+              <Search className="size-4" />
+              {searchLabel}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full bg-brand px-6 py-3 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
+            >
+              {dict.closeCalendar}
+            </button>
+          )}
         </div>
       )}
     </div>
